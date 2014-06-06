@@ -10,6 +10,6 @@ package es.bancodehierro.banco.persona;
  *
  * @author guillem
  */
-public class Usuari extends Persona {
+public class Empleado extends Persona {
     
 }
