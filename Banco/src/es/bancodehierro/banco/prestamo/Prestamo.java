@@ -1,5 +1,8 @@
 package es.bancodehierro.banco.prestamo;
 
+import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.cc.Movimiento;
+import es.bancodehierro.banco.excepciones.PrestamoException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -86,4 +89,16 @@ public class Prestamo {
         this.cuotaMensual = cuotaMensual;
     }
 
+    public boolean añadirMovimiento(Movimiento mov) throws PrestamoException{
+        
+        if(mov != null){
+            this.listaMovimientos.add(mov);
+            return true;
+        }
+        
+        return false;
+        
+    }
+    
+    
 }
