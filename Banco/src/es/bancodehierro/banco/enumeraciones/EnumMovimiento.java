@@ -11,5 +11,5 @@ package es.bancodehierro.banco.enumeraciones;
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel Angel Cànaves
  */
 public enum EnumMovimiento {
-    
+        TARJETA_CREDITO,TARGETA_DEBITO,CUENTA_CORRIENTE,PRESTAMO;
 }
