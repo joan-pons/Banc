@@ -10,6 +10,6 @@ package es.bancodehierro.banco.enumeraciones;
  *
  * @author guillem
  */
-public class EnumCargo {
-    
+public enum EnumCargo {
+    EMPLEADOSUCURSAL, DIRECTORBANCO, DIRECTORSUCURSAL
 }
