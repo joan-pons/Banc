@@ -16,7 +16,9 @@ public class Principal {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        System.out.println("BIENVENIDO AL BANCO DE HIERRO");
+        String dni = GestionaMenu.llegirCadena("inserta tu DNI");
+        
     }
     
 }
