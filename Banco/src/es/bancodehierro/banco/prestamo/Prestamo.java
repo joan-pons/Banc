@@ -5,10 +5,11 @@ import java.util.Date;
 
 /**
  * Classe de Prestamo.
+ *
  * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol, Tomeu Moranta
  */
 public class Prestamo {
-    
+
     private int codigoPrestamo;
     private String tipoPrestamo;
     private Date fechaInicio;
@@ -84,12 +85,5 @@ public class Prestamo {
     public void setCuotaMensual(Double cuotaMensual) {
         this.cuotaMensual = cuotaMensual;
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
 }
