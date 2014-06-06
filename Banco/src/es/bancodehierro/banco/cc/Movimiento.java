@@ -8,7 +8,7 @@ package es.bancodehierro.banco.cc;
 
 /**
  *
- * @author Oli
+ * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel Angel Cànaves
  */
 public class Movimiento {
     
