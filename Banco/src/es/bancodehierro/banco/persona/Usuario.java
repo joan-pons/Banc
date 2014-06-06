@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 
-package es.bancodehierro.banco.cc;
+package es.bancodehierro.banco.persona;
 
 /**
  *
- * @author Oli
+ * @author guillem
  */
-public enum EnumMovimiento {
+public class Usuario extends Persona {
     
 }
