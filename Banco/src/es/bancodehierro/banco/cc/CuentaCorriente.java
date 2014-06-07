@@ -59,11 +59,11 @@ public class CuentaCorriente {
     }
 
     public ArrayList<Movimiento> getIncidencia() {
-        return incidencia;
+        return incidencias;
     }
 
     public void setIncidencia(ArrayList<Movimiento> incidencia) {
-        this.incidencia = incidencia;
+        this.incidencias = incidencia;
     }
 
     public HashMap<Cliente, String> getTitulares() {
@@ -92,7 +92,7 @@ public class CuentaCorriente {
         }
     }
 
-    public boolean modificarTitular(Cliente nuevoTitular, Cliente) {
+    public boolean modificarTitular(Cliente nuevoTitular) {
         boolean resultado = false;
 
         return resultado;
@@ -105,7 +105,7 @@ public class CuentaCorriente {
                 titulares.remove(cliente);
             }else if(titulares.get("Titular").equals(cliente) && titulares.containsKey("Segundo")){
                 titulares.remove(cliente);
-                Cliente nuevoTitular = titulares.get("Segundo");
+                Cliente nuevoTitular. = titulares.get("Segundo");
                 titulares.put(nuevoTitular,"Titular");
                 titulares.remove("Segundo");
             }else if(titulares.containsValue(cliente) && titulares.containsKey("Titular") && !titulares.containsKey("Segundo")){
@@ -116,5 +116,6 @@ public class CuentaCorriente {
         }else{
             throw new CuentaCorrienteException();
         }
+        return true;
     }
 }
