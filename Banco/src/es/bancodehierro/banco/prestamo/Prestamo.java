@@ -78,6 +78,27 @@ public class Prestamo {
         return listaMovimientos;
     }
 
+    /**
+     * Cercador de préstecs
+     * El mètode parteix del llistat Moviment i selecciona només els de tipus
+     * préstec. Es pot reaprofitar per altres grups!
+     * @author Jaume Mayol
+     * @param listaMovimientos
+     * @return l'objecte ArrayList de Movimiento amb el tipus només de préstec.
+     * @see es.bancodehierro.banco.cc.Movimiento
+     */
+    public ArrayList<Movimiento> llista(ArrayList<Movimiento> listaMovimientos) {
+        ArrayList<Movimiento> prestamos = new ArrayList<>();
+        for (int i = 0; i < listaMovimientos.size(); ++i) {
+            Movimiento aux = listaMovimientos.get(i);
+            //S'ha de fer públic l'atribut tipus!!! (grup compte corrent!)
+            if (aux.tipo == PRESTAMO) {
+                prestamos.add(aux);
+            }
+        }
+        return prestamos;
+    }
+
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
     }
