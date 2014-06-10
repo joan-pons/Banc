@@ -8,7 +8,7 @@ package es.bancodehierro.banco.menu;
 
 /**
  *
- * @author guillem
+ * @author Guillem Arrom, Guillem Rotger, Pedro Lladó, François
  */
 public class Principal {
 
