@@ -183,14 +183,17 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 3: {
-
+                    
                     break;
                 }
 
             }
         }
     }
-
+/**
+ * Metodo para repetir el menu o ir al anterior
+ * @return Devuelve un booleano con la opcion elegida
+ */
     public boolean algunaCosaMas() {
 
         String resp;
@@ -210,7 +213,11 @@ public class MenuCuentaCorriente {
         return respC != 'N';
 
     }
-
+/**
+ * Método para mostrar opciones del Menu
+ * @param opciones Array de Strings con los valores de las opciones
+ * @return Devuelve un int con la opcion elegida
+ */
     public int mostrarMenu(String[] opciones) {
         return GestionaMenu.gestionarMenu(
                 "\nElegir Opcion:\n\t", opciones,
