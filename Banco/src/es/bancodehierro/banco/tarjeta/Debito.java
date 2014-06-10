@@ -6,6 +6,9 @@
 
 package es.bancodehierro.banco.tarjeta;
 
+import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.persona.Cliente;
+
 /**
  *
  * @author bernadi
