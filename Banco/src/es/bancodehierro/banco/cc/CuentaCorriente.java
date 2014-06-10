@@ -99,7 +99,7 @@ public class CuentaCorriente {
     }
     
     public void eliminarTitular(Cliente cliente) throws CuentaCorrienteException {
-        if (!titulares.containsValue(cliente)) {
+        if (titulares.containsValue(cliente)) {
             if (titulares.get("Segundo").equals(cliente)) {
                 titulares.remove(cliente);
             } else if (titulares.get("Titular").equals(cliente) && titulares.containsKey("Segundo")) {
