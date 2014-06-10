@@ -16,11 +16,11 @@ import java.util.HashMap;
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel Angel Cànaves
  */
 public class CuentaCorriente {
-    private final String IBAN = "";
-    private final String ENTIDAD = "";
+    private String iban;
+    private final String ENTIDAD = "2100";
     private String oficina;
     private String dC;
-    private final String CUENTA = "";
+    private String cuenta;
     private double importe;
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
     private ArrayList<Movimiento> incidencias = new ArrayList<>();
@@ -74,9 +74,11 @@ public class CuentaCorriente {
         this.titulares = titulares;
     }
 
-    public CuentaCorriente(String oficina, String dC, double importe) {
+    public CuentaCorriente(String iban, String oficina, String dC, String cuenta, double importe) {
+        this.iban = "ES" + iban;
         this.oficina = oficina;
         this.dC = dC;
+        this.cuenta = cuenta;
         this.importe = importe;
     }
 

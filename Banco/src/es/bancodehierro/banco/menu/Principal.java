@@ -6,9 +6,11 @@
 
 package es.bancodehierro.banco.menu;
 
+import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
+
 /**
  *
- * @author guillem
+ * @author Guillem Arrom, Guillem Rotger, Pedro Lladó, François
  */
 public class Principal {
 
@@ -18,7 +20,13 @@ public class Principal {
     public static void main(String[] args) {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
-        
+        String[] opciones = {"1. Cunta corriente", "2.Opcion2", "3.Opcion3"};
+        int op = gestionarMenu("Menu Principal", opciones, "Elige una opción", 0);
+        switch (op){
+            case 1:
+                MenuCuentaCorriente.menuCC;
+            break;
+        }
     }
     
 }
