@@ -14,12 +14,12 @@ import java.util.Date;
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel Angel Cànaves
  */
 public class Movimiento {
-    EnumMovimiento tipo;
-    int codigo;
-    String concepto;
-    double importe;
-    Date fecha;
-    boolean incidencia;
+    private EnumMovimiento tipo;
+    private int codigo;
+    private String concepto;
+    private double importe;
+    private Date fecha;
+    private boolean incidencia;
 
     public int getCodigo() {
         return codigo;
@@ -56,7 +56,7 @@ public class Movimiento {
 
     @Override
     public String toString() {
-        return "Movimiento{" + "tipo=" + tipo + ", codigo=" + codigo + ", concepto=" + concepto + ", importe=" + importe + ", fecha=" + fecha + ", incidencia=" + incidencia + '}';
+        return "Código: " + codigo + "Tipo: " + tipo + " ........... Concepto: " + concepto + " Importe: " + importe + "€ Fecha: " + fecha + "Incidencia: " + incidencia + "\n";
     }
     
     
