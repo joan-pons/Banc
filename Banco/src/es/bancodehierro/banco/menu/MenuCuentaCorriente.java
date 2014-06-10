@@ -5,6 +5,11 @@
  */
 package es.bancodehierro.banco.menu;
 
+import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.persona.Cliente;
+import es.bancodehierro.banco.cc.Movimiento;
+import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
+
 /**
  *
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel
@@ -13,6 +18,7 @@ package es.bancodehierro.banco.menu;
 public class MenuCuentaCorriente {
 
     public static void menuCC() {
+        CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), GestionaMenu.llegirDouble("Introduce un Importe"));
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
@@ -33,9 +39,11 @@ public class MenuCuentaCorriente {
                         int menuImp = menuCC.mostrarMenu(opcionesImp);
                         switch (menuImp) {
                             case 0: {
+                                cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
                                 break;
                             }
                             case 1: {
+                                System.out.println(cC.getImporte());
                                 break;
                             }
                             case 2: {
@@ -65,15 +73,21 @@ public class MenuCuentaCorriente {
                         int menuTit = menuCC.mostrarMenu(opcionesTit);
                         switch (menuTit) {
                             case 0: {
+                                Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
+                                cC.agregarTitular(cliente);
                                 break;
                             }
                             case 1: {
+
                                 break;
                             }
                             case 2: {
+                                Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
+                                cC.eliminarTitular(cliente);
                                 break;
                             }
                             case 3: {
+                                cC.intercambiarTitular();
                                 break;
                             }
                             case 4: {
@@ -112,9 +126,20 @@ public class MenuCuentaCorriente {
                                     int menuMovC = menuCC.mostrarMenu(opcionesMovC);
                                     switch (menuMovC) {
                                         case 0: {
+                                            for (Movimiento mov : cC.mostrarMovimiento(false)) {
+
+                                                System.out.println(mov);
+
+                                            }
                                             break;
                                         }
                                         case 1: {
+
+                                            for (Movimiento mov : cC.mostrarMovimiento(false, menuCC.seleccionTipo())) {
+
+                                                System.out.println(mov);
+
+                                            }
                                             break;
                                         }
                                         case 2: {
@@ -145,9 +170,20 @@ public class MenuCuentaCorriente {
                                     int menuMovI = menuCC.mostrarMenu(opcionesMovI);
                                     switch (menuMovI) {
                                         case 0: {
+                                            for (Movimiento mov : cC.mostrarMovimiento(true)) {
+
+                                                System.out.println(mov);
+
+                                            }
                                             break;
                                         }
                                         case 1: {
+
+                                            for (Movimiento mov : cC.mostrarMovimiento(true, menuCC.seleccionTipo())) {
+
+                                                System.out.println(mov);
+
+                                            }
                                             break;
                                         }
                                         case 2: {
@@ -183,17 +219,19 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 3: {
-                    
+
                     break;
                 }
 
             }
         }
     }
-/**
- * Metodo para repetir el menu o ir al anterior
- * @return Devuelve un booleano con la opcion elegida
- */
+
+    /**
+     * Metodo para repetir el menu o ir al anterior
+     *
+     * @return Devuelve un booleano con la opcion elegida
+     */
     public boolean algunaCosaMas() {
 
         String resp;
@@ -213,14 +251,43 @@ public class MenuCuentaCorriente {
         return respC != 'N';
 
     }
-/**
- * Método para mostrar opciones del Menu
- * @param opciones Array de Strings con los valores de las opciones
- * @return Devuelve un int con la opcion elegida
- */
+
+    /**
+     * Método para mostrar opciones del Menu
+     *
+     * @param opciones Array de Strings con los valores de las opciones
+     * @return Devuelve un int con la opcion elegida
+     */
     public int mostrarMenu(String[] opciones) {
         return GestionaMenu.gestionarMenu(
                 "\nElegir Opcion:\n\t", opciones,
                 "¿Que quieres ejecutar?", 0);
     }
+
+    public EnumMovimiento seleccionTipo() {
+        boolean respTipoBoolean = false;
+        EnumMovimiento respTipoEnum = null;
+        for (; !respTipoBoolean;) {
+            System.out.println("\nElige un tipo de Articulo:\n\t0-CUENTA CORRIENTE\n\t1-PRESTAMO\n\t2-TARJETA DEBITO\n\t3-TARJETA CREDITO");
+            int respPestescidaInt = GestionaMenu.llegirSencer("\nRespuesta: ");
+            if (respPestescidaInt == 0) {
+                respTipoEnum = EnumMovimiento.CUENTA_CORRIENTE;
+                respTipoBoolean = true;
+            } else if (respPestescidaInt == 1) {
+                respTipoEnum = EnumMovimiento.PRESTAMO;
+                respTipoBoolean = true;
+            } else if (respPestescidaInt == 2) {
+                respTipoEnum = EnumMovimiento.TARJETA_DEBITO;
+                respTipoBoolean = true;
+            } else if (respPestescidaInt == 3) {
+                respTipoEnum = EnumMovimiento.TARJETA_CREDITO;
+                respTipoBoolean = true;
+            } else {
+                System.out.println("\nERROR:Opción no Válida, Inserta un Valor Correcto");
+            }
+
+        }
+        return respTipoEnum;
+    }
+
 }

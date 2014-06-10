@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package es.bancodehierro.banco.cc;
 
+import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import java.util.ArrayList;
@@ -27,55 +27,55 @@ public class CuentaCorriente {
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
     private ArrayList<Movimiento> incidencias = new ArrayList<>();
     private HashMap<String, Cliente> titulares = new HashMap<>();
-    
+
     public String getOficina() {
         return oficina;
     }
-    
+
     public void setOficina(String oficina) {
         this.oficina = oficina;
     }
-    
+
     public String getdC() {
         return dC;
     }
-    
+
     public void setdC(String dC) {
         this.dC = dC;
     }
-    
+
     public double getImporte() {
         return importe;
     }
-    
+
     public void setImporte(double importe) {
         this.importe = importe;
     }
-    
+
     public ArrayList<Movimiento> getMovimientos() {
         return movimientos;
     }
-    
+
     public void setMovimientos(ArrayList<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
-    
+
     public ArrayList<Movimiento> getIncidencia() {
         return incidencias;
     }
-    
+
     public void setIncidencia(ArrayList<Movimiento> incidencia) {
         this.incidencias = incidencia;
     }
-    
+
     public HashMap<String, Cliente> getTitulares() {
         return titulares;
     }
-    
+
     public void setTitulares(HashMap<String, Cliente> titulares) {
         this.titulares = titulares;
     }
-    
+
     public CuentaCorriente(String iban, String oficina, String dC, String cuenta, double importe) {
         this.iban = "ES" + iban;
         this.oficina = oficina;
@@ -83,7 +83,7 @@ public class CuentaCorriente {
         this.cuenta = cuenta;
         this.importe = importe;
     }
-    
+
     public void agregarTitular(Cliente titular) throws CuentaCorrienteException {
         if (!titulares.containsValue(titular)) {
             if (!titulares.containsKey("Titular")) {
@@ -97,7 +97,7 @@ public class CuentaCorriente {
             throw new CuentaCorrienteException("Error: Titular, " + titular.getDni() + ", ya asociado a está cuenta.");
         }
     }
-    
+
     public void eliminarTitular(Cliente cliente) throws CuentaCorrienteException {
         if (titulares.containsValue(cliente)) {
             if (titulares.get("Segundo").equals(cliente)) {
@@ -114,14 +114,24 @@ public class CuentaCorriente {
             throw new CuentaCorrienteException("Error: Ya existe en esta cuenta.");
         }
     }
-    
+
     public void intercambiarTitular() throws CuentaCorrienteException {
-        
+
         Cliente auxiliar = titulares.get("Titular");
-        
+
         eliminarTitular(titulares.get("Titular"));
-        
+
         agregarTitular(auxiliar);
-        
+
+    }
+
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) {
+        ArrayList<Movimiento> movimiento = null;
+        return movimiento;
+    }
+    
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia,EnumMovimiento tipo) {
+        ArrayList<Movimiento> movimiento = null;
+        return movimiento;
     }
 }
