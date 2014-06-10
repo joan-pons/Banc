@@ -2,6 +2,7 @@ package es.bancodehierro.banco.prestamo;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
+import static es.bancodehierro.banco.enumeraciones.EnumMovimiento.PRESTAMO;
 import es.bancodehierro.banco.excepciones.PrestamoException;
 import es.bancodehierro.banco.persona.Empleado;
 import java.util.ArrayList;
@@ -96,8 +97,9 @@ public class Prestamo {
         ArrayList<Movimiento> prestamos = new ArrayList<>();
         for (int i = 0; i < listaMovimientos.size(); ++i) {
             Movimiento aux = listaMovimientos.get(i);
-            //S'ha de fer públic l'atribut tipus!!! (grup compte corrent!)
-            if (aux.tipo == PRESTAMO) {
+            //Get para conseguir el tipo y lo igualamos a PRESTAMO
+            //PRESTAMO, constante importada de la clase Enumeración.
+            if (aux.getTipo() == PRESTAMO) {
                 prestamos.add(aux);
             }
         }
