@@ -14,7 +14,7 @@ import java.util.Date;
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel Angel Cànaves
  */
 public class Movimiento {
-     EnumMovimiento tipo;
+    EnumMovimiento tipo;
     int codigo;
     String concepto;
     double importe;
