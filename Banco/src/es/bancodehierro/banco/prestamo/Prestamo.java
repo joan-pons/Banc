@@ -107,8 +107,8 @@ public class Prestamo {
     }
 
     /**
-     * <b>Cálculo cuota mensual</b> Si pedimos un préstamo de 1.000 € a 18 meses con un
-     * Interés del 3,5, entonces para obtener la cuota mensual es 1.000 x
+     * <b>Cálculo cuota mensual</b> Si pedimos un préstamo de 1.000 € a 18 meses
+     * con un Interés del 3,5, entonces para obtener la cuota mensual es 1.000 x
      * 3,5/1,200 (12 mesos) x 18 (durada préstec) I = 1000 x 3.5/1,200 x 18 =
      * 52.50€.
      *
