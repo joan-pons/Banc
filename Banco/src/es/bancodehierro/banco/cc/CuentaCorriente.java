@@ -24,7 +24,7 @@ public class CuentaCorriente {
     private double importe;
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
     private ArrayList<Movimiento> incidencias = new ArrayList<>();
-    private HashMap<Cliente, String> titulares = new HashMap<Cliente, String>();
+    private HashMap<String ,Cliente> titulares = new HashMap<>();
 
     public String getOficina() {
         return oficina;
@@ -66,11 +66,11 @@ public class CuentaCorriente {
         this.incidencias = incidencia;
     }
 
-    public HashMap<Cliente, String> getTitulares() {
+    public HashMap<String, Cliente> getTitulares() {
         return titulares;
     }
 
-    public void setTitulares(HashMap<Cliente, String> titulares) {
+    public void setTitulares(HashMap<String, Cliente> titulares) {
         this.titulares = titulares;
     }
 
@@ -83,9 +83,11 @@ public class CuentaCorriente {
     public void agregarTitular(Cliente titular) throws CuentaCorrienteException {
         if (!titulares.containsValue(titular)) {
             if (!titulares.containsKey("Titular")) {
-                titulares.put(titular, "Titular");
-            } else {
-                titulares.put(titular, "Segundo Titular");
+                titulares.put("Titular",titular);
+            } else if(!titulares.containsKey("Segundo")) {
+                titulares.put("Segundo", titular);
+            }else{
+                throw new CuentaCorrienteException("Error: Límite de titulares alcanzado.");
             }
         } else {
             throw new CuentaCorrienteException("Error: Titular, " + titular.getDNI() + ", ya asociado a está cuenta.");
@@ -98,24 +100,20 @@ public class CuentaCorriente {
         return resultado;
     }
 
-    public boolean eliminarTitular(Cliente cliente) throws CuentaCorrienteException {
-        boolean resultado = false;
+    public void eliminarTitular(Cliente cliente) throws CuentaCorrienteException {
         if (!titulares.containsValue(cliente)) {
             if(titulares.get("Segundo").equals(cliente)){
                 titulares.remove(cliente);
             }else if(titulares.get("Titular").equals(cliente) && titulares.containsKey("Segundo")){
                 titulares.remove(cliente);
-                Cliente nuevoTitular. = titulares.get("Segundo");
-                titulares.put(nuevoTitular,"Titular");
+                Cliente nuevoTitular = titulares.get("Segundo");
+                titulares.put("Titular", nuevoTitular);
                 titulares.remove("Segundo");
             }else if(titulares.containsValue(cliente) && titulares.containsKey("Titular") && !titulares.containsKey("Segundo")){
-                throw new CuentaCorrienteException();
-            }else{
-                throw new CuentaCorrienteException();
+                throw new CuentaCorrienteException("Error: No puede desvincular a todos los titulares de la cuenta.");
             }
         }else{
-            throw new CuentaCorrienteException();
+            throw new CuentaCorrienteException("Error: Ya existe en esta cuenta.");
         }
-        return true;
     }
 }
