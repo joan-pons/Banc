@@ -115,8 +115,7 @@ public class CuentaCorriente {
         }
     }
     
-    public boolean intercambiarTitular() throws CuentaCorrienteException {
-        boolean resultado = false;
+    public void intercambiarTitular() throws CuentaCorrienteException {
         
         Cliente auxiliar = titulares.get("Titular");
         
@@ -124,6 +123,5 @@ public class CuentaCorriente {
         
         agregarTitular(auxiliar);
         
-        return resultado;
     }
 }
