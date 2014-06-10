@@ -12,7 +12,7 @@ package es.bancodehierro.banco.menu;
 public class MenuTarjeta {
 
     public static void altaTarjeta() {
-
+        GestionaMenu.llegirSencer("")
     }
 
     public static void eliminarTarjeta() {
@@ -40,7 +40,33 @@ public class MenuTarjeta {
             System.out.println("Opcion 4: Ingresar (sólo débito).");
             System.out.println("Opcion 5: Ver movimientos tarjeta.");
             System.out.println("Opcion 6: Salir.");
-            GestionaMenu.llegirSencer("Introduce la opción: ");         
+            int opcion = GestionaMenu.llegirSencer("Introduce la opción: ");
+            switch (opcion) {
+                case 1: {
+                    altaTarjeta();
+                    break;
+                }
+                case 2: {
+                    eliminarTarjeta();
+                    break;
+                }
+                case 3: {
+                    pagar();
+                    break;
+                }
+                case 4: {
+                    ingresarDebito();
+                    break;
+                }
+                case 5: {
+                    verMovimientos();
+                    break;
+                }
+                case 6: {
+                    flag=false;
+                    break;
+                }
+            }
             
         }while(flag);
     }
