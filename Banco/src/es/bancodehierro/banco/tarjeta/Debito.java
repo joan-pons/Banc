@@ -16,8 +16,8 @@ import es.bancodehierro.banco.persona.Cliente;
 public class Debito extends Tarjeta {
     private Double saldo;
 
-    public Debito(Double saldo, int codigoTarjeta, Cliente titular, CuentaCorriente cuenta, TipoTarjeta tipo) {
-        super(codigoTarjeta, titular, cuenta, tipo);
+    public Debito(int codigoTarjeta, Cliente titular, CuentaCorriente cuentaCorriente, TipoTarjeta tipoTarjeta) {
+        super(codigoTarjeta, titular, cuentaCorriente, tipoTarjeta);
         this.saldo = saldo;
     }
 
