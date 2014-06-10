@@ -98,7 +98,7 @@ public class Prestamo {
         for (int i = 0; i < listaMovimientos.size(); ++i) {
             Movimiento aux = listaMovimientos.get(i);
             //Get para conseguir el tipo y lo igualamos a PRESTAMO
-            //PRESTAMO, constante importada de la clase Enumeración.
+            //PRESTAMO, tipo de dato enumerario importado de la clase Enumeración.
             if (aux.getTipo() == PRESTAMO) {
                 prestamos.add(aux);
             }
