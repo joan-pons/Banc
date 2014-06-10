@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author guillem
+ * @author Guillem Arrom
  */
 public class GestionaMenu {
     /**
