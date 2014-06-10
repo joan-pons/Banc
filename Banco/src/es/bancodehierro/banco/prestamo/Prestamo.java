@@ -79,15 +79,15 @@ public class Prestamo {
     }
 
     /**
-     * Cercador de préstecs
-     * El mètode parteix del llistat Moviment i selecciona només els de tipus
-     * préstec. Es pot reaprofitar per altres grups!
+     * Buscador de préstamos El método parte del listado Movimiento y selecciona
+     * sólo los de tipo Préstamo. Se puede reaprovechar para otros grupos!
+     *
      * @author Jaume Mayol
      * @param listaMovimientos
-     * @return l'objecte ArrayList de Movimiento amb el tipus només de préstec.
+     * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
      * @see es.bancodehierro.banco.cc.Movimiento
      */
-    public ArrayList<Movimiento> llista(ArrayList<Movimiento> listaMovimientos) {
+    public ArrayList<Movimiento> buscadorPrestamos(ArrayList<Movimiento> listaMovimientos) {
         ArrayList<Movimiento> prestamos = new ArrayList<>();
         for (int i = 0; i < listaMovimientos.size(); ++i) {
             Movimiento aux = listaMovimientos.get(i);
