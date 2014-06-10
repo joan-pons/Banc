@@ -5,6 +5,7 @@
  */
 package es.bancodehierro.banco.persona;
 
+import es.bancodehierro.banco.enumeraciones.EnumCargo;
 import java.util.Date;
 
 /**
@@ -14,6 +15,7 @@ import java.util.Date;
 public class Empleado extends Persona {
 
     private int idEmpleado;
+    private EnumCargo cargo;
 
     public int getIdEmpleado() {
         return idEmpleado;
@@ -23,8 +25,20 @@ public class Empleado extends Persona {
         this.idEmpleado = idEmpleado;
     }
 
-    public Empleado(String nombre, String apellidos, String dni, String poblacion, String direccion, Date fechaNacimiento) {
-        super(nombre, apellidos, dni, poblacion, direccion, fechaNacimiento);
+    public EnumCargo getCargo() {
+        return cargo;
     }
+
+    public void setCargo(EnumCargo cargo) {
+        this.cargo = cargo;
+    }
+
+    public Empleado(int idEmpleado, EnumCargo cargo, String nombre, String apellidos, String dni, String poblacion, String direccion, Date fechaNacimiento) {
+        super(nombre, apellidos, dni, poblacion, direccion, fechaNacimiento);
+        this.idEmpleado = idEmpleado;
+        this.cargo = cargo;
+    }
+
+
 
 }
