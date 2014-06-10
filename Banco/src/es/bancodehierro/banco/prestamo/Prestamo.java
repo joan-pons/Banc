@@ -25,6 +25,11 @@ public class Prestamo {
     private CuentaCorriente cuentaCorriente;
     private ArrayList<Movimiento> listaMovimientos;
 
+    //Els he afegit, cal discutir-ho. Veure mètodes cuotaMensual y
+    //Cálculo total a Pagar (Jaume)
+    private double tasaInteresAnual;
+    private int nombreAños;
+
     public Prestamo(int codigoPrestamo, String tipoPrestamo, Date fechaInicio, Date fechaFinal, Double importePrestado, Double importeRestante, Double cuotaMensual, Empleado empleadoAutorizacion, CuentaCorriente cuentaCorriente) {
         this.codigoPrestamo = codigoPrestamo;
         this.tipoPrestamo = tipoPrestamo;
@@ -97,6 +102,36 @@ public class Prestamo {
             }
         }
         return prestamos;
+    }
+
+    /**
+     * <b>Cálculo cuota mensual</b> Si pedimos un préstamo de 1.000 € a 18 meses con un
+     * Interés del 3,5, entonces para obtener la cuota mensual es 1.000 x
+     * 3,5/1,200 (12 mesos) x 18 (durada préstec) I = 1000 x 3.5/1,200 x 18 =
+     * 52.50€.
+     *
+     * @author Jaume Mayol
+     * @return
+     */
+    public double cuotaMensual() {
+        double taxaInteresMensual = tasaInteresAnual / 1200;
+        double importeMensual = importePrestado * taxaInteresMensual / (1
+                - (Math.pow(1 / (1 + taxaInteresMensual), nombreAños * 12)));
+        return importeMensual;
+    }
+
+    /**
+     * Cálculo total a pagar (capital prestado + intereses) Se utiliza el método
+     * cuotaMensual y se hace la sencilla de operación de multiplicar su
+     * resultado por el nombre de Años del préstamo por los 12 meses del año.
+     *
+     * @author Jaume Mayol
+     * @see cuotaMensual
+     * @return el pago total que deberà el prestatario
+     */
+    public double calculoTotalAPagar() {
+        double pagoTotal = cuotaMensual() * nombreAños * 12;
+        return pagoTotal;
     }
 
     public void setFechaFinal(Date fechaFinal) {
