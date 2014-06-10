@@ -18,7 +18,6 @@ public class Debito extends Tarjeta {
 
     public Debito(int codigoTarjeta, Cliente titular, CuentaCorriente cuentaCorriente, TipoTarjeta tipoTarjeta) {
         super(codigoTarjeta, titular, cuentaCorriente, tipoTarjeta);
-        this.saldo = saldo;
     }
 
     public Double getSaldo() {
