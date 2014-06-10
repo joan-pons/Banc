@@ -94,7 +94,7 @@ public class CuentaCorriente {
                 throw new CuentaCorrienteException("Error: Límite de titulares alcanzado.");
             }
         } else {
-            throw new CuentaCorrienteException("Error: Titular, " + titular.getDNI() + ", ya asociado a está cuenta.");
+            throw new CuentaCorrienteException("Error: Titular, " + titular.getDni() + ", ya asociado a está cuenta.");
         }
     }
     
