@@ -11,13 +11,13 @@ import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
  *
  * @author Guillem Arrom, Guillem Rotger, Pedro Lladó, François
  */
-public class Principal {
+public abstract class Principal {
 
     private static final int MENU_PRONCIPAL_PREFIX = 69000;
     private static final int MENU_PRINCIPAL_CC = 69000;
     private static final int MENU_PRINCIPAL_PRESTAMO = 69001;
     private static final int MENU_PRINCIPAL_TARJETA = 69002;
-    private static final int MENU_PRINCIPAL_OTRO = 69003;
+    private static final int MENU_PRINCIPAL_SUCURSAL = 69003;
 
     /**
      * @param args the command line arguments
@@ -39,8 +39,9 @@ public class Principal {
             case MENU_PRINCIPAL_TARJETA:
                 //Aqui debe llamar al metodo principal del menu de tarjeta
                 break;
-            case MENU_PRINCIPAL_OTRO:
-                //Aqui debe llamar al metodo principal del menu de otroxd
+            case MENU_PRINCIPAL_SUCURSAL:
+                //Aqui debe llamar al metodo principal del menu de sucursal
+                MenuSucursal.menu();
                 break;
         }
     }
