@@ -10,6 +10,7 @@ import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,15 +31,15 @@ public class Banco {
         return true;
     }
 
-    public CuentaCorriente mostrarCuentaCorriente() {
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente() {
         return null;
     }
 
-    public CuentaCorriente mostrarCuentaCorriente(Sucursal sucursal) {
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Sucursal sucursal) {
         return null;
     }
 
-    public CuentaCorriente mostrarCuentaCorriente(Cliente cliente) {
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Cliente cliente) {
         return null;
     }
 
