@@ -12,7 +12,7 @@ import java.sql.Statement;
  */
 public class MenuPrestamo {
 
-    public static void muestraMenu() {
+    public static void menuPres() {
 
         String[] opcions = {"Insertar Prestamo"};
 
