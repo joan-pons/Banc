@@ -134,6 +134,25 @@ public class Prestamo {
         double pagoTotal = cuotaMensual() * nombreAños * 12;
         return pagoTotal;
     }
+    
+     /**
+     * Cancelar Préstamo
+     * Versió molt "experimental"
+     * També es pot calcular com:
+     * [deuda pendint x interes Esperado x meses restantes] / 12
+     * @author Jaume Mayol
+     * @param importePagado
+     * @param tasaInteresMensual
+     * @param tasaInteresEsperado
+     * @return 
+     */
+    public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
+        double interesesCancelacion = importePrestado * tasaInteresMensual / (1
+                - (Math.pow(1 / (1 + tasaInteresEsperado), nombreAños * 12)));
+        double pagoFinal = calculoTotalAPagar() - importePagado + interesesCancelacion;
+        //eliminarPrestamo();
+        return pagoFinal;
+    }
 
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
@@ -159,13 +178,23 @@ public class Prestamo {
     }
 
     /**
-     * Mètode de inserció de prestec.
+     * Mètodo de inserción de prestamo.
      *
      * @author Rafel Sastre.
      * @return
      */
     public String insertarPrestamo() {
         return "INSERT INTO Prestamo (codigoPrestamo, tipoPrestamo, fechaInicio, fechaFinal, importePrestado, importeRestante, cuotaMensual, empleadoAutorizacion, cuentaCorriente) VALUES (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ")";
+    }
+    
+    /**
+     * Método de modificación de préstamo (por código)
+     * 
+     * @author Pau Riera.
+     * @return 
+     */
+    public String updatePrestamo(){
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = "+getCodigoPrestamo();
     }
     
        /**

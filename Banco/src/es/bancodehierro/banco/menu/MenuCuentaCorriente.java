@@ -6,10 +6,11 @@
 package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
-import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
+import es.bancodehierro.banco.persona.Cliente;
+import es.bancodehierro.banco.persona.Empleado;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,7 +41,7 @@ public class MenuCuentaCorriente {
 
                 case 1: {
                     boolean repMenuTitular = true;
-                    menuCC.metodoTitular(repMenuTitular, cC);
+                    menuCC.metodoTitular(repMenuTitular);
                     break;
                 }
 
@@ -161,8 +162,9 @@ public class MenuCuentaCorriente {
      * Metodo que contiene las opciones del menu con las operaciones de Importe
      * @param repMenuTitular booleano con true o false
      * @param cC Paso de la cuenta corriente
+     * @param cliente Cliente a tratar
      */
-    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC){
+    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente){
         for (; repMenuTitular;) {
                         String[] opcionesTit = {"Agregar Titular",
                             "Modificar Titular",
@@ -173,7 +175,8 @@ public class MenuCuentaCorriente {
                         int menuTit = mostrarMenu(opcionesTit);
                         switch (menuTit) {
                             case 0: {
-                                Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                               // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                Cliente clienteOperacion= cliente;
                                 try {
                                     cC.agregarTitular(cliente);
                                 } catch (CuentaCorrienteException ex) {
@@ -186,7 +189,7 @@ public class MenuCuentaCorriente {
                                 break;
                             }
                             case 2: {
-                                Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                                 try {
                                     cC.eliminarTitular(cliente);
                                 } catch (CuentaCorrienteException ex) {
