@@ -125,13 +125,51 @@ public class CuentaCorriente {
 
     }
 
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) {
-        ArrayList<Movimiento> movimiento = null;
-        return movimiento;
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws CuentaCorrienteException{
+        if(incidencia == true){
+            if(incidencias.isEmpty()){
+                return incidencias;
+            }else{
+                throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
+            }
+        }else{
+            if(movimientos.isEmpty()){
+                return movimientos;
+            }else{
+                throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
+            }
+        }
     }
     
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia,EnumMovimiento tipo) {
-        ArrayList<Movimiento> movimiento = null;
-        return movimiento;
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia,EnumMovimiento tipo) throws CuentaCorrienteException {
+        ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
+        if(incidencia == true){
+            if(incidencias.isEmpty()){
+                for(Movimiento inci: movimientos){
+                    if(inci.getTipo() == tipo){
+                        movimientoFiltrado.add(inci);
+                    }
+                }
+            }else{
+                throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
+            }
+        }else{
+            if(movimientos.isEmpty()){
+                for(Movimiento movi: movimientos){
+                    if(movi.getTipo() == tipo){
+                        movimientoFiltrado.add(movi);
+                    }
+                }
+            }else{
+                throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
+            }
+        }
+        
+        if(movimientoFiltrado.isEmpty()){
+            return movimientoFiltrado;
+        }else{
+            throw new CuentaCorrienteException("Error: No se han encontrados movimientos.");
+        }
+        
     }
 }
