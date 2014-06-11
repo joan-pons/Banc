@@ -23,8 +23,8 @@ public class Cliente extends Persona {
         this.idCliente = idCliente;
     }
 
-    public Cliente(int idCliente, String nombre, String apellidos, String dni, String poblacion, String direccion, Date fechaNacimiento) {
-        super(nombre, apellidos, dni, poblacion, direccion, fechaNacimiento);
+    public Cliente(int idCliente, String nombre, String apellido1, String apellido2, String dni, String poblacion, String direccion, Date fechaNacimiento, String tlf) {
+        super(nombre, apellido1, apellido2, dni, poblacion, direccion, fechaNacimiento, tlf);
         this.idCliente = idCliente;
     }
 

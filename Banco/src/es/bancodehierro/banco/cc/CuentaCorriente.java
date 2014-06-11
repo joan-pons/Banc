@@ -5,11 +5,16 @@
  */
 package es.bancodehierro.banco.cc;
 
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -88,7 +93,11 @@ public class CuentaCorriente {
         return (iban + ENTIDAD + oficina + dC + cuenta);
     }
 
-    public void agregarTitular(Cliente titular) throws CuentaCorrienteException {
+    public void agregarTitular(Cliente titular) throws CuentaCorrienteException, SQLException {
+        Statement st = Conexion.conectar().createStatement();
+        String insertTitular="INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION) ";
+	int filas = st.executeUpdate(insertTitular);
+        st.close();
         if (!titulares.containsValue(titular)) {
             if (!titulares.containsKey("Titular")) {
                 titulares.put("Titular", titular);
@@ -125,23 +134,39 @@ public class CuentaCorriente {
 
         eliminarTitular(titulares.get("Titular"));
 
-        agregarTitular(auxiliar);
+        try {
+            agregarTitular(auxiliar);
+        } catch (SQLException ex) {
+            System.err.println(ex.getMessage());
+        }
 
     }
     
     public void cambiarTitular(Cliente viejo, Cliente nuevo) throws CuentaCorrienteException{
         
         if (!titulares.containsKey("Segundo")){            
-            agregarTitular(nuevo);
+            try {
+                agregarTitular(nuevo);
+            } catch (SQLException ex) {
+                System.err.println(ex.getMessage());
+            }
             eliminarTitular(viejo);
         }else{
             if (viejo.equals(titulares.get("Titular"))){
                 eliminarTitular(viejo);
-                agregarTitular(nuevo);
+                try {
+                    agregarTitular(nuevo);
+                } catch (SQLException ex) {
+                    System.err.println(ex.getMessage());
+                }
                 intercambiarTitular();
             } else {
                 eliminarTitular(viejo);
-                agregarTitular(nuevo);
+                try {
+                    agregarTitular(nuevo);
+                } catch (SQLException ex) {
+                     System.err.println(ex.getMessage());
+                }
             }
         }
     }

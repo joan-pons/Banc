@@ -16,11 +16,13 @@ import java.util.Date;
  */
 public class Persona {
     private String nombre;
-    private String apellidos;
+    private String apellido1;
+    private String apellido2;
     private String dni;
     private String poblacion;
     private String direccion;
     private Date fechaNacimiento;
+    private String tlf;
 
     public String getNombre() {
         return nombre;
@@ -30,14 +32,20 @@ public class Persona {
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido1() {
+        return apellido1;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+public String getApellido2() {
+        return apellido2;
     }
 
+    public void setApellido2(String apellido2) {
+        this.apellido2 = apellido2;
+    }
     public String getDni() {
         return dni;
     }
@@ -61,6 +69,14 @@ public class Persona {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+    
+     public String getTlf() {
+        return tlf;
+    }
+
+    public void setTlf(String tlf) {
+        this.tlf = tlf;
+    }
 
     public Date getFechaNacimiento() {
         return fechaNacimiento;
@@ -70,13 +86,15 @@ public class Persona {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Persona(String nombre, String apellidos, String dni, String poblacion, String direccion, Date fechaNacimiento) {
+    public Persona(String nombre, String apellido1, String apellido2, String dni, String poblacion, String direccion, Date fechaNacimiento, String tlf) {
         this.nombre = nombre;
-        this.apellidos = apellidos;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
         this.dni = dni;
         this.poblacion = poblacion;
         this.direccion = direccion;
         this.fechaNacimiento = fechaNacimiento;
+        this.tlf = tlf;
     }
     
 }
