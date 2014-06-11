@@ -5,8 +5,12 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import es.bancodehierro.banco.menu.GestionaMenu;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -14,8 +18,35 @@ import es.bancodehierro.banco.menu.GestionaMenu;
  */
 public class MenuTarjeta {
 
+    private static String url = "jdbc:mysql://localhost:3306/computerstore?user=root&password=";
+    private static Connection conexio;
+
+    static {
+        try {
+            conexio = DriverManager.getConnection(url);
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+    }
+
     public static void altaTarjeta() {
         int codiClient = GestionaMenu.llegirSencer("Introdueix el codi del client.");
+        int clientTrobat=0;
+        try {
+            Statement st = conexio.createStatement();
+            String selectClient = "select count(*) from Cliente where idCliente=" + codiClient;
+            ResultSet rs = st.executeQuery(selectClient);
+            rs.next();
+            clientTrobat= rs.getInt(1);
+            st.close();
+            rs.close();
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+        if (clientTrobat==1) {
+            
+        }
+
     }
 
     public static void eliminarTarjeta() {
@@ -35,7 +66,7 @@ public class MenuTarjeta {
     }
 
     public static void ejecutarMenu() {
-        boolean flag=true;
+        boolean flag = true;
         do {
             System.out.println("Opcion 1: Dar de alta una tarjeta.");
             System.out.println("Opcion 2: Eliminar una tarjeta.");
@@ -66,12 +97,12 @@ public class MenuTarjeta {
                     break;
                 }
                 case 6: {
-                    flag=false;
+                    flag = false;
                     break;
                 }
             }
-            
-        }while(flag);
+
+        } while (flag);
     }
 
 }
