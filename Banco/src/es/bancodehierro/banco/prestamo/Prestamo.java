@@ -134,6 +134,25 @@ public class Prestamo {
         double pagoTotal = cuotaMensual() * nombreAños * 12;
         return pagoTotal;
     }
+    
+     /**
+     * Cancelar Préstamo
+     * Versió molt "experimental"
+     * També es pot calcular com:
+     * [deuda pendint x interes Esperado x meses restantes] / 12
+     * @author Jaume Mayol
+     * @param importePagado
+     * @param tasaInteresMensual
+     * @param tasaInteresEsperado
+     * @return 
+     */
+    public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
+        double interesesCancelacion = importePrestado * tasaInteresMensual / (1
+                - (Math.pow(1 / (1 + tasaInteresEsperado), nombreAños * 12)));
+        double pagoFinal = calculoTotalAPagar() - importePagado + interesesCancelacion;
+        //eliminarPrestamo();
+        return pagoFinal;
+    }
 
     public void setFechaFinal(Date fechaFinal) {
         this.fechaFinal = fechaFinal;
