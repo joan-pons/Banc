@@ -31,14 +31,13 @@ public class Prestamo {
     private double tasaInteresAnual;
     private int nombreAños;
 
-    public Prestamo(int codigoPrestamo, String tipoPrestamo, Date fechaInicio, Date fechaFinal, Double importePrestado, Double importeRestante, Double cuotaMensual, Empleado empleadoAutorizacion, CuentaCorriente cuentaCorriente) {
+    public Prestamo(int codigoPrestamo, String tipoPrestamo, Date fechaInicio, Date fechaFinal, Double importePrestado, Double tasaInteresAnual, Empleado empleadoAutorizacion, CuentaCorriente cuentaCorriente) {
         this.codigoPrestamo = codigoPrestamo;
         this.tipoPrestamo = tipoPrestamo;
         this.fechaInicio = fechaInicio;
         this.fechaFinal = fechaFinal;
         this.importePrestado = importePrestado;
-        this.importeRestante = importeRestante;
-        this.cuotaMensual = cuotaMensual;
+        this.tasaInteresAnual = tasaInteresAnual;
         this.empleadoAutorizacion = empleadoAutorizacion;
         this.cuentaCorriente = cuentaCorriente;
         this.listaMovimientos = new ArrayList<>();
