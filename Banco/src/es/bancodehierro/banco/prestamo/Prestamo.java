@@ -159,4 +159,8 @@ public class Prestamo {
 
     }
 
+    public String inserir() {
+        return "INSERT INTO Prestamo (codigoPrestamo, tipoPrestamo, fechaInicio, fechaFinal, importePrestado, importeRestante, cuotaMensual, empleadoAutorizacion, cuentaCorriente) VALUES ('getCodigoPrestamo()', 'getTipoPrestamo()', 'getFechaInicio()', 'getFechaFinal()', 'getImportePrestado()', 'getImporteRestante()', 'getCuotaMensual()', 'getEmpleadoAutorizacion()', 'getCuentaCorriente()')";
+    }
+
 }
