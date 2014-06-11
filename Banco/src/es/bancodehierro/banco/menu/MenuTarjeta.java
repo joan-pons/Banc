@@ -8,6 +8,7 @@ package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.menu.GestionaMenu;
+import es.bancodehierro.banco.tarjeta.GestionTarjetas;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -68,7 +69,10 @@ public class MenuTarjeta {
             }
         }
         
-        //
+        //pedir tipo
+        String tipo = GestionaMenu.llegirCadena("Introduce el tipo de tarjeta (DEBITO/CREDITO)/");
+        //llamar al metodo de GestionTarjetas
+        //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase());
         
     }
 
