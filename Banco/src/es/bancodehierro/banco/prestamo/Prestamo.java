@@ -167,5 +167,15 @@ public class Prestamo {
     public String insertarPrestamo() {
         return "INSERT INTO Prestamo (codigoPrestamo, tipoPrestamo, fechaInicio, fechaFinal, importePrestado, importeRestante, cuotaMensual, empleadoAutorizacion, cuentaCorriente) VALUES (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ")";
     }
+    
+       /**
+     * Método de eliminación de préstamo (por código)
+     *
+     * @author Jaume Mayol
+     * @return
+     */
+     public String eliminarPrestamo() {
+        return "DELETE FROM Prestamo WHERE CodigoPrestamo=" + getCodigoPrestamo();
+    }
 
 }
