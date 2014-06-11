@@ -1,5 +1,6 @@
 package es.bancodehierro.banco.tarjeta;
 
+import banc.Conexion;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
 import java.sql.Connection;
@@ -24,37 +25,19 @@ public class GestionTarjetas {
         return null;
     }
 
-    public Boolean eliminarTarjeta(int codigoTarjeta) {
-         try {
-            Statement st = conexio.createStatement();
-            String query = "DELETE FROM tarjeta WHERE codigoTarjeta = "+codigoTarjeta;
+    public Boolean eliminarTarjeta(int codigoTarjeta, Conexion conexio) {
+        try {
+            Connection cn = conexio.conectar();
+            Statement st = cn.createStatement();
+            String query = "DELETE FROM tarjeta WHERE codigoTarjeta = " + codigoTarjeta;
             st.executeUpdate(query);
             st.close();
+            conexio.desconectar();
             return true;
         } catch (SQLException ex) {
-             System.out.println("Error al eliminar tarjeta. Confirma el codigo de la tarjeta.");
-             return false;
+            System.out.println("Error en la conexion");
+            return false;
         }
-    }
-
-    public Boolean pagar() {
-
-    }
-
-    public Boolean ingresarDebito(double importe, String concepto, int codigoTarjeta) {
-        try{
-            if(importe<=0){
-                throw new 
-            }
-        } catch () {
-            
-        }
-        
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        String dateTime = date.toString();
-        MovimientoTarjeta m = new MovimientoTarjeta('I', dateTime, concepto, importe, codigoTarjeta);
-        return true;
     }
 
     public Boolean verMovimientos(int codigoTarjeta) {
