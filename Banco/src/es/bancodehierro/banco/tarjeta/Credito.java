@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.bancodehierro.banco.tarjeta;
+package es.bancodehierro.banco.Tarjeta;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
