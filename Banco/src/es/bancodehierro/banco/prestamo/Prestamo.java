@@ -168,6 +168,16 @@ public class Prestamo {
         return "INSERT INTO Prestamo (codigoPrestamo, tipoPrestamo, fechaInicio, fechaFinal, importePrestado, importeRestante, cuotaMensual, empleadoAutorizacion, cuentaCorriente) VALUES (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ")";
     }
     
+    /**
+     * Método de modificación de préstamo (por código)
+     * 
+     * @author Pau Riera.
+     * @return 
+     */
+    public String updatePrestamo(){
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = "+getCodigoPrestamo();
+    }
+    
        /**
      * Método de eliminación de préstamo (por código)
      *
