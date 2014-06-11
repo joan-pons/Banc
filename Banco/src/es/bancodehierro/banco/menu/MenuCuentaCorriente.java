@@ -50,7 +50,7 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 3: {
-
+                    Principal.menuPrincipal();
                     break;
                 }
 
