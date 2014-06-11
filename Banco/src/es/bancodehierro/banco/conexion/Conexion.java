@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.bancodegierro.banco.conexion;
+package es.bancodehierro.banco.conexion;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
