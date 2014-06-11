@@ -37,7 +37,7 @@ public class MenuPrestamo {
         try {
             conexio = DriverManager.getConnection(url);
             Statement st = conexio.createStatement();
-            int filesAfectades = st.executeUpdate(presta.inserir());
+            int filesAfectades = st.executeUpdate(presta.insertarPrestamo());
             System.out.println(filesAfectades + ", files afectades.");
         } catch (SQLException ex) {
             System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
