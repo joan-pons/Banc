@@ -124,6 +124,23 @@ public class CuentaCorriente {
         agregarTitular(auxiliar);
 
     }
+    
+    public void cambiarTitular(Cliente viejo, Cliente nuevo) throws CuentaCorrienteException{
+        
+        if (!titulares.containsKey("Segundo")){            
+            agregarTitular(nuevo);
+            eliminarTitular(viejo);
+        }else{
+            if (viejo.equals(titulares.get("Titular"))){
+                eliminarTitular(viejo);
+                agregarTitular(nuevo);
+                intercambiarTitular();
+            } else {
+                eliminarTitular(viejo);
+                agregarTitular(nuevo);
+            }
+        }
+    }
 
     public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws CuentaCorrienteException{
         if(incidencia == true){
