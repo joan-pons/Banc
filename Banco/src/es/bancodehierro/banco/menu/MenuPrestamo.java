@@ -46,6 +46,26 @@ public class MenuPrestamo {
     
     /**
      * PENDIENTE DE PASAR A BANCO.
+     * Menú. Método de modificar Préstamo.
+     * Modifica el préstamo pasándole un objeto de Préstamo.
+     * 
+     * @author Pau Riera
+     * @param presta 
+     */
+    public void updatePrestamo(Prestamo presta) {
+        Connection conexio = Conexion.conectar();
+        try {
+            Statement st = conexio.createStatement();
+            int filesAfectades = st.executeUpdate(presta.updatePrestamo());
+            System.out.println(filesAfectades + ", files afectades.");
+        } catch (SQLException ex) {
+            System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
+        }
+        
+    }
+    
+    /**
+     * PENDIENTE DE PASAR A BANCO.
      * Menú. Método de eliminar Préstamo
      * Elimina el préstamo. Coge el código del préstamo.
      * @author Jaume Mayol
