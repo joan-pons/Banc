@@ -46,9 +46,11 @@ public class MenuPrestamo {
     
     /**
      * PENDIENTE DE PASAR A BANCO.
-     *
+     * Menú. Método de eliminar Préstamo
+     * Elimina el préstamo. Coge el código del préstamo.
      * @author Jaume Mayol
      * @param presta
+     * @see es.bancodehierro.banco.prestamo.Prestamo
      */
     public void eliminarPrestamo(Prestamo presta) {
         Connection conexio = Conexion.conectar();
