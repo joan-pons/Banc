@@ -6,6 +6,7 @@
 
 package es.bancodehierro.banco.tarjeta;
 
+import banc.Conexion;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
 import static es.bancodehierro.banco.tarjeta.TipoTarjeta.CREDITO;
@@ -42,47 +43,38 @@ public abstract class  Tarjeta {
      * guardada en la base de datos.
      * @param codigoTarjeta 
      */
-   public Tarjeta(int codigoTarjeta ,ObjecteConexio conexio){
-      Statement consulta = conexio.createStament();
+   public Tarjeta(int codigoTarjeta ,Conexion conexion){
+     
        ResultSet resultat;
        String tipoT=null;
+       int codTitular = 0;
+       int codCuentaCorriente = 0;
         try {
+             Statement consulta = conexion.conectar().createStatement();
             resultat = consulta.executeQuery("select * from Tarjeta where codigoTarjeta ="+ codigoTarjeta);
               while(resultat.next()){
-            int codTitular = resultat.getInt("CodigoTitular");
-            int codCuentaCorriente = resultat.getInt("CodigoCuentaCorriente");
-             tipoT = resultat.getString("TipoTarjeta");
-             
+                codTitular = resultat.getInt("CodigoTitular");
+                codCuentaCorriente = resultat.getInt("CodigoCuentaCorriente");
+                tipoT = resultat.getString("TipoTarjeta");
+              }
         if(resultat!=null) resultat.close();
-  
-        if (tipoT == "CREDITO"){
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(Tarjeta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          if (tipoT == "CREDITO"){
             this.tipo = CREDITO;
         } else if (tipoT == "DEBITO"){
             this.tipo = DEBITO;
         }
-       
         this.codigoTarjeta = codigoTarjeta;
         this.codigoTitular = codTitular;
         this.codigoCuentaCorriente = codCuentaCorriente;
         this.tipo = tipo;
-        }
-        } catch (SQLException ex) {
-            Logger.getLogger(Tarjeta.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-      
    }
 
     public void setCodigoTarjeta(int codigoTarjeta) {
         this.codigoTarjeta = codigoTarjeta;
-    }
-
-    public void setTitular(Cliente titular) {
-        this.titular = titular;
-    }
-
-    public void setCuenta(CuentaCorriente cuenta) {
-        this.cuenta = cuenta;
     }
 
     public void setTipo(TipoTarjeta tipo) {
@@ -93,13 +85,23 @@ public abstract class  Tarjeta {
         return codigoTarjeta;
     }
 
-    public Cliente getTitular() {
-        return titular;
+    public int getCodigoTitular() {
+        return codigoTitular;
     }
 
-    public CuentaCorriente getCuenta() {
-        return cuenta;
+    public int getCodigoCuentaCorriente() {
+        return codigoCuentaCorriente;
     }
+
+    public void setCodigoTitular(int codigoTitular) {
+        this.codigoTitular = codigoTitular;
+    }
+
+    public void setCodigoCuentaCorriente(int codigoCuentaCorriente) {
+        this.codigoCuentaCorriente = codigoCuentaCorriente;
+    }
+
+
 
     public TipoTarjeta getTipo() {
         return tipo;
