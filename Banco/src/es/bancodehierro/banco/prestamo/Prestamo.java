@@ -169,7 +169,7 @@ public class Prestamo {
     }
     
     /**
-     * Mètode de modificació de préstec.
+     * Método de modificación de préstamo (por código)
      * 
      * @author Pau Riera.
      * @return 
