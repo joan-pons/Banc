@@ -23,9 +23,8 @@ public abstract class Principal {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        System.out.println("BIENVENIDO AL BANCO DE HIERRO");
-        String dni = GestionaMenu.llegirCadena("inserta tu DNI");
+    
+    public static void menuPrincipal(){
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
         boolean menu = true;
         do {
@@ -52,6 +51,11 @@ public abstract class Principal {
                     break;
             }
         } while (menu);
+    }
+    public static void main(String[] args) {
+        System.out.println("BIENVENIDO AL BANCO DE HIERRO");
+        String dni = GestionaMenu.llegirCadena("inserta tu DNI");
+        menuPrincipal();
     }
 
 }
