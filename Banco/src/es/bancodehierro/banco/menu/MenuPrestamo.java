@@ -27,7 +27,7 @@ public class MenuPrestamo {
     }
 
     /**
-     * PENDIENTE DE PASAR A BANCO Y INDICAR BASE DE DATOS.
+     * PENDIENTE DE PASAR A BANCO.
      *
      * @author Rafel Sastre.
      * @param presta

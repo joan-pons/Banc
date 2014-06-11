@@ -159,7 +159,7 @@ public class Prestamo {
     }
 
     /**
-     * Mètode de inserció de prestec.
+     * Mètodo de inserción de prestamo.
      *
      * @author Rafel Sastre.
      * @return
