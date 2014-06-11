@@ -5,7 +5,7 @@
  */
 package es.bancodehierro.banco.menu;
 
-import banc.Conexion;
+import es.bancodehierro.banco.conexion.Conexion;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 
 /**
