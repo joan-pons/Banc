@@ -34,203 +34,19 @@ public class MenuCuentaCorriente {
             switch (menu) {
                 case 0: {
                     boolean repMenuImporte = true;
-                    for (; repMenuImporte;) {
-                        String[] opcionesImp = {"Modificar Importe",
-                            "Mostrar Importe",
-                            "Volver atrás"};
-
-                        int menuImp = menuCC.mostrarMenu(opcionesImp);
-                        switch (menuImp) {
-                            case 0: {
-                                cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
-                                break;
-                            }
-                            case 1: {
-                                System.out.println(cC.getImporte());
-                                break;
-                            }
-                            case 2: {
-                                //Retrocede al menu anterior
-                                repMenuImporte = false;
-                                break;
-                            }
-
-                        }
-                        if (menuImp != 2) {
-
-                            repMenuImporte = menuCC.algunaCosaMas();
-                        }
-                    }
+                        menuCC.metodoImporte(repMenuImporte, cC);
                     break;
                 }
 
                 case 1: {
                     boolean repMenuTitular = true;
-                    for (; repMenuTitular;) {
-                        String[] opcionesTit = {"Agregar Titular",
-                            "Modificar Titular",
-                            "Eliminar Titular",
-                            "Intercambiar Titular",
-                            "Volver atrás"};
-
-                        int menuTit = menuCC.mostrarMenu(opcionesTit);
-                        switch (menuTit) {
-                            case 0: {
-                                Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
-                                try {
-                                    cC.agregarTitular(cliente);
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
-                                break;
-                            }
-                            case 1: {
-
-                                break;
-                            }
-                            case 2: {
-                                Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
-                                try {
-                                    cC.eliminarTitular(cliente);
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
-                                break;
-                            }
-                            case 3: {
-                                try {
-                                    cC.intercambiarTitular();
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
-                                break;
-                            }
-                            case 4: {
-                                //Retrocede al menu anterior
-                                repMenuTitular = false;
-                                break;
-                            }
-
-                        }
-                        if (menuTit != 4) {
-
-                            repMenuTitular = menuCC.algunaCosaMas();;
-
-                        }
-                    }
+                    menuCC.metodoTitular(repMenuTitular, cC);
                     break;
                 }
 
                 case 2: {
                     boolean repMenuMovimiento = true;
-                    for (; repMenuMovimiento;) {
-                        String[] opcionesMov = {"Movimientos",
-                            "Incidencias",
-                            "Volver atrás"};
-
-                        int menuMov = menuCC.mostrarMenu(opcionesMov);
-                        switch (menuMov) {
-                            case 0: {
-
-                                boolean repMenuMovimientoCorrecto = true;
-                                for (; repMenuMovimientoCorrecto;) {
-                                    String[] opcionesMovC = {"Mostrar todos los Movimientos",
-                                        "Mostrar Movimientos segun Tipo",
-                                        "Volver atrás"};
-
-                                    int menuMovC = menuCC.mostrarMenu(opcionesMovC);
-                                    switch (menuMovC) {
-                                        case 0: {
-                                            for (Movimiento mov : cC.mostrarMovimiento(false)) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                            break;
-                                        }
-                                        case 1: {
-
-                                            for (Movimiento mov : cC.mostrarMovimiento(false, menuCC.seleccionTipo())) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                            break;
-                                        }
-                                        case 2: {
-                                            //Retrocede al menu anterior
-                                            repMenuMovimientoCorrecto = false;
-                                            menuMov = 2;
-                                            break;
-                                        }
-
-                                    }
-                                    if (menuMovC != 2) {
-
-                                        repMenuMovimientoCorrecto = menuCC.algunaCosaMas();
-                                        menuMov = 2;
-                                    }
-                                }
-                                break;
-
-                            }
-                            case 1: {
-
-                                boolean repMenuMovimientoIncidencia = true;
-                                for (; repMenuMovimientoIncidencia;) {
-                                    String[] opcionesMovI = {"Mostrar todos las Incidencias",
-                                        "Mostrar Incidencias segun Tipo",
-                                        "Volver atrás"};
-
-                                    int menuMovI = menuCC.mostrarMenu(opcionesMovI);
-                                    switch (menuMovI) {
-                                        case 0: {
-                                            for (Movimiento mov : cC.mostrarMovimiento(true)) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                            break;
-                                        }
-                                        case 1: {
-
-                                            for (Movimiento mov : cC.mostrarMovimiento(true, menuCC.seleccionTipo())) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                            break;
-                                        }
-                                        case 2: {
-                                            //Retrocede al menu anterior
-                                            repMenuMovimientoIncidencia = false;
-                                            menuMov = 2;
-                                            break;
-                                        }
-
-                                    }
-                                    if (menuMovI != 2) {
-
-                                        repMenuMovimientoIncidencia = menuCC.algunaCosaMas();
-                                        menuMov = 2;
-                                    }
-                                }
-                                break;
-
-                            }
-                            case 2: {
-                                //Retrocede al menu anterior
-                                repMenuMovimiento = false;
-                                break;
-                            }
-
-                        }
-                        if (menuMov != 2) {
-
-                            repMenuMovimiento = menuCC.algunaCosaMas();
-
-                        }
-                    }
+                    menuCC.metodoMovimiento(repMenuMovimiento, cC);
                     break;
                 }
                 case 3: {
@@ -278,7 +94,10 @@ public class MenuCuentaCorriente {
                 "\nElegir Opcion:\n\t", opciones,
                 "¿Que quieres ejecutar?", 0);
     }
-
+    /**
+     * 
+     * @return 
+     */
     public EnumMovimiento seleccionTipo() {
         boolean respTipoBoolean = false;
         EnumMovimiento respTipoEnum = null;
@@ -304,5 +123,225 @@ public class MenuCuentaCorriente {
         }
         return respTipoEnum;
     }
+    /**
+     * Metodo que contiene las opciones del menu con las operaciones de Tipo
+     * @param repMenuImporte booleano con true o false
+     * @param cC Paso de la cuenta corriente
+     */
+    public void metodoImporte(boolean repMenuImporte, CuentaCorriente cC){
+        for (; repMenuImporte;) {
+                        String[] opcionesImp = {"Modificar Importe",
+                            "Mostrar Importe",
+                            "Volver atrás"};
 
+                        int menuImp = mostrarMenu(opcionesImp);
+                        switch (menuImp) {
+                            case 0: {
+                                cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
+                                break;
+                            }
+                            case 1: {
+                                System.out.println(cC.getImporte());
+                                break;
+                            }
+                            case 2: {
+                                //Retrocede al menu anterior
+                                repMenuImporte = false;
+                                break;
+                            }
+
+                        }
+                        if (menuImp != 2) {
+
+                            repMenuImporte = algunaCosaMas();
+                        }
+                    }
+    }
+    /**
+     * Metodo que contiene las opciones del menu con las operaciones de Importe
+     * @param repMenuTitular booleano con true o false
+     * @param cC Paso de la cuenta corriente
+     */
+    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC){
+        for (; repMenuTitular;) {
+                        String[] opcionesTit = {"Agregar Titular",
+                            "Modificar Titular",
+                            "Eliminar Titular",
+                            "Intercambiar Titular",
+                            "Volver atrás"};
+
+                        int menuTit = mostrarMenu(opcionesTit);
+                        switch (menuTit) {
+                            case 0: {
+                                Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                try {
+                                    cC.agregarTitular(cliente);
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
+                                break;
+                            }
+                            case 1: {
+
+                                break;
+                            }
+                            case 2: {
+                                Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                try {
+                                    cC.eliminarTitular(cliente);
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
+                                break;
+                            }
+                            case 3: {
+                                try {
+                                    cC.intercambiarTitular();
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
+                                break;
+                            }
+                            case 4: {
+                                //Retrocede al menu anterior
+                                repMenuTitular = false;
+                                break;
+                            }
+
+                        }
+                        if (menuTit != 4) {
+
+                            repMenuTitular = algunaCosaMas();;
+
+                        }
+                    }
+    }
+    /**
+     * Metodo que contiene las opciones del menu con las operaciones de Movimiento
+     * @param repMenuMovimiento booleano con true o false
+     * @param cC Paso de la cuenta corriente
+     */
+    public void metodoMovimiento(boolean repMenuMovimiento,CuentaCorriente cC){
+        for (; repMenuMovimiento;) {
+                        String[] opcionesMov = {"Movimientos",
+                            "Incidencias",
+                            "Volver atrás"};
+
+                        int menuMov = mostrarMenu(opcionesMov);
+                        switch (menuMov) {
+                            case 0: {
+
+                                boolean repMenuMovimientoCorrecto = true;
+                                for (; repMenuMovimientoCorrecto;) {
+                                    String[] opcionesMovC = {"Mostrar todos los Movimientos",
+                                        "Mostrar Movimientos segun Tipo",
+                                        "Volver atrás"};
+
+                                    int menuMovC = mostrarMenu(opcionesMovC);
+                                    switch (menuMovC) {
+                                        case 0: {
+                                        try {
+                                            for (Movimiento mov : cC.mostrarMovimiento(false)) {
+
+                                                System.out.println(mov);
+
+                                            }
+                                        } catch (CuentaCorrienteException ex) {
+                                            System.err.println(ex.getMessage());
+                                        }
+                                            break;
+                                        }
+                                        case 1: {
+
+                                        try {
+                                            for (Movimiento mov : cC.mostrarMovimiento(false, seleccionTipo())) {
+
+                                                System.out.println(mov);
+
+                                            }
+                                        } catch (CuentaCorrienteException ex) {
+                                        System.err.println(ex.getMessage());}
+                                            break;
+                                        }
+                                        case 2: {
+                                            //Retrocede al menu anterior
+                                            repMenuMovimientoCorrecto = false;
+                                            menuMov = 2;
+                                            break;
+                                        }
+
+                                    }
+                                    if (menuMovC != 2) {
+
+                                        repMenuMovimientoCorrecto = algunaCosaMas();
+                                        menuMov = 2;
+                                    }
+                                }
+                                break;
+
+                            }
+                            case 1: {
+
+                                boolean repMenuMovimientoIncidencia = true;
+                                for (; repMenuMovimientoIncidencia;) {
+                                    String[] opcionesMovI = {"Mostrar todos las Incidencias",
+                                        "Mostrar Incidencias segun Tipo",
+                                        "Volver atrás"};
+
+                                    int menuMovI = mostrarMenu(opcionesMovI);
+                                    switch (menuMovI) {
+                                        case 0: {
+                                        try {
+                                            for (Movimiento mov : cC.mostrarMovimiento(true)) {
+
+                                                System.out.println(mov);
+
+                                            }
+                                        } catch (CuentaCorrienteException ex) {
+                                        System.err.println(ex.getMessage());}
+                                            break;
+                                        }
+                                        case 1: {
+
+                                        try {
+                                            for (Movimiento mov : cC.mostrarMovimiento(true, seleccionTipo())) {
+
+                                                System.out.println(mov);
+
+                                            }
+                                        } catch (CuentaCorrienteException ex) {
+                                        System.err.println(ex.getMessage()); }
+                                            break;
+                                        }
+                                        case 2: {
+                                            //Retrocede al menu anterior
+                                            repMenuMovimientoIncidencia = false;
+                                            menuMov = 2;
+                                            break;
+                                        }
+
+                                    }
+                                    if (menuMovI != 2) {
+
+                                        repMenuMovimientoIncidencia = algunaCosaMas();
+                                        menuMov = 2;
+                                    }
+                                }
+                                break;
+
+                            }
+                            case 2: {
+                                //Retrocede al menu anterior
+                                repMenuMovimiento = false;
+                                break;
+                            }
+
+                        }
+                        if (menuMov != 2) {
+
+                            repMenuMovimiento = algunaCosaMas();
+
+                        }
+                    }
+    }
 }
