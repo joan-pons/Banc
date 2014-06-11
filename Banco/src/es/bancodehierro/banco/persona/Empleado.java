@@ -33,8 +33,8 @@ public class Empleado extends Persona {
         this.cargo = cargo;
     }
 
-    public Empleado(int idEmpleado, EnumCargo cargo, String nombre, String apellidos, String dni, String poblacion, String direccion, Date fechaNacimiento) {
-        super(nombre, apellidos, dni, poblacion, direccion, fechaNacimiento);
+    public Empleado(int idEmpleado, EnumCargo cargo, String nombre, String apellido1, String apellido2, String dni, String poblacion, String direccion, Date fechaNacimiento, String tlf) {
+        super(nombre, apellido1, apellido2, dni, poblacion, direccion, fechaNacimiento, tlf);
         this.idEmpleado = idEmpleado;
         this.cargo = cargo;
     }

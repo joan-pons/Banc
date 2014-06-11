@@ -11,6 +11,7 @@ import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +42,8 @@ public class MenuCuentaCorriente {
 
                 case 1: {
                     boolean repMenuTitular = true;
-                    menuCC.metodoTitular(repMenuTitular);
+                    Cliente cliente = null;
+                    menuCC.metodoTitular(repMenuTitular,cC,cliente);
                     break;
                 }
 
@@ -179,7 +181,7 @@ public class MenuCuentaCorriente {
                                 Cliente clienteOperacion= cliente;
                                 try {
                                     cC.agregarTitular(cliente);
-                                } catch (CuentaCorrienteException ex) {
+                                } catch (CuentaCorrienteException | SQLException ex) {
                                     System.err.println(ex.getMessage());
                                 }
                                 break;
