@@ -9,6 +9,9 @@ import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
+import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -74,7 +77,11 @@ public class MenuCuentaCorriente {
                         switch (menuTit) {
                             case 0: {
                                 Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
-                                cC.agregarTitular(cliente);
+                                try {
+                                    cC.agregarTitular(cliente);
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
                                 break;
                             }
                             case 1: {
@@ -83,11 +90,19 @@ public class MenuCuentaCorriente {
                             }
                             case 2: {
                                 Cliente cliente = new Cliente(menu, null, null, null, null, null, null);
-                                cC.eliminarTitular(cliente);
+                                try {
+                                    cC.eliminarTitular(cliente);
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
                                 break;
                             }
                             case 3: {
-                                cC.intercambiarTitular();
+                                try {
+                                    cC.intercambiarTitular();
+                                } catch (CuentaCorrienteException ex) {
+                                    System.err.println(ex.getMessage());
+                                }
                                 break;
                             }
                             case 4: {
