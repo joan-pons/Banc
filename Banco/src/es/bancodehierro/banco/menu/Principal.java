@@ -36,7 +36,7 @@ public abstract class Principal {
                     break;
 
                 case MENU_PRINCIPAL_PRESTAMO:
-                    //Aqui debe llamar al metodo principal del menu de prestamo
+                    MenuPrestamo.menuPres();
                     break;
 
                 case MENU_PRINCIPAL_TARJETA:
