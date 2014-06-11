@@ -15,33 +15,81 @@ public class MenuPrestamo {
 
     public static void menuPres() {
 
-        String[] opcions = {"Insertar Prestamo"};
+        String[] opcions = {"Insertar Prestamo", "Editar Prestamo", "Eliminar Prestamo", "Atras"};
+        int opcionSeleccionada;
 
-        int opcionSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
+        do {
 
-        switch (opcionSeleccionada) {
-            case 1:
+            opcionSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 1);
 
-                break;
-        }
+            switch (opcionSeleccionada) {
+                case 1:
+
+                    break;
+                case 2:
+
+                    break;
+                case 3:
+
+                    break;
+                default:
+                    break;
+            }
+
+        } while (!(opcionSeleccionada == 4));
     }
 
     /**
      * PENDIENTE DE PASAR A BANCO.
      *
-     * @author Rafel Sastre.
+     * @author Rafel Sastre y Miquel Vallespir Castello
      * @param presta
      */
-    public void insertarPrestamo(Prestamo presta) {
-        Connection conexio = Conexion.conectar();
+    public boolean insertarPrestamo(Empleado empleado) {
+        Connection conexion = Conexion.conectar();
+        ArrayList<CuentaCorriente> listCC = null;
+        Banco b = new Banco();// al meter en banco desaparece
+
+        String dniCliente = GestionaMenu.llegirCadena("Introduce DNI cliente.");
+
+        Cliente cliente = b.devuelveCliente(dniCliente);
+
+        if (cliente == null) {
+            System.err.println("El cliente no existe!!");
+            return false;
+        } else {
+            listCC = b.mostrarCuentaCorriente(cliente);
+        }
+
+        if (listCC == null) {
+            System.err.println("Este cliente no tiene ninguna cuenta asociada.");
+            return false;
+        }
+
+        String[] opcions = new String[listCC.size()];
+        int i = 0;
+        for (CuentaCorriente cc : listCC) {
+
+            opcions[i] = cc.muestraCC();
+            i++;
+
+        }
+
+        int opcioSeleccionade = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
+
+        Prestamo presta = new Prestamo(0, "", null, null, Double.NaN, Double.MIN_NORMAL, empleado, listCC.get(opcioSeleccionade));
+
         try {
-            Statement st = conexio.createStatement();
+            Statement st = conexion.createStatement();
             int filesAfectades = st.executeUpdate(presta.insertarPrestamo());
             System.out.println(filesAfectades + ", files afectades.");
         } catch (SQLException ex) {
             System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
+            return false;
         }
+        presta.toString();
 
+        return true;
     }
     
     /**
