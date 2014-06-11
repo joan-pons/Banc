@@ -5,6 +5,7 @@
  */
 package es.bancodehierro.banco.menu;
 
+import banc.Conexion;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 
 /**
@@ -46,6 +47,7 @@ public abstract class Principal {
                     MenuSucursal.menu();
                     break;
                 case MENU_PRINCIPAL_SALIR:
+                    Conexion.desconectar();
                     menu=false;
                     System.out.println("Sortint...");
                     break;
