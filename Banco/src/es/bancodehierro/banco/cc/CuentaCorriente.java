@@ -83,6 +83,10 @@ public class CuentaCorriente {
         this.cuenta = cuenta;
         this.importe = importe;
     }
+    
+    public String muestraCC(){
+        return (iban + ENTIDAD + oficina + dC + cuenta);
+    }
 
     public void agregarTitular(Cliente titular) throws CuentaCorrienteException {
         if (!titulares.containsValue(titular)) {
