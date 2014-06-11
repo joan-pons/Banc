@@ -5,6 +5,7 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import banc.Conexion;
 import es.bancodehierro.banco.menu.GestionaMenu;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,35 +19,56 @@ import java.sql.Statement;
  */
 public class MenuTarjeta {
 
-    private static String url = "jdbc:mysql://localhost:3306/computerstore?user=root&password=";
-    private static Connection conexio;
-
-    static {
-        try {
-            conexio = DriverManager.getConnection(url);
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
-        }
-    }
+    private static Connection conexio = Conexion.conectar();
 
     public static void altaTarjeta() {
-        int codiClient = GestionaMenu.llegirSencer("Introdueix el codi del client.");
-        int clientTrobat=0;
-        try {
-            Statement st = conexio.createStatement();
-            String selectClient = "select count(*) from Cliente where idCliente=" + codiClient;
-            ResultSet rs = st.executeQuery(selectClient);
-            rs.next();
-            clientTrobat= rs.getInt(1);
-            st.close();
-            rs.close();
-        } catch (SQLException ex) {
-            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
-        }
-        if (clientTrobat==1) {
-            
+        //Obtener el cliente.
+        int codigoCliente = GestionaMenu.llegirSencer("Introdueix el codi del client.");
+        int clienteEncontrado = 0;
+        while (clienteEncontrado == 0) {
+            try {
+                Statement st = conexio.createStatement();
+                String selectCliente = "select count(*) from Cliente where idCliente=" + codigoCliente;
+                ResultSet rs = st.executeQuery(selectCliente);
+                rs.next();
+                clienteEncontrado = rs.getInt(1);
+                st.close();
+                rs.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+            }
+            if (clienteEncontrado == 1) {
+                System.out.println("Cliente encontrado.");
+            } else {
+                System.out.println("Cliente no encontrado, introduzca un codigo de cliente existente.");
+            }
         }
 
+        //Obtener cuenta corriente.
+        int codigoSucursal = GestionaMenu.llegirSencer("Introduzca el código de sucursal");
+        int codigoCuenta = GestionaMenu.llegirSencer("Introduzca el código de cuenta corriente");
+        int cuentaEncontrada = 0;
+        while (cuentaEncontrada == 0) {
+            try {
+                Statement st = conexio.createStatement();
+                String selectCuenta = "select count(*) from CuentaCorriente where codigo_scc=" + codigoSucursal +" and numero_cc="+codigoCuenta;
+                ResultSet rs = st.executeQuery(selectCuenta);
+                rs.next();
+                cuentaEncontrada = rs.getInt(1);
+                st.close();
+                rs.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+            }
+            if (cuentaEncontrada == 1) {
+                System.out.println("Cuenta encontrada.");
+            } else {
+                System.out.println("Cuenta no encontrada, introduzca un codigo sucursal y cuenta existente.");
+            }
+        }
+        
+        //
+        
     }
 
     public static void eliminarTarjeta() {

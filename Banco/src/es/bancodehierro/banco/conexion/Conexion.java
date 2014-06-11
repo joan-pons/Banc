@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class Conexion {
 
     private static Connection conexion = null;
-    private static final String url ="";
+    private static final String url = "jdbc:oracle:thin:banco/oracle@//192.168.7.24:1521/orcl";
     
     public static Connection conectar() {
         try {
