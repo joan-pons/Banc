@@ -5,7 +5,8 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import banc.Conexion;
+
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.menu.GestionaMenu;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,7 +22,7 @@ public class MenuTarjeta {
 
     private static Connection conexio = Conexion.conectar();
 
-    public static void altaTarjeta() {
+    public void altaTarjeta() {
         //Obtener el cliente.
         int codigoCliente = GestionaMenu.llegirSencer("Introdueix el codi del client.");
         int clienteEncontrado = 0;
@@ -71,23 +72,94 @@ public class MenuTarjeta {
         
     }
 
-    public static void eliminarTarjeta() {
-
+   /**
+    * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
+    * para eliminar una tarjeta de la base de datos.
+    */
+    public void eliminarTarjeta() { 
+        int codigoTarjeta;
+        boolean existe;
+        do{
+            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
+            existe = comprovarTarjeta(codigoTarjeta);
+        }while(existe);
+        //eliminarTarjeta(codigoTarjeta);
     }
 
-    public static void pagar() {
-
+    /**
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
+     * para pagar con las tarjetas.
+     */
+    public void pagar() {
+        int codigoTarjeta;
+        boolean existe;
+        do{
+            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
+            existe = comprovarTarjeta(codigoTarjeta);
+        }while(existe);
+        String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
     }
 
-    public static void ingresarDebito() {
-
+    /**
+     * Metodo que sirve para recoger los datos que luego utilitzaremos en el metodo 
+     * para ingresar en tarjetas de debito.
+     */
+    public void ingresarDebito() {
+        int codigoTarjeta;
+        boolean existe;
+        do{
+            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
+            existe = comprovarTarjeta(codigoTarjeta);
+        }while(existe);
+        double importe = GestionaMenu.llegirDouble("Introduce el importe a ingresar: ");
+        String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
+        //ingresarDebito(importe, concepto, codigoTarjeta);
     }
 
-    public static void verMovimientos() {
-
+    /**
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
+     * para ver los movimientos de las tarjetas.
+     */
+    public void verMovimientos() {
+        int codigoTarjeta;
+        boolean existe;
+        do{
+            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
+            existe = comprovarTarjeta(codigoTarjeta);
+        }while(existe);
+        //verMovimientos(codigoTarjeta);
+    }
+  
+    /**
+     * Este metodo sirve para comprovar si una tarjeta existe en la base de datos.
+     * @param codigoTarjeta El codigo de la tarjeta.
+     * @return Devuelve un boolean (false si la encuentra o true si no).
+     */
+    public boolean comprovarTarjeta(int codigoTarjeta){
+        boolean flag=true; 
+        try {
+        Statement st = conexio.createStatement();                              
+            String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE Codigo_tarjeta = " + codigoTarjeta;
+            ResultSet rs = st.executeQuery(selectTarjeta);
+            rs.next();
+            int existeix = rs.getInt(1);
+            if(existeix == 1){
+                System.out.println("Tarjeta encontrada!");
+                flag=false;
+            }
+            else{
+                System.out.println("Tarjeta no encontrada!");
+                flag=true;
+            }
+            rs.close();       
+        st.close();
+        } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+            }
+        return flag;
     }
 
-    public static void ejecutarMenu() {
+    public void ejecutarMenu() {
         boolean flag = true;
         do {
             System.out.println("Opcion 1: Dar de alta una tarjeta.");
