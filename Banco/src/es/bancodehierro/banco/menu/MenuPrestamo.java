@@ -43,5 +43,23 @@ public class MenuPrestamo {
         }
 
     }
+    
+    /**
+     * PENDIENTE DE PASAR A BANCO.
+     *
+     * @author Jaume Mayol
+     * @param presta
+     */
+    public void eliminarPrestamo(Prestamo presta) {
+        Connection conexio = Conexion.conectar();
+        try {
+            Statement st = conexio.createStatement();
+            int filesAfectades = st.executeUpdate(presta.eliminarPrestamo());
+            System.out.println(filesAfectades + ", files afectades.");
+        } catch (SQLException ex) {
+            System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
+        }
+
+    }
 
 }
