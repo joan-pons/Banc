@@ -1,9 +1,12 @@
+package es.bancodehierro.banco.menu;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.bancodehierro.banco.menu;
+
+import es.bancodehierro.banco.menu.GestionaMenu;
 
 /**
  *
@@ -12,7 +15,7 @@ package es.bancodehierro.banco.menu;
 public class MenuTarjeta {
 
     public static void altaTarjeta() {
-        GestionaMenu.llegirSencer("")
+        int codiClient = GestionaMenu.llegirSencer("Introdueix el codi del client.");
     }
 
     public static void eliminarTarjeta() {
@@ -31,7 +34,7 @@ public class MenuTarjeta {
 
     }
 
-    public static void main(String[] args) {
+    public static void ejecutarMenu() {
         boolean flag=true;
         do {
             System.out.println("Opcion 1: Dar de alta una tarjeta.");
