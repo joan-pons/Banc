@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.bancodehierro.banco.conexion;
+package banc;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -15,16 +17,25 @@ import java.sql.SQLException;
  */
 public class Conexion {
 
-    private static Connection conexio = null;
+    private static Connection conexion = null;
     private static final String url ="";
+    
     public static Connection conectar() {
         try {
-            if (conexio == null) {
-                conexio = DriverManager.getConnection(url);
+            if (conexion == null) {
+                conexion = DriverManager.getConnection(url);
             }
         } catch (SQLException ex) {
             System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
         }
-        return conexio;
+        return conexion;
+    }
+    
+    public static void desconectar(){
+        try {
+            conexion.close();
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
     }
 }
