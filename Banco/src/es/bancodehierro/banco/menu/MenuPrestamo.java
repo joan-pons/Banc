@@ -47,9 +47,9 @@ public class MenuPrestamo {
     }
 
     /**
-     * PENDIENTE DE PASAR A BANCO.
+     * MÉTODO INSERTAR PRESTAMO - PENDIENTE DE PASAR A BANCO.
      *
-     * @author Rafel Sastre, Miquel Vallespir Castello, Pau Riera
+     * @author Rafel Sastre, Miquel Vallespir i Pau Riera.
      * @param presta
      */
     public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException {
@@ -82,13 +82,13 @@ public class MenuPrestamo {
 
         }
 
-        int opcioSeleccionade = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
+        int opcioSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
         double importePrestado = GestionaMenu.llegirDouble("Introdueix el total a prestar");
         double tasaInteresAnual = GestionaMenu.llegirDouble("La tasa de interes anual");
         
 
-        Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
-
+        //Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
+        Prestamo presta = new Prestamo(0, 1000.00, null, null, null, null, null);
         try {
             Statement st = conexion.createStatement();
             int filesAfectades = st.executeUpdate(presta.insertarPrestamo());
@@ -108,17 +108,17 @@ public class MenuPrestamo {
      * @author Pau Riera
      * @param presta 
      */
-    public void updatePrestamo(Prestamo presta) {
-        Connection conexio = Conexion.conectar();
-        try {
-            Statement st = conexio.createStatement();
-            int filesAfectades = st.executeUpdate(presta.updatePrestamo());
-            System.out.println(filesAfectades + ", files afectades.");
-        } catch (SQLException ex) {
-            System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
-        }
-        
-    }
+//    public void updatePrestamo(Prestamo presta) {
+//        Connection conexio = Conexion.conectar();
+//        try {
+//            Statement st = conexio.createStatement();
+//            int filesAfectades = st.executeUpdate(presta.updatePrestamo());
+//            System.out.println(filesAfectades + ", files afectades.");
+//        } catch (SQLException ex) {
+//            System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
+//        }
+//        
+//    }
     
     /**
      * PENDIENTE DE PASAR A BANCO.
