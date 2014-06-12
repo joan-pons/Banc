@@ -11,6 +11,7 @@ import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
+import es.bancodehierro.banco.sucursal.Sucursal;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,9 +23,10 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC() {
+    public static void menuCC() throws SQLException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), GestionaMenu.llegirDouble("Introduce un Importe"));
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
+        Sucursal sucursal=new Sucursal(null, null, 0, 0000, null);
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
             String[] opciones = {"Operaciones de Importe",
@@ -43,7 +45,7 @@ public class MenuCuentaCorriente {
                 case 1: {
                     boolean repMenuTitular = true;
                     Cliente cliente = null;
-                    menuCC.metodoTitular(repMenuTitular,cC,cliente);
+                    menuCC.metodoTitular(repMenuTitular,cC,cliente,sucursal);
                     break;
                 }
 
@@ -166,7 +168,7 @@ public class MenuCuentaCorriente {
      * @param cC Paso de la cuenta corriente
      * @param cliente Cliente a tratar
      */
-    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente){
+    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente,Sucursal sucursal) throws SQLException{
         for (; repMenuTitular;) {
                         String[] opcionesTit = {"Agregar Titular",
                             "Modificar Titular",
@@ -180,7 +182,7 @@ public class MenuCuentaCorriente {
                                // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                                 Cliente clienteOperacion= cliente;
                                 try {
-                                    cC.agregarTitular(cliente);
+                                    cC.agregarTitular(cliente,sucursal);
                                 } catch (CuentaCorrienteException | SQLException ex) {
                                     System.err.println(ex.getMessage());
                                 }
@@ -193,7 +195,7 @@ public class MenuCuentaCorriente {
                             case 2: {
                                 //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                                 try {
-                                    cC.eliminarTitular(cliente);
+                                    cC.eliminarTitular(cliente,sucursal);
                                 } catch (CuentaCorrienteException ex) {
                                     System.err.println(ex.getMessage());
                                 }
@@ -201,7 +203,7 @@ public class MenuCuentaCorriente {
                             }
                             case 3: {
                                 try {
-                                    cC.intercambiarTitular();
+                                    cC.intercambiarTitular(sucursal);
                                 } catch (CuentaCorrienteException ex) {
                                     System.err.println(ex.getMessage());
                                 }
