@@ -81,8 +81,11 @@ public class MenuPrestamo {
         }
 
         int opcioSeleccionade = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
+        double importePrestado = GestionaMenu.llegirDouble("Introdueix el total a prestar");
+        double tasaInteresAnual = GestionaMenu.llegirDouble("La tasa de interes anual");
+        
 
-        Prestamo presta = new Prestamo(0, "", null, null, Double.NaN, Double.MIN_NORMAL, empleado, listCC.get(opcioSeleccionade));
+        Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
 
         try {
             Statement st = conexion.createStatement();
