@@ -3,7 +3,7 @@ package es.bancodehierro.banco.menu;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.conexion.Conexion;
-import es.bancodehierro.banco.excepciones.ClienteNoEncontrado;
+import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
@@ -52,7 +52,7 @@ public class MenuPrestamo {
      * @author Rafel Sastre, Miquel Vallespir Castello, Pau Riera
      * @param presta
      */
-    public void insertarPrestamo(Empleado empleado) throws ClienteNoEncontrado, CuentaCorrienteException {
+    public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException {
         Connection conexion = Conexion.conectar();
         ArrayList<CuentaCorriente> listCC = null;
         Banco b = new Banco();// al meter en banco desaparece
@@ -62,7 +62,7 @@ public class MenuPrestamo {
         Cliente cliente = b.devuelveCliente(dniCliente);
 
         if (cliente == null) {
-            throw new ClienteNoEncontrado("El cliente con +"+dniCliente+" no ha sido encontrado.");
+            throw new ClienteException("El cliente con +"+dniCliente+" no ha sido encontrado.");
             //return false;
         } else {
             listCC = b.mostrarCuentaCorriente(cliente);

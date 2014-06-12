@@ -10,13 +10,13 @@ package es.bancodehierro.banco.excepciones;
  * Excepción que se lanza cuando un cliente no sea encontrado.
  * @author Pau Riera
  */
-public class ClienteNoEncontrado extends Exception {
+public class ClienteException extends Exception {
 
     /**
      * Creates a new instance of <code>ClienteNoEncontrado</code> without detail
      * message.
      */
-    public ClienteNoEncontrado() {
+    public ClienteException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class ClienteNoEncontrado extends Exception {
      *
      * @param msg the detail message.
      */
-    public ClienteNoEncontrado(String msg) {
+    public ClienteException(String msg) {
         super(msg);
     }
 }
