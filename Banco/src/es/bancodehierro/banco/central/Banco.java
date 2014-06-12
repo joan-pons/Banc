@@ -10,6 +10,7 @@ import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -61,7 +62,7 @@ public class Banco {
         return null;
     }
     
-    public static boolean insertarCliente(Cliente cliente) {
+    public static boolean insertarCliente(Cliente cliente, Connection con) {
         boolean sortida = false;
         try {
         //no se le pasa
@@ -103,7 +104,7 @@ public class Banco {
         return suc;
     }
 
-    public static boolean eleiminarSucursal(Sucursal sucursal) {
+    public static boolean eliminarSucursal(Sucursal sucursal) {
         return false;
     }
     

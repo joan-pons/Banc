@@ -60,7 +60,7 @@ public abstract class MenuSucursal {
         int codiSuc = GestionaMenu.llegirSencer("Cual es el codigo de sucursal que quieres borrar?");
         sucursal = Banco.devuelveSucursal(codiSuc);
         System.out.println("Seguro que quereis borrar la sucursal " + codiSuc);
-        if(Banco.eliminaSucursal(sucursal)){
+        if(Banco.eliminarSucursal(sucursal)){
             System.out.println("Sucursal borrada");
         }else{
             System.out.println("Error al borrar la sucursal.");

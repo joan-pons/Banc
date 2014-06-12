@@ -11,5 +11,5 @@ package es.bancodehierro.banco.tarjeta;
  * @author bernadi
  */
 public enum TipoTarjeta {
-    Credito, Debito
+    CREDITO, DEBITO
 }

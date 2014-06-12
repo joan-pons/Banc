@@ -6,11 +6,12 @@
 
 package es.bancodehierro.banco.tarjeta;
 
-import banc.Conexion;
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
 import static es.bancodehierro.banco.tarjeta.TipoTarjeta.CREDITO;
 import static es.bancodehierro.banco.tarjeta.TipoTarjeta.DEBITO;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public abstract class  Tarjeta {
 
     
-    private int codigoTarjeta;
+    int codigoTarjeta;
     private int codigoTitular;
     private int codigoCuentaCorriente;
     private  TipoTarjeta tipo;
@@ -34,30 +35,42 @@ public abstract class  Tarjeta {
         this.codigoTitular = codigoTitular;
         this.codigoCuentaCorriente = codigoCuentaCorriente;
         this.tipo = tipo;
+    
+        try {
+            Connection conexion = Conexion.conectar();
+            Statement consulta = conexion.createStatement();
+            int filesAfectades = consulta.executeUpdate("insert into ");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Tarjeta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
     }
  
     
     /**
-     * Este metodo es las sobrecarga de el constructo de Tarjeta, 
+     * Este metodo es las sobrecarga de el constructor de Tarjeta, 
      * devuelve la tarjeta que conicide con el codigo de tarjeta que esta
      * guardada en la base de datos.
      * @param codigoTarjeta 
      */
-   public Tarjeta(int codigoTarjeta ,Conexion conexion){
+   public Tarjeta(int codigoTarjeta){
      
        ResultSet resultat;
        String tipoT=null;
        int codTitular = 0;
        int codCuentaCorriente = 0;
         try {
-             Statement consulta = conexion.conectar().createStatement();
+            Connection conexion = Conexion.conectar();
+             Statement consulta = conexion.createStatement();
             resultat = consulta.executeQuery("select * from Tarjeta where codigoTarjeta ="+ codigoTarjeta);
               while(resultat.next()){
-                codTitular = resultat.getInt("CodigoTitular");
-                codCuentaCorriente = resultat.getInt("CodigoCuentaCorriente");
-                tipoT = resultat.getString("TipoTarjeta");
+                codTitular = resultat.getInt("DNI_CLIENTE_TARJETA");
+                codCuentaCorriente = resultat.getInt("NUMERO_CC_TARJETA");
+                tipoT = resultat.getString("TIPO_TARJETA");
               }
         if(resultat!=null) resultat.close();
+        
         }
         catch (SQLException ex) {
             Logger.getLogger(Tarjeta.class.getName()).log(Level.SEVERE, null, ex);
@@ -71,6 +84,7 @@ public abstract class  Tarjeta {
         this.codigoTitular = codTitular;
         this.codigoCuentaCorriente = codCuentaCorriente;
         this.tipo = tipo;
+        
    }
 
     public void setCodigoTarjeta(int codigoTarjeta) {

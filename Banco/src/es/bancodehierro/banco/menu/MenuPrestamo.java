@@ -1,11 +1,16 @@
 package es.bancodehierro.banco.menu;
 
-import banc.Conexion;
+import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.central.Banco;
+import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.persona.Cliente;
+import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.prestamo.Prestamo;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
@@ -76,8 +81,11 @@ public class MenuPrestamo {
         }
 
         int opcioSeleccionade = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
+        double importePrestado = GestionaMenu.llegirDouble("Introdueix el total a prestar");
+        double tasaInteresAnual = GestionaMenu.llegirDouble("La tasa de interes anual");
+        
 
-        Prestamo presta = new Prestamo(0, "", null, null, Double.NaN, Double.MIN_NORMAL, empleado, listCC.get(opcioSeleccionade));
+        Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
 
         try {
             Statement st = conexion.createStatement();
