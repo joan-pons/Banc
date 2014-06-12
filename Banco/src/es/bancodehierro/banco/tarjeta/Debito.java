@@ -30,7 +30,7 @@ public class Debito extends Tarjeta {
 
 
 
-    public Debito(int codigoTarjeta, int codigoTitular, int codigoCuentaCorriente, TipoTarjeta tipo) {
+    public Debito(int codigoTarjeta, int codigoTitular, int codigoCuentaCorriente, String tipo) {
         super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, tipo);
         
     }

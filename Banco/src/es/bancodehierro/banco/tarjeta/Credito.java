@@ -46,7 +46,7 @@ public class Credito extends Tarjeta {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String dateTime = date.toString();
-        MovimientoTarjeta m = new MovimientoTarjeta('I', dateTime, concepto, importe, this.codigoTarjeta);
+       // MovimientoTarjeta m = new MovimientoTarjeta('I', dateTime, concepto, importe, this.codigoTarjeta);
         return true;
     }
 }

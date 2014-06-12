@@ -1,7 +1,7 @@
 package es.bancodehierro.banco.tarjeta;
 
-import banc.Conexion;
 import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.persona.Cliente;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class GestionTarjetas {
 
-    public Boolean altaTarjeta(int codigoCliente, CuentaCorriente cuentaCorriente, TipoTarjeta tipoTarjeta, Double limite) {
+    public Boolean altaTarjeta(int codigoCliente, CuentaCorriente cuentaCorriente, String tipoTarjeta, Double limite) {
         if (limite == null) {
             //Debito d = new Debito(codigoCliente, cuentaCorriente, tipoTarjeta);
         } else {
@@ -25,14 +25,14 @@ public class GestionTarjetas {
         return null;
     }
 
-    public Boolean eliminarTarjeta(int codigoTarjeta, Conexion conexio) {
+    public Boolean eliminarTarjeta(int codigoTarjeta) {
         try {
-            Connection cn = conexio.conectar();
+            Connection cn = Conexion.conectar();
             Statement st = cn.createStatement();
             String query = "DELETE FROM tarjeta WHERE codigoTarjeta = " + codigoTarjeta;
             st.executeUpdate(query);
             st.close();
-            conexio.desconectar();
+            Conexion.desconectar();
             return true;
         } catch (SQLException ex) {
             System.out.println("Error en la conexion");
