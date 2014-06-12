@@ -52,7 +52,7 @@ public class MenuPrestamo {
      * @author Rafel Sastre, Miquel Vallespir Castello, Pau Riera
      * @param presta
      */
-    public boolean insertarPrestamo(Empleado empleado) throws ClienteNoEncontrado, CuentaCorrienteException {
+    public void insertarPrestamo(Empleado empleado) throws ClienteNoEncontrado, CuentaCorrienteException {
         Connection conexion = Conexion.conectar();
         ArrayList<CuentaCorriente> listCC = null;
         Banco b = new Banco();// al meter en banco desaparece
@@ -95,11 +95,9 @@ public class MenuPrestamo {
             System.out.println(filesAfectades + ", files afectades.");
         } catch (SQLException ex) {
             System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
-            return false;
         }
         presta.toString();
 
-        return true;
     }
     
     /**
