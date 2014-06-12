@@ -9,8 +9,6 @@ package es.bancodehierro.banco.tarjeta;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
-import static es.bancodehierro.banco.tarjeta.TipoTarjeta.CREDITO;
-import static es.bancodehierro.banco.tarjeta.TipoTarjeta.DEBITO;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,9 +26,9 @@ public abstract class  Tarjeta {
     int codigoTarjeta;
     private int codigoTitular;
     private int codigoCuentaCorriente;
-    private  TipoTarjeta tipo;
+    private  String tipo;
 
-    public Tarjeta(int codigoTarjeta, int codigoTitular, int codigoCuentaCorriente, TipoTarjeta tipo) {
+    public Tarjeta(int codigoTarjeta, int codigoTitular, int codigoCuentaCorriente, String tipo) {
         this.codigoTarjeta = codigoTarjeta;
         this.codigoTitular = codigoTitular;
         this.codigoCuentaCorriente = codigoCuentaCorriente;
@@ -75,11 +73,7 @@ public abstract class  Tarjeta {
         catch (SQLException ex) {
             Logger.getLogger(Tarjeta.class.getName()).log(Level.SEVERE, null, ex);
         }
-          if (tipoT == "CREDITO"){
-            this.tipo = CREDITO;
-        } else if (tipoT == "DEBITO"){
-            this.tipo = DEBITO;
-        }
+          
         this.codigoTarjeta = codigoTarjeta;
         this.codigoTitular = codTitular;
         this.codigoCuentaCorriente = codCuentaCorriente;
@@ -91,7 +85,7 @@ public abstract class  Tarjeta {
         this.codigoTarjeta = codigoTarjeta;
     }
 
-    public void setTipo(TipoTarjeta tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
@@ -117,7 +111,7 @@ public abstract class  Tarjeta {
 
 
 
-    public TipoTarjeta getTipo() {
+    public String getTipo() {
         return tipo;
     }
 }
