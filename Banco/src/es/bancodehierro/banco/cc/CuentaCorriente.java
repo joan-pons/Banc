@@ -9,6 +9,8 @@ import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
+import es.bancodehierro.banco.sucursal.Sucursal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -88,16 +90,33 @@ public class CuentaCorriente {
         this.cuenta = cuenta;
         this.importe = importe;
     }
-    
-    public String muestraCC(){
+
+    public String muestraCC() {
         return (iban + ENTIDAD + oficina + dC + cuenta);
     }
 
-    public void agregarTitular(Cliente titular) throws CuentaCorrienteException, SQLException {
-        Statement st = Conexion.conectar().createStatement();
-        String insertTitular="INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION) ";
-	int filas = st.executeUpdate(insertTitular);
-        st.close();
+    public void agregarTitular(Cliente titular, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        try (Statement st = Conexion.conectar().createStatement()) {
+            String consultaTitular = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE='" + titular.getDni() + "'";
+            if (st.executeQuery(consultaTitular) != null) {
+                String insertTitular = null;
+                int filas = '\0';
+                String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+                ResultSet rs = st.executeQuery(consultaCountTitular);
+                rs.next();
+                if (rs.getInt(1) == 0) {
+                    insertTitular = "INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION,POSICIO) VALUES('" + titular.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",1";
+                    
+                } else if (rs.getInt(1) == 1) {
+                    insertTitular = "INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION,POSICIO) VALUES('" + titular.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",2";
+                    
+                } else {
+                    System.err.println("Ya tiene dos titulares, no puedes añadir más");
+                }
+                filas = st.executeUpdate(insertTitular);
+                System.out.println("Filas insertadas: " + filas);
+            }
+        }
         if (!titulares.containsValue(titular)) {
             if (!titulares.containsKey("Titular")) {
                 titulares.put("Titular", titular);
@@ -111,7 +130,35 @@ public class CuentaCorriente {
         }
     }
 
-    public void eliminarTitular(Cliente cliente) throws CuentaCorrienteException {
+    public void eliminarTitular(Cliente cliente, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        try (Statement st = Conexion.conectar().createStatement()) {
+            String consultaTitular = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE='" + cliente.getDni() + "'";
+            if (st.executeQuery(consultaTitular) != null) {
+                String insertTitular = null;
+                String borrarTitular = null;
+                int filas = '\0';
+                String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+                ResultSet rs = st.executeQuery(consultaCountTitular);
+                rs.next();
+                if (rs.getInt(1) == 1) {
+                    System.err.println("No tienes mas titulares, antes da de baja la cuenta");
+                    //insertTitular = "INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION,POSICIO) VALUES('" + cliente.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",2";
+                    
+                } else if (rs.getInt(1) > 1) {
+                    String consultaPosicionTitular = "SELECT POSICIO FROM CLIENTE_CUENTA_CORRIENTE WHERE DNI_CLIENTE_CC='" + cliente.getDni();
+                    rs = st.executeQuery(consultaPosicionTitular);
+                    rs.next();
+                    if (rs.getInt(1) == 1) {
+                        intercambiarTitular(sucursal);
+                        
+                    }
+                    borrarTitular = "DELETE FROM CLIENTE_CUENTA_CORRIENTE WHERE POSICIO= 2";
+                }
+                filas = st.executeUpdate(borrarTitular);
+                System.out.println("Filas borradas: " + filas);
+            }
+        }
+
         if (titulares.containsValue(cliente)) {
             if (titulares.get("Segundo").equals(cliente)) {
                 titulares.remove(cliente);
@@ -128,94 +175,114 @@ public class CuentaCorriente {
         }
     }
 
-    public void intercambiarTitular() throws CuentaCorrienteException {
-
+    public void intercambiarTitular(Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        try (Statement st = Conexion.conectar().createStatement()) {
+            
+                String insertTitular = null;
+                int filas = '\0';
+                String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+                ResultSet rs = st.executeQuery(consultaCountTitular);
+                rs.next();
+                if (rs.getInt(1) == 0) {
+                    System.err.println("ERROR");
+                } else if (rs.getInt(1) == 1) {
+                    System.err.println("ERROR: solo hay un titular");
+                } /*else {
+                     insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET POSICIO= VALUES('" + titular.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",1";
+                    
+                }*/
+                filas = st.executeUpdate(insertTitular);
+                System.out.println("Filas insertadas: " + filas);
+            }
+        
+        
+        
         Cliente auxiliar = titulares.get("Titular");
 
-        eliminarTitular(titulares.get("Titular"));
+        eliminarTitular(titulares.get("Titular"),sucursal);
 
         try {
-            agregarTitular(auxiliar);
+            agregarTitular(auxiliar, sucursal);
         } catch (SQLException ex) {
             System.err.println(ex.getMessage());
         }
 
     }
-    
-    public void cambiarTitular(Cliente viejo, Cliente nuevo) throws CuentaCorrienteException{
-        
-        if (!titulares.containsKey("Segundo")){            
+
+    public void cambiarTitular(Cliente viejo, Cliente nuevo, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+
+        if (!titulares.containsKey("Segundo")) {
             try {
-                agregarTitular(nuevo);
+                agregarTitular(nuevo, sucursal);
             } catch (SQLException ex) {
                 System.err.println(ex.getMessage());
             }
-            eliminarTitular(viejo);
-        }else{
-            if (viejo.equals(titulares.get("Titular"))){
-                eliminarTitular(viejo);
+            eliminarTitular(viejo,sucursal);
+        } else {
+            if (viejo.equals(titulares.get("Titular"))) {
+                eliminarTitular(viejo,sucursal);
                 try {
-                    agregarTitular(nuevo);
+                    agregarTitular(nuevo, sucursal);
                 } catch (SQLException ex) {
                     System.err.println(ex.getMessage());
                 }
-                intercambiarTitular();
+                intercambiarTitular(sucursal);
             } else {
-                eliminarTitular(viejo);
+                eliminarTitular(viejo,sucursal);
                 try {
-                    agregarTitular(nuevo);
+                    agregarTitular(nuevo, sucursal);
                 } catch (SQLException ex) {
-                     System.err.println(ex.getMessage());
+                    System.err.println(ex.getMessage());
                 }
             }
         }
     }
 
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws CuentaCorrienteException{
-        if(incidencia == true){
-            if(incidencias.isEmpty()){
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws CuentaCorrienteException {
+        if (incidencia == true) {
+            if (incidencias.isEmpty()) {
                 return incidencias;
-            }else{
+            } else {
                 throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
             }
-        }else{
-            if(movimientos.isEmpty()){
+        } else {
+            if (movimientos.isEmpty()) {
                 return movimientos;
-            }else{
+            } else {
                 throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
             }
         }
     }
-    
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia,EnumMovimiento tipo) throws CuentaCorrienteException {
+
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia, EnumMovimiento tipo) throws CuentaCorrienteException {
         ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
-        if(incidencia == true){
-            if(incidencias.isEmpty()){
-                for(Movimiento inci: movimientos){
-                    if(inci.getTipo() == tipo){
+        if (incidencia == true) {
+            if (incidencias.isEmpty()) {
+                for (Movimiento inci : movimientos) {
+                    if (inci.getTipo() == tipo) {
                         movimientoFiltrado.add(inci);
                     }
                 }
-            }else{
+            } else {
                 throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
             }
-        }else{
-            if(movimientos.isEmpty()){
-                for(Movimiento movi: movimientos){
-                    if(movi.getTipo() == tipo){
+        } else {
+            if (movimientos.isEmpty()) {
+                for (Movimiento movi : movimientos) {
+                    if (movi.getTipo() == tipo) {
                         movimientoFiltrado.add(movi);
                     }
                 }
-            }else{
+            } else {
                 throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
             }
         }
-        
-        if(movimientoFiltrado.isEmpty()){
+
+        if (movimientoFiltrado.isEmpty()) {
             return movimientoFiltrado;
-        }else{
+        } else {
             throw new CuentaCorrienteException("Error: No se han encontrados movimientos.");
         }
-        
+
     }
 }
