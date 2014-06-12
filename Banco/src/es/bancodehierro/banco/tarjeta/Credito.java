@@ -11,8 +11,10 @@ public class Credito extends Tarjeta {
     private Double limite;
     private Double saldo;
 
+
     public Credito(Double limite, Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
         super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
+
         this.limite = limite;
         this.saldo = saldo;
         try {

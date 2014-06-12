@@ -9,7 +9,6 @@ package es.bancodehierro.banco.menu;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.menu.GestionaMenu;
 import es.bancodehierro.banco.tarjeta.GestionTarjetas;
-import es.bancodehierro.banco.tarjeta.TipoTarjeta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
