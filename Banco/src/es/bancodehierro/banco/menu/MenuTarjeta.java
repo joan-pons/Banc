@@ -7,10 +7,6 @@ package es.bancodehierro.banco.menu;
  */
 
 import es.bancodehierro.banco.conexion.Conexion;
-import es.bancodehierro.banco.menu.GestionaMenu;
-import es.bancodehierro.banco.tarjeta.GestionTarjetas;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,15 +17,13 @@ import java.sql.Statement;
  */
 public class MenuTarjeta {
 
-    private static Connection conexio = Conexion.conectar();
-
     public void altaTarjeta() {
         //Obtener el cliente.
         String codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
         int clienteEncontrado = 0;
         while (clienteEncontrado == 0) {
             try {
-                Statement st = conexio.createStatement();
+                Statement st = Conexion.conectar().createStatement();
                 String selectCliente = "select count(*) from Cliente where DNI_CLIENTE_TARJETA=" + codigoCliente;
                 ResultSet rs = st.executeQuery(selectCliente);
                 rs.next();
@@ -52,7 +46,7 @@ public class MenuTarjeta {
         int cuentaEncontrada = 0;
         while (cuentaEncontrada == 0) {
             try {
-                Statement st = conexio.createStatement();
+                Statement st = Conexion.conectar().createStatement();
                 String selectCuenta = "select count(*) from CuentaCorriente where CODIGO_SUC_TARJETA=" + codigoSucursal +" and NUMERO_CC_TARJETA="+codigoCuenta;
                 ResultSet rs = st.executeQuery(selectCuenta);
                 rs.next();
@@ -150,7 +144,7 @@ public class MenuTarjeta {
     public boolean comprobarTarjeta(String codigoTarjeta){
         boolean flag=true; 
         try {
-        Statement st = conexio.createStatement();                              
+        Statement st = Conexion.conectar().createStatement();                              
             String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE CODIGO_TARJETA = '" + codigoTarjeta+"'";
             ResultSet rs = st.executeQuery(selectTarjeta);
             rs.next();
