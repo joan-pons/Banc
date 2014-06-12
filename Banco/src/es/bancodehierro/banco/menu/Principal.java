@@ -21,9 +21,6 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_SUCURSAL = 69003;
     private static final int MENU_PRINCIPAL_SALIR = 69004;
     
-    /**
-     * @param args the command line arguments
-     */
     
     public static void menuPrincipal(){
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
