@@ -134,17 +134,16 @@ public class Prestamo {
         double pagoTotal = cuotaMensual() * nombreAños * 12;
         return pagoTotal;
     }
-    
-     /**
-     * Cancelar Préstamo
-     * Versió molt "experimental"
-     * També es pot calcular com:
+
+    /**
+     * Cancelar Préstamo Versió molt "experimental" També es pot calcular com:
      * [deuda pendint x interes Esperado x meses restantes] / 12
+     *
      * @author Jaume Mayol
      * @param importePagado
      * @param tasaInteresMensual
      * @param tasaInteresEsperado
-     * @return 
+     * @return
      */
     public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
         double interesesCancelacion = importePrestado * tasaInteresMensual / (1
@@ -183,27 +182,27 @@ public class Prestamo {
      * @author Rafel Sastre.
      * @return
      */
-    public String insertarPrestamo() {
-        return "INSERT INTO Prestamo (codigoPrestamo, tipoPrestamo, fechaInicio, fechaFinal, importePrestado, importeRestante, cuotaMensual, empleadoAutorizacion, cuentaCorriente) VALUES (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ")";
-    }
-    
+//    public String insertarPrestamo() {
+//        return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigo_Pretamo() + ", " + getImporte_Prestamo() + ", "getDuracion_Mes_Prestamo() + ", " + getDni_Trabajador() + ", " + getFecha_Firma_Prestamo() + ", " + getCodigo_Suc_Tarjeta() + ", " + getNumero_Cc_Prestamo() + ")";
+//    }
+
     /**
      * Método de modificación de préstamo (por código)
-     * 
+     *
      * @author Pau Riera.
-     * @return 
+     * @return
      */
-    public String updatePrestamo(){
-        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = "+getCodigoPrestamo();
+    public String updatePrestamo() {
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = " + getCodigoPrestamo();
     }
-    
-       /**
+
+    /**
      * Método de eliminación de préstamo (por código)
      *
      * @author Jaume Mayol
      * @return
      */
-     public String eliminarPrestamo() {
+    public String eliminarPrestamo() {
         return "DELETE FROM Prestamo WHERE CodigoPrestamo=" + getCodigoPrestamo();
     }
 
