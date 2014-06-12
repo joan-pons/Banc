@@ -62,7 +62,6 @@ public class MenuPrestamo {
 
         if (cliente == null) {
             throw new ClienteNoEncontrado("El cliente con +"+dniCliente+" no ha sido encontrado.");
-            return false;
         } else {
             listCC = b.mostrarCuentaCorriente(cliente);
         }
