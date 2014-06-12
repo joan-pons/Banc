@@ -9,6 +9,7 @@ package es.bancodehierro.banco.menu;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.menu.GestionaMenu;
 import es.bancodehierro.banco.tarjeta.GestionTarjetas;
+import es.bancodehierro.banco.tarjeta.TipoTarjeta;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,12 +26,12 @@ public class MenuTarjeta {
 
     public void altaTarjeta() {
         //Obtener el cliente.
-        int codigoCliente = GestionaMenu.llegirSencer("Introdueix el codi del client.");
+        String codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
         int clienteEncontrado = 0;
         while (clienteEncontrado == 0) {
             try {
                 Statement st = conexio.createStatement();
-                String selectCliente = "select count(*) from Cliente where idCliente=" + codigoCliente;
+                String selectCliente = "select count(*) from Cliente where DNI_CLIENTE_TARJETA=" + codigoCliente;
                 ResultSet rs = st.executeQuery(selectCliente);
                 rs.next();
                 clienteEncontrado = rs.getInt(1);
@@ -47,13 +48,13 @@ public class MenuTarjeta {
         }
 
         //Obtener cuenta corriente.
-        int codigoSucursal = GestionaMenu.llegirSencer("Introduzca el código de sucursal");
+        String codigoSucursal = GestionaMenu.llegirCadena("Introduzca el código de sucursal");
         int codigoCuenta = GestionaMenu.llegirSencer("Introduzca el código de cuenta corriente");
         int cuentaEncontrada = 0;
         while (cuentaEncontrada == 0) {
             try {
                 Statement st = conexio.createStatement();
-                String selectCuenta = "select count(*) from CuentaCorriente where codigo_scc=" + codigoSucursal +" and numero_cc="+codigoCuenta;
+                String selectCuenta = "select count(*) from CuentaCorriente where CODIGO_SUC_TARJETA=" + codigoSucursal +" and NUMERO_CC_TARJETA="+codigoCuenta;
                 ResultSet rs = st.executeQuery(selectCuenta);
                 rs.next();
                 cuentaEncontrada = rs.getInt(1);
@@ -68,11 +69,19 @@ public class MenuTarjeta {
                 System.out.println("Cuenta no encontrada, introduzca un codigo sucursal y cuenta existente.");
             }
         }
-        
+               
         //pedir tipo
         String tipo = GestionaMenu.llegirCadena("Introduce el tipo de tarjeta (DEBITO/CREDITO)/");
+        
+          //pedir limite
+        Double limite = 0.0;
+        if (tipo.toUpperCase()=="CREDITO"){
+            do{
+            limite = GestionaMenu.llegirDouble("Introduce el límite de la tarjeta.");
+            }while(limite<0);
+        }
         //llamar al metodo de GestionTarjetas
-        //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase());
+        //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase(),limite);
         
     }
 
@@ -81,11 +90,11 @@ public class MenuTarjeta {
     * para eliminar una tarjeta de la base de datos.
     */
     public void eliminarTarjeta() { 
-        int codigoTarjeta;
+        String codigoTarjeta;
         boolean existe;
         do{
-            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
-            existe = comprovarTarjeta(codigoTarjeta);
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
         }while(existe);
         //eliminarTarjeta(codigoTarjeta);
     }
@@ -95,11 +104,11 @@ public class MenuTarjeta {
      * para pagar con las tarjetas.
      */
     public void pagar() {
-        int codigoTarjeta;
+        String codigoTarjeta;
         boolean existe;
         do{
-            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
-            existe = comprovarTarjeta(codigoTarjeta);
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
         }while(existe);
         String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
     }
@@ -109,11 +118,11 @@ public class MenuTarjeta {
      * para ingresar en tarjetas de debito.
      */
     public void ingresarDebito() {
-        int codigoTarjeta;
+        String codigoTarjeta;
         boolean existe;
         do{
-            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
-            existe = comprovarTarjeta(codigoTarjeta);
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
         }while(existe);
         double importe = GestionaMenu.llegirDouble("Introduce el importe a ingresar: ");
         String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
@@ -125,11 +134,11 @@ public class MenuTarjeta {
      * para ver los movimientos de las tarjetas.
      */
     public void verMovimientos() {
-        int codigoTarjeta;
+        String codigoTarjeta;
         boolean existe;
         do{
-            codigoTarjeta = GestionaMenu.llegirSencer("Introduce la ID de la tarjeta: ");
-            existe = comprovarTarjeta(codigoTarjeta);
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
         }while(existe);
         //verMovimientos(codigoTarjeta);
     }
@@ -139,11 +148,11 @@ public class MenuTarjeta {
      * @param codigoTarjeta El codigo de la tarjeta.
      * @return Devuelve un boolean (false si la encuentra o true si no).
      */
-    public boolean comprovarTarjeta(int codigoTarjeta){
+    public boolean comprobarTarjeta(String codigoTarjeta){
         boolean flag=true; 
         try {
         Statement st = conexio.createStatement();                              
-            String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE Codigo_tarjeta = " + codigoTarjeta;
+            String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE CODIGO_TARJETA = '" + codigoTarjeta+"'";
             ResultSet rs = st.executeQuery(selectTarjeta);
             rs.next();
             int existeix = rs.getInt(1);
