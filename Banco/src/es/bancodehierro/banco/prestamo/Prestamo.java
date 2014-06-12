@@ -5,25 +5,25 @@ import es.bancodehierro.banco.cc.Movimiento;
 import static es.bancodehierro.banco.enumeraciones.EnumMovimiento.PRESTAMO;
 import es.bancodehierro.banco.excepciones.PrestamoException;
 import es.bancodehierro.banco.persona.Empleado;
+import es.bancodehierro.banco.sucursal.Sucursal;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Classe de Prestamo.
  *
- * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol, Tomeu Moranta
+ * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol i Tomeu
+ * Moranta.
  */
 public class Prestamo {
 
-    private int codigoPrestamo;
-    private String tipoPrestamo;
-    private Date fechaInicio;
-    private Date fechaFinal;
-    private Double importePrestado;
-    private Double importeRestante;
-    private Double cuotaMensual;
-    private Empleado empleadoAutorizacion;
-    private CuentaCorriente cuentaCorriente;
+    private int codigo_Prestamo;
+    private Double importe_Prestamo;
+    private Date duracion_Mes_Prestamo;
+    private Empleado dni_Trabajador;
+    private Date fecha_Firma_Prestamo;
+    private Sucursal codigo_Suc_Tarjeta;
+    private CuentaCorriente numero_Cc_Prestamo;
     private ArrayList<Movimiento> listaMovimientos;
 
     //Els he afegit, cal discutir-ho. Veure mètodes cuotaMensual y
@@ -31,56 +31,55 @@ public class Prestamo {
     private double tasaInteresAnual;
     private int nombreAños;
 
-    public Prestamo(int codigoPrestamo, String tipoPrestamo, Date fechaInicio, Date fechaFinal, Double importePrestado, Double tasaInteresAnual, Empleado empleadoAutorizacion, CuentaCorriente cuentaCorriente) {
-        this.codigoPrestamo = codigoPrestamo;
-        this.tipoPrestamo = tipoPrestamo;
-        this.fechaInicio = fechaInicio;
-        this.fechaFinal = fechaFinal;
-        this.importePrestado = importePrestado;
-        this.tasaInteresAnual = tasaInteresAnual;
-        this.empleadoAutorizacion = empleadoAutorizacion;
-        this.cuentaCorriente = cuentaCorriente;
+    public Prestamo(int codigo_Prestamo, Double importe_Prestamo, Date duracion_Mes_Prestamo, Empleado dni_Trabajador, Date fecha_Firma_Prestamo, Sucursal codigo_Suc_Tarjeta, CuentaCorriente numero_Cc_Prestamo) {
+        this.codigo_Prestamo = codigo_Prestamo;
+        this.importe_Prestamo = importe_Prestamo;
+        this.duracion_Mes_Prestamo = duracion_Mes_Prestamo;
+        this.dni_Trabajador = dni_Trabajador;
+        this.fecha_Firma_Prestamo = fecha_Firma_Prestamo;
+        this.codigo_Suc_Tarjeta = codigo_Suc_Tarjeta;
+        this.numero_Cc_Prestamo = numero_Cc_Prestamo;
         this.listaMovimientos = new ArrayList<>();
     }
 
-    public int getCodigoPrestamo() {
-        return codigoPrestamo;
+    public int getCodigo_Prestamo() {
+        return codigo_Prestamo;
     }
 
-    public String getTipoPrestamo() {
-        return tipoPrestamo;
+    public Double getImporte_Prestamo() {
+        return importe_Prestamo;
     }
 
-    public Date getFechaInicio() {
-        return fechaInicio;
+    public Date getDuracion_Mes_Prestamo() {
+        return duracion_Mes_Prestamo;
     }
 
-    public Date getFechaFinal() {
-        return fechaFinal;
+    public Empleado getDni_Trabajador() {
+        return dni_Trabajador;
     }
 
-    public Double getImportePrestado() {
-        return importePrestado;
+    public Date getFecha_Firma_Prestamo() {
+        return fecha_Firma_Prestamo;
     }
 
-    public Double getImporteRestante() {
-        return importeRestante;
+    public Sucursal getCodigo_Suc_Tarjeta() {
+        return codigo_Suc_Tarjeta;
     }
 
-    public Double getCuotaMensual() {
-        return cuotaMensual;
-    }
-
-    public Empleado getEmpleadoAutorizacion() {
-        return empleadoAutorizacion;
-    }
-
-    public CuentaCorriente getCuentaCorriente() {
-        return cuentaCorriente;
+    public CuentaCorriente getNumero_Cc_Prestamo() {
+        return numero_Cc_Prestamo;
     }
 
     public ArrayList<Movimiento> getListaMovimientos() {
         return listaMovimientos;
+    }
+
+    public double getTasaInteresAnual() {
+        return tasaInteresAnual;
+    }
+
+    public int getNombreAños() {
+        return nombreAños;
     }
 
     /**
@@ -114,13 +113,12 @@ public class Prestamo {
      * @author Jaume Mayol
      * @return
      */
-    public double cuotaMensual() {
-        double taxaInteresMensual = tasaInteresAnual / 1200;
-        double importeMensual = importePrestado * taxaInteresMensual / (1
-                - (Math.pow(1 / (1 + taxaInteresMensual), nombreAños * 12)));
-        return importeMensual;
-    }
-
+//    public double cuotaMensual() {
+//        double taxaInteresMensual = tasaInteresAnual / 1200;
+//        double importeMensual = importePrestado * taxaInteresMensual / (1
+//                - (Math.pow(1 / (1 + taxaInteresMensual), nombreAños * 12)));
+//        return importeMensual;
+//    }
     /**
      * Cálculo total a pagar (capital prestado + intereses) Se utiliza el método
      * cuotaMensual y se hace la sencilla de operación de multiplicar su
@@ -130,11 +128,10 @@ public class Prestamo {
      * @see cuotaMensual
      * @return el pago total que deberà el prestatario
      */
-    public double calculoTotalAPagar() {
-        double pagoTotal = cuotaMensual() * nombreAños * 12;
-        return pagoTotal;
-    }
-
+//    public double calculoTotalAPagar() {
+//        double pagoTotal = cuotaMensual() * nombreAños * 12;
+//        return pagoTotal;
+//    }
     /**
      * Cancelar Préstamo Versió molt "experimental" També es pot calcular com:
      * [deuda pendint x interes Esperado x meses restantes] / 12
@@ -145,24 +142,23 @@ public class Prestamo {
      * @param tasaInteresEsperado
      * @return
      */
-    public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
-        double interesesCancelacion = importePrestado * tasaInteresMensual / (1
-                - (Math.pow(1 / (1 + tasaInteresEsperado), nombreAños * 12)));
-        double pagoFinal = calculoTotalAPagar() - importePagado + interesesCancelacion;
-        //eliminarPrestamo();
-        return pagoFinal;
+//    public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
+//        double interesesCancelacion = importePrestado * tasaInteresMensual / (1
+//                - (Math.pow(1 / (1 + tasaInteresEsperado), nombreAños * 12)));
+//        double pagoFinal = calculoTotalAPagar() - importePagado + interesesCancelacion;
+//        //eliminarPrestamo();
+//        return pagoFinal;
+//    }
+    public void setImporte_Prestamo(Double importe_Prestamo) {
+        this.importe_Prestamo = importe_Prestamo;
     }
 
-    public void setFechaFinal(Date fechaFinal) {
-        this.fechaFinal = fechaFinal;
+    public void setFecha_Firma_Prestamo(Date fecha_Firma_Prestamo) {
+        this.fecha_Firma_Prestamo = fecha_Firma_Prestamo;
     }
 
-    public void setImporteRestante(Double importeRestante) {
-        this.importeRestante = importeRestante;
-    }
-
-    public void setCuotaMensual(Double cuotaMensual) {
-        this.cuotaMensual = cuotaMensual;
+    public void setTasaInteresAnual(double tasaInteresAnual) {
+        this.tasaInteresAnual = tasaInteresAnual;
     }
 
     public boolean añadirMovimiento(Movimiento mov) throws PrestamoException {
@@ -182,9 +178,9 @@ public class Prestamo {
      * @author Rafel Sastre.
      * @return
      */
-//    public String insertarPrestamo() {
-//        return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigo_Pretamo() + ", " + getImporte_Prestamo() + ", "getDuracion_Mes_Prestamo() + ", " + getDni_Trabajador() + ", " + getFecha_Firma_Prestamo() + ", " + getCodigo_Suc_Tarjeta() + ", " + getNumero_Cc_Prestamo() + ")";
-//    }
+    public String insertarPrestamo() {
+        return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigo_Prestamo() + ", " + getImporte_Prestamo() + ", " + getDuracion_Mes_Prestamo() + ", '" + getDni_Trabajador() + "', " + getFecha_Firma_Prestamo() + ", " + getCodigo_Suc_Tarjeta() + ", '" + getNumero_Cc_Prestamo() + "')";
+    }
 
     /**
      * Método de modificación de préstamo (por código)
@@ -192,10 +188,9 @@ public class Prestamo {
      * @author Pau Riera.
      * @return
      */
-    public String updatePrestamo() {
-        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = " + getCodigoPrestamo();
-    }
-
+//    public String updatePrestamo() {
+//        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = " + getCodigoPrestamo();
+//    }
     /**
      * Método de eliminación de préstamo (por código)
      *
@@ -203,7 +198,7 @@ public class Prestamo {
      * @return
      */
     public String eliminarPrestamo() {
-        return "DELETE FROM Prestamo WHERE CodigoPrestamo=" + getCodigoPrestamo();
+        return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigo_Prestamo();
     }
 
 }
