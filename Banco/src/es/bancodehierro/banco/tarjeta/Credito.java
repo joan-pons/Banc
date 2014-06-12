@@ -1,29 +1,46 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.bancodehierro.banco.Tarjeta;
 
-import es.bancodehierro.banco.cc.CuentaCorriente;
-import es.bancodehierro.banco.persona.Cliente;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-/**
- *
- * @author bernadi
- */
+import es.bancodehierro.banco.conexion.Conexion;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Credito extends Tarjeta {
 
     private Double limite;
     private Double saldo;
 
-    public Credito(Double limite, Double saldo, int codigoTarjeta, Cliente titular, CuentaCorriente cuenta, String tipo) {
-        super(codigoTarjeta, titular, cuenta, tipo);
+
+    public Credito(Double limite, Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
+        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
+
         this.limite = limite;
         this.saldo = saldo;
+        try {
+            Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_credito VALUES ("
+                    + "null"
+                    + ",'" + codigoTitular + "'"
+                    + ",'" + codigoCuentaCorriente
+                    + "'," + codigoSucursal
+                    + ",null,"
+                    + limite + ")");
+        } catch (SQLException e) {
+
+        }
+    }
+
+    public Credito(String codigoTarjeta) {
+        super(codigoTarjeta, "CREDITO");
+        try {
+            ResultSet select = Conexion.conectar().createStatement().executeQuery("SELECT * FROM v_tarjeta_credito WHERE codigo_tarjeta = '" + codigoTarjeta + "'");
+            while (select.next()) {
+                this.limite = select.getDouble(6);
+                this.saldo = select.getDouble(7);
+            }
+        } catch (SQLException e) {
+
+        }
     }
 
     public Double getLimite() {
@@ -42,11 +59,8 @@ public class Credito extends Tarjeta {
         this.saldo = saldo;
     }
 
-    public Boolean pagar(double importe, String concepto) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        String dateTime = date.toString();
-       // MovimientoTarjeta m = new MovimientoTarjeta('I', dateTime, concepto, importe, this.codigoTarjeta);
+    public Boolean pagar(double importe, String concepto, String codigoTarjeta) {
+        MovimientoTarjeta m = new MovimientoTarjeta();
         return true;
     }
 }

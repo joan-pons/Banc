@@ -6,6 +6,8 @@
 package es.bancodehierro.banco.central;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
+import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
@@ -25,16 +27,46 @@ import java.util.logging.Logger;
  */
 public class Banco {
 
-    public boolean agregarCuentaCorriente() {
+    public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        
+   
+        Statement sel = (Statement) Conexion.conectar();
+        
+        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"','"+sucursal.getCodi()+"';");
+             
+        if (!comp.next()){
+        
+        Statement st = (Statement) Conexion.conectar();
+        
+        ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('"+cc.muestraCC()+"','"+sucursal.getCodi()+"',0,"+"SYSTIMESTAMP);");
+        
         return true;
+        
+        }else{
+            throw new CuentaCorrienteException();
+        }
     }
 
     public boolean modificarCuentaCorriente() {
         return true;
     }
 
-    public boolean eliminarCuentaCorriente() {
+    public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        
+        Statement sel = (Statement) Conexion.conectar();
+        
+        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"','"+sucursal.getCodi()+"';");
+             
+        if (comp.next()){
+        Statement st = (Statement) Conexion.conectar();
+        
+        ResultSet rs = st.executeQuery("DELETE FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"'&&'"+sucursal.getCodi()+"';");
+        
         return true;
+        
+        }else{
+            throw new CuentaCorrienteException();
+        }
     }
 
     public ArrayList<CuentaCorriente> mostrarCuentaCorriente() {

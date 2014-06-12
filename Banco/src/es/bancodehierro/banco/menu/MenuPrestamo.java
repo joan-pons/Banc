@@ -3,7 +3,8 @@ package es.bancodehierro.banco.menu;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.conexion.Conexion;
-import es.bancodehierro.banco.excepciones.ClienteNoEncontrado;
+import es.bancodehierro.banco.excepciones.ClienteException;
+import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.prestamo.Prestamo;
@@ -51,7 +52,7 @@ public class MenuPrestamo {
      * @author Rafel Sastre, Miquel Vallespir Castello, Pau Riera
      * @param presta
      */
-    public boolean insertarPrestamo(Empleado empleado) throws ClienteNoEncontrado {
+    public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException {
         Connection conexion = Conexion.conectar();
         ArrayList<CuentaCorriente> listCC = null;
         Banco b = new Banco();// al meter en banco desaparece
@@ -61,14 +62,15 @@ public class MenuPrestamo {
         Cliente cliente = b.devuelveCliente(dniCliente);
 
         if (cliente == null) {
-            throw new ClienteNoEncontrado("El cliente con +"+dniCliente+" no ha sido encontrado.");
+            throw new ClienteException("El cliente con +"+dniCliente+" no ha sido encontrado.");
+            //return false;
         } else {
             listCC = b.mostrarCuentaCorriente(cliente);
         }
 
         if (listCC == null) {
-            System.err.println("Este cliente no tiene ninguna cuenta asociada.");
-            return false;
+            throw new CuentaCorrienteException("Este cliente no tiene ninguna cuenta asociada.");
+            //return false;
         }
 
         String[] opcions = new String[listCC.size()];
@@ -93,11 +95,9 @@ public class MenuPrestamo {
             System.out.println(filesAfectades + ", files afectades.");
         } catch (SQLException ex) {
             System.out.println("ERROR: " + ex.getErrorCode() + ", " + ex.getLocalizedMessage());
-            return false;
         }
         presta.toString();
 
-        return true;
     }
     
     /**
