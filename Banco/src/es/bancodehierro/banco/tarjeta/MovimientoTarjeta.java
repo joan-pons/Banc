@@ -7,6 +7,11 @@ import java.sql.Statement;
 
 public class MovimientoTarjeta {
 
+    private String codigoTarjeta;
+    private int codigo;
+    private String operacion;
+    private String fecha;
+
     int codigo;
     char tipo;
     String fecha;
@@ -28,7 +33,7 @@ public class MovimientoTarjeta {
                     + ",fecha=" + fecha
                     + ",concepto=" + concepto
                     + ",importe=" + importe
-                    + ",codigoTarjeta=" + codigoTarjeta+")";
+                    + ",codigoTarjeta=" + codigoTarjeta + ")";
             st.executeUpdate(query);
             st.close();
             Conexion.desconectar();
