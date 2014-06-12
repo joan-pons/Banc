@@ -20,7 +20,7 @@ public class Credito extends Tarjeta {
     private Double limite;
     private Double saldo;
 
-    public Credito(Double limite, Double saldo, int codigoTarjeta, Cliente titular, CuentaCorriente cuenta, TipoTarjeta tipo) {
+    public Credito(Double limite, Double saldo, int codigoTarjeta, Cliente titular, CuentaCorriente cuenta, String tipo) {
         super(codigoTarjeta, titular, cuenta, tipo);
         this.limite = limite;
         this.saldo = saldo;
