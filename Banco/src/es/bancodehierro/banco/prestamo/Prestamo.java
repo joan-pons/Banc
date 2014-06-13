@@ -206,22 +206,7 @@ public class Prestamo {
      * @throws PrestamoException
      * @throws SQLException
      */
-    public boolean eliminarPrestamo() throws PrestamoException, SQLException {
-
-        Statement sel = (Statement) Conexion.conectar();
-
-        ResultSet comp = sel.executeQuery("SELECT * FROM PRESTAMO WHERE CODIGO_PRESTAMO = '" + getCodigoPrestamo() + "';");
-
-        if (comp.next()) {
-            Statement st = (Statement) Conexion.conectar();
-
-            ResultSet rs = st.executeQuery("DELETE FROM PRESTAMO WHERE CODIGO_PRESTAMO = '" + getCodigoPrestamo() + "';");
-
-            return true;
-
-        } else {
-            throw new PrestamoException();
-        }
-    }
-
+    public String eliminarPrestamo()  {
+return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
+  
 }
