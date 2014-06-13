@@ -285,4 +285,11 @@ public class CuentaCorriente {
         }
 
     }
+
+    @Override
+    public String toString() {
+        return "CuentaCorriente{" + "cuenta=" + muestraCC() + ", importe=" + importe + '}';
+    }
+    
+    
 }

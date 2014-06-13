@@ -28,21 +28,20 @@ import java.util.logging.Logger;
 public class Banco {
 
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
-        
-   
+
         Statement sel = (Statement) Conexion.conectar();
-        
-        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"','"+sucursal.getCodi()+"';");
-             
-        if (!comp.next()){
-        
-        Statement st = (Statement) Conexion.conectar();
-        
-        ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('"+cc.muestraCC()+"','"+sucursal.getCodi()+"',0,"+"SYSTIMESTAMP);");
-        
-        return true;
-        
-        }else{
+
+        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
+
+        if (!comp.next()) {
+
+            Statement st = (Statement) Conexion.conectar();
+
+            ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
+
+            return true;
+
+        } else {
             throw new CuentaCorrienteException();
         }
     }
@@ -52,24 +51,37 @@ public class Banco {
     }
 
     public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
-        
+
         Statement sel = (Statement) Conexion.conectar();
-        
-        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"','"+sucursal.getCodi()+"';");
-             
-        if (comp.next()){
-        Statement st = (Statement) Conexion.conectar();
-        
-        ResultSet rs = st.executeQuery("DELETE FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '"+cc.muestraCC()+"'&&'"+sucursal.getCodi()+"';");
-        
-        return true;
-        
-        }else{
+
+        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
+
+        if (comp.next()) {
+            Statement st = (Statement) Conexion.conectar();
+
+            ResultSet rs = st.executeQuery("DELETE FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "'&&'" + sucursal.getCodi() + "';");
+
+            return true;
+
+        } else {
             throw new CuentaCorrienteException();
         }
     }
 
-    public ArrayList<CuentaCorriente> mostrarCuentaCorriente() {
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente() throws SQLException {
+        String resultado = null;
+        try (Statement st = Conexion.conectar().createStatement()) {
+            String consultaTitular = "SELECT * FROM CUENTA_CORRIENTE";
+            ResultSet rs = st.executeQuery(consultaTitular);
+            ArrayList<CuentaCorriente> cuentaCorriente = new ArrayList<>();
+            for (int i = 0; rs.next(); i++) {
+                cuentaCorriente.add(new CuentaCorriente(rs.getString("IBAN"), rs.getString("CODIGO_SCC"), rs.getString("dC"), rs.getString("NUMERO_CC"), rs.getDouble("IMPORTE_CC")));
+                resultado = resultado + "\n" + cuentaCorriente.get(i).toString();
+                    //aB.add(biblio);
+                //System.out.println(biblio);
+            }
+        }
+
         return null;
     }
 
@@ -93,11 +105,11 @@ public class Banco {
     public Empleado devuelveEmpleado(String dni) {
         return null;
     }
-    
+
     public static boolean insertarCliente(Cliente cliente, Connection con) {
         boolean sortida = false;
         try {
-        //no se le pasa
+            //no se le pasa
 
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery("select * from cliente where DNI_CLIENTE =" + cliente.getIdCliente());
@@ -106,19 +118,17 @@ public class Banco {
 
                 st.executeUpdate("insert into persona values(" + cliente.getDni() + ", " + cliente.getNombre() + ", " + cliente.getApellido1() + ", " + cliente.getApellido2() + ", " + cliente.getFechaNacimiento() + ", " + cliente.getDireccion() + ", " + cliente.getPoblacion() + ", " + cliente.getTlf() + ")");
                 st.executeUpdate("insert into cliente value" + cliente.getIdCliente() + ", " + cliente.getDni() + ")");
-                 rs.close();
-            rs.close();
-            st.close();
+                rs.close();
+                rs.close();
+                st.close();
                 return sortida = true;
             } else {
-                 rs.close();
-            rs.close();
-            st.close();
+                rs.close();
+                rs.close();
+                st.close();
                 return sortida = false;
 
             }
-
-           
 
         } catch (SQLException ex) {
             Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,6 +149,6 @@ public class Banco {
     public static boolean eliminarSucursal(Sucursal sucursal) {
         return false;
     }
-    
+
     //Fi de la part del grup de Guillem Arrom, Rotger, Pedro i François
 }
