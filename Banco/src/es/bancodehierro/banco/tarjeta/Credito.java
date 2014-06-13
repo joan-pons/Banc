@@ -1,4 +1,4 @@
-package es.bancodehierro.banco.Tarjeta;
+package es.bancodehierro.banco.tarjeta;
 
 import es.bancodehierro.banco.conexion.Conexion;
 

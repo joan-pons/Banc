@@ -5,7 +5,7 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import es.bancodehierro.banco.Tarjeta.Credito;
+import es.bancodehierro.banco.tarjeta.Credito;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.tarjeta.Debito;
 import java.sql.ResultSet;
