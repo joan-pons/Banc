@@ -84,11 +84,11 @@ public class MenuPrestamo {
 
         int opcioSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
         double importePrestado = GestionaMenu.llegirDouble("Introdueix el total a prestar");
-        double tasaInteresAnual = GestionaMenu.llegirDouble("La tasa de interes anual");
-        
+        String fechaInicio = GestionaMenu.llegirCadena("Introdueix fecha inicial (dd-mm-yyyy)");
+        String fechaFinal = GestionaMenu.llegirCadena("Introdueix fecha final (dd-mm-yyyy)");
 
         //Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
-        Prestamo presta = new Prestamo(0, 1000.00, null, null, null, null, null);
+        Prestamo presta = new Prestamo(0, importePrestado, fechaInicio, empleado, fechaFinal, null, listCC.get(opcioSeleccionada));
         try {
             Statement st = conexion.createStatement();
             int filesAfectades = st.executeUpdate(presta.insertarPrestamo());
