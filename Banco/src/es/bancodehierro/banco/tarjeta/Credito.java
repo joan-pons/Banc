@@ -10,10 +10,9 @@ public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
     private Double limite;
     private Double saldo;
 
-    public Credito(Double limite, Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
-        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
+    public Credito(String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, double limite) {
+        super(null, codigoTitular, codigoCuentaCorriente, codigoSucursal, null, null);
         this.limite = limite;
-        this.saldo = saldo;
         try {
             Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_credito VALUES ("
                     + "null"
@@ -56,8 +55,8 @@ public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
         this.saldo = saldo;
     }
 
-    /*public Boolean pagar(double importe, String concepto) {
+    public Boolean pagar(double importe, String concepto) {
         MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta,"PAGAR",importe,concepto,"CREDITO");
         return true;
-    }*/
+    }
 }

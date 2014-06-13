@@ -10,11 +10,11 @@ import java.sql.Statement;
 
 public class GestionTarjetas {
 
-    public Boolean altaTarjeta(int codigoCliente, CuentaCorriente cuentaCorriente, String tipoTarjeta, Double limite) {
+    public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite) {
         if (limite == null) {
-            //Debito d = new Debito(codigoCliente, cuentaCorriente, tipoTarjeta);
+            Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
         } else {
-            //Credito d = new Credito(codigoCliente, cuentaCorriente, tipoTarjeta, limite);
+            Credito c = new Credito(codigoCliente, cuentaCorriente, sucursal, limite);
         }
         return null;
     }
