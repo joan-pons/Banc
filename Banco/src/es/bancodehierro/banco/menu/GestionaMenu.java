@@ -170,7 +170,7 @@ public class GestionaMenu {
      * @param fecha String en formato "dd-mm-yyyy" que se usara para transformarlo en fecha.
      * @return Objeto "Date" con la fecha correspondiente.
      */
-    public Date setFechaNacimiento(String fecha){
+    public static Date setFechaNacimiento(String fecha){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date data = formatter.parse(fecha, new ParsePosition(1));
         return data;
