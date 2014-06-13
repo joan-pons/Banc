@@ -5,11 +5,14 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+import es.bancodehierro.banco.Tarjeta.Credito;
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.tarjeta.Debito;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -47,7 +50,7 @@ public class MenuTarjeta {
         while (cuentaEncontrada == 0) {
             try {
                 Statement st = Conexion.conectar().createStatement();
-                String selectCuenta = "select count(*) from CuentaCorriente where CODIGO_SUC_TARJETA=" + codigoSucursal +" and NUMERO_CC_TARJETA="+codigoCuenta;
+                String selectCuenta = "select count(*) from CuentaCorriente where CODIGO_SUC_TARJETA=" + codigoSucursal + " and NUMERO_CC_TARJETA=" + codigoCuenta;
                 ResultSet rs = st.executeQuery(selectCuenta);
                 rs.next();
                 cuentaEncontrada = rs.getInt(1);
@@ -62,106 +65,134 @@ public class MenuTarjeta {
                 System.out.println("Cuenta no encontrada, introduzca un codigo sucursal y cuenta existente.");
             }
         }
-               
+
         //pedir tipo
         String tipo = GestionaMenu.llegirCadena("Introduce el tipo de tarjeta (DEBITO/CREDITO)/");
-        
-          //pedir limite
+
+        //pedir limite
         Double limite = 0.0;
-        if (tipo.toUpperCase()=="CREDITO"){
-            do{
-            limite = GestionaMenu.llegirDouble("Introduce el límite de la tarjeta.");
-            }while(limite<0);
+        if (tipo.toUpperCase() == "CREDITO") {
+            do {
+                limite = GestionaMenu.llegirDouble("Introduce el límite de la tarjeta.");
+            } while (limite < 0);
         }
         //llamar al metodo de GestionTarjetas
         //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase(),limite);
-        
+
     }
 
-   /**
-    * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
-    * para eliminar una tarjeta de la base de datos.
-    */
-    public void eliminarTarjeta() { 
+    /**
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el
+     * metodo para eliminar una tarjeta de la base de datos.
+     */
+    public void eliminarTarjeta() {
         String codigoTarjeta;
         boolean existe;
-        do{
+        do {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
-        }while(existe);
+        } while (existe);
         //eliminarTarjeta(codigoTarjeta);
     }
 
     /**
-     * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
-     * para pagar con las tarjetas.
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el
+     * metodo para pagar con las tarjetas.
      */
     public void pagar() {
         String codigoTarjeta;
         boolean existe;
-        do{
+        do {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
-        }while(existe);
+        } while (existe);
         String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
     }
 
     /**
-     * Metodo que sirve para recoger los datos que luego utilitzaremos en el metodo 
-     * para ingresar en tarjetas de debito.
+     * Metodo que sirve para recoger los datos que luego utilitzaremos en el
+     * metodo para ingresar en tarjetas de debito.
      */
     public void ingresarDebito() {
         String codigoTarjeta;
         boolean existe;
-        do{
+        do {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
-        }while(existe);
+        } while (existe);
         double importe = GestionaMenu.llegirDouble("Introduce el importe a ingresar: ");
         String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
         //ingresarDebito(importe, concepto, codigoTarjeta);
     }
 
     /**
-     * Metodo que sirve para recoger los datos que luego utilizaremos en el metodo
-     * para ver los movimientos de las tarjetas.
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el
+     * metodo para ver los movimientos de las tarjetas.
      */
     public void verMovimientos() {
         String codigoTarjeta;
         boolean existe;
-        do{
+        do {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
-        }while(existe);
+        } while (existe);
         //verMovimientos(codigoTarjeta);
     }
-  
+
     /**
-     * Este metodo sirve para comprovar si una tarjeta existe en la base de datos.
+     * Este metodo sirve para comprovar si una tarjeta existe en la base de
+     * datos.
+     *
      * @param codigoTarjeta El codigo de la tarjeta.
      * @return Devuelve un boolean (false si la encuentra o true si no).
      */
-    public boolean comprobarTarjeta(String codigoTarjeta){
-        boolean flag=true; 
+    public Credito devolverTarjetaCredito() {
+        String codigoTarjeta;
+        boolean existe;
+        do {
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
+            if (!existe){
+                System.out.println("ID de tarjeta erróneo, introduzca uno valido.");
+            }
+        } while (existe);
+        return new Credito(codigoTarjeta);
+    }
+    
+        public Debito devolverTarjetaDebito() {
+        String codigoTarjeta;
+        boolean existe;
+        do {
+            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            existe = comprobarTarjeta(codigoTarjeta);
+            if (!existe){
+                System.out.println("ID de tarjeta erróneo, introduzca uno valido.");
+            }
+        } while (existe);
+        return null;
+       // return new Debito(codigoTarjeta);
+    }
+
+    public boolean comprobarTarjeta(String codigoTarjeta) {
+        boolean flag = true;
         try {
-        Statement st = Conexion.conectar().createStatement();                              
-            String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE CODIGO_TARJETA = '" + codigoTarjeta+"'";
+            Statement st = Conexion.conectar().createStatement();
+            String selectTarjeta = "SELECT COUNT(*) FROM TARJETA WHERE CODIGO_TARJETA = '" + codigoTarjeta + "'";
             ResultSet rs = st.executeQuery(selectTarjeta);
             rs.next();
             int existeix = rs.getInt(1);
-            if(existeix == 1){
+            if (existeix == 1) {
                 System.out.println("Tarjeta encontrada!");
-                flag=false;
-            }
-            else{
+                flag = false;
+            } else {
                 System.out.println("Tarjeta no encontrada!");
-                flag=true;
+                flag = true;
             }
-            rs.close();       
-        st.close();
+            rs.close();
+            st.close();
         } catch (SQLException ex) {
-                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
-            }
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
         return flag;
     }
 
