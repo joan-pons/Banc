@@ -7,10 +7,13 @@ package es.bancodehierro.banco.central;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
+import es.bancodehierro.banco.menu.GestionaMenu;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
+import es.bancodehierro.banco.prestamo.Prestamo;
 import es.bancodehierro.banco.sucursal.Sucursal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -31,20 +34,35 @@ public class Banco {
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
+        String function="{? = call INSERCIO_CCB(?,?,?,?)}";
+        //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
 
-        ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
-
-        if (comp.next()) {
-            CallableStatement cS = Conexion.conectar().prepareCall("{call INSERCIO_CCB('" + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}");
-            ResultSet rs = cS.executeQuery();
+        //if (comp.next()) {
+            CallableStatement cS = Conexion.conectar().prepareCall(function);
+            cS.registerOutParameter(1, java.sql.Types.INTEGER);
+            cS.setString(2, cc.muestraCC());
+            cS.setInt(3, sucursal.getCodi());
+            cS.setInt(4, 0);
+            cS.setString(5, "SYSTIMESTAMP");
+            
+            //ResultSet rs = cS.executeQuery();
+            cS.executeQuery();
+           
+           
+            
+            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
+            
+            
 //ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
 
+            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
+//ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
             //ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
             return true;
 
-        } else {
+        /*} else {
             throw new CuentaCorrienteException();
-        }
+        }*/
     }
 
     public boolean modificarCuentaCorriente() {
@@ -152,7 +170,6 @@ public class Banco {
     }
 
     //Fi de la part del grup de Guillem Arrom, Rotger, Pedro i François
-
     /**
      * MÉTODO INSERTAR PRESTAMO - PENDIENTE DE PASAR A BANCO.
      *
@@ -169,7 +186,7 @@ public class Banco {
         Cliente cliente = b.devuelveCliente(dniCliente);
 
         if (cliente == null) {
-            throw new ClienteException("El cliente con +"+dniCliente+" no ha sido encontrado.");
+            throw new ClienteException("El cliente con +" + dniCliente + " no ha sido encontrado.");
             //return false;
         } else {
             listCC = b.mostrarCuentaCorriente(cliente);
@@ -191,11 +208,11 @@ public class Banco {
 
         int opcioSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 0);
         double importePrestado = GestionaMenu.llegirDouble("Introdueix el total a prestar");
-        String fechaInicio = GestionaMenu.llegirCadena("Introdueix fecha inicial (dd-mm-yyyy)");
+        int duracionPrestamo = GestionaMenu.llegirSencer("Introdueix durade prestec mesos");
         String fechaFinal = GestionaMenu.llegirCadena("Introdueix fecha final (dd-mm-yyyy)");
 
         //Prestamo presta = new Prestamo(0, "", null, null, importePrestado, tasaInteresAnual, empleado, listCC.get(opcioSeleccionade));
-        Prestamo presta = new Prestamo(0, importePrestado, fechaInicio, empleado, fechaFinal, null, listCC.get(opcioSeleccionada));
+        Prestamo presta = new Prestamo(0, importePrestado, duracionPrestamo, empleado, listCC.get(opcioSeleccionada));
         try {
             Statement st = conexion.createStatement();
             int filesAfectades = st.executeUpdate(presta.insertarPrestamo());
@@ -208,9 +225,9 @@ public class Banco {
     }
 
     /**
-     * PENDIENTE DE PASAR A BANCO.
-     * Menú. Método de eliminar Préstamo
-     * Elimina el préstamo. Coge el código del préstamo.
+     * PENDIENTE DE PASAR A BANCO. Menú. Método de eliminar Préstamo Elimina el
+     * préstamo. Coge el código del préstamo.
+     *
      * @author Jaume Mayol
      * @param presta
      * @see es.bancodehierro.banco.prestamo.Prestamo
@@ -226,6 +243,5 @@ public class Banco {
         }
 
     }
-
 
 }

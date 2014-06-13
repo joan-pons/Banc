@@ -13,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,10 +22,11 @@ import java.util.ArrayList;
  */
 public class MenuPrestamo {
 
-    public static void menuPres() {
+    public static void menuPres(Empleado empleado) {
 
-        String[] opcions = {"Insertar Prestamo", "Editar Prestamo", "Eliminar Prestamo", "Atras"};
+        String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
         int opcionSeleccionada;
+        Banco banco = new Banco();
 
         do {
 
@@ -31,10 +34,16 @@ public class MenuPrestamo {
 
             switch (opcionSeleccionada) {
                 case 1:
-                    
+                    try {
+                        banco.insertarPrestamo(empleado);
+                    } catch (ClienteException ex) {
+                        System.err.println("El client no existeix.");
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println("La conta corrent no existeix.");
+                    }
                     break;
                 case 2:
-
+                    banco.eliminarPrestamo(null);
                     break;
                 case 3:
 
