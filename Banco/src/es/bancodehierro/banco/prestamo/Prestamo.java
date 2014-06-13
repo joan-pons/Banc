@@ -191,9 +191,9 @@ public class Prestamo {
      * @author Pau Riera.
      * @return
      */
-//    public String updatePrestamo() {
-//        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = " + getCodigoPrestamo();
-//    }
+    public String updatePrestamo() {
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo()+ ") WHERE codiprestamo = " + getCodigoPrestamo();
+    }
     /**
      * Método de eliminación de préstamo (por código)
      *
