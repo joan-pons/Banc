@@ -202,12 +202,11 @@ public class Prestamo {
      * Elimina el préstec per codi, si el troba. Si no, llança excepció de préstec
      * o excepció SQL.
      * @author Jaume Mayol Hervás
-     * @param id
      * @return
      * @throws PrestamoException
      * @throws SQLException 
      */
-    public boolean eliminarPrestamo(Prestamo Codigo_Prestamo) throws PrestamoException, SQLException {
+    public boolean eliminarPrestamo() throws PrestamoException, SQLException {
 
         Statement sel = (Statement) Conexion.conectar();
 
