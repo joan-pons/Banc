@@ -6,6 +6,7 @@
 package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,14 +29,14 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_SALIR = 69004;
     
     
-    public static void menuPrincipal(){
+    public static void menuPrincipal() throws SQLException, CuentaCorrienteException{
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
         boolean menu = true;
         do {
             int op = gestionarMenu("Menu Principal", opciones, "Elige una opción", MENU_PRONCIPAL_PREFIX);
             switch (op) {
                 case MENU_PRINCIPAL_CC:
-                    //MenuCuentaCorriente.menuCC;
+                    MenuCuentaCorriente.menuCC();
                     break;
 
                 case MENU_PRINCIPAL_PRESTAMO:
@@ -57,12 +58,12 @@ public abstract class Principal {
             }
         } while (menu);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, CuentaCorrienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
         try(Statement st = conexio.createStatement()){
             ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = "+dni);
-            System.out.println(rs.getString(1));
+            //System.out.println(rs.getString(1));
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }

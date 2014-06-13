@@ -5,15 +5,14 @@ import es.bancodehierro.banco.conexion.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Credito extends Tarjeta {
+public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
 
     private Double limite;
     private Double saldo;
 
-    public Credito(Double limite, Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
-        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
+    public Credito(String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, double limite) {
+        super(null, codigoTitular, codigoCuentaCorriente, codigoSucursal, null, null);
         this.limite = limite;
-        this.saldo = saldo;
         try {
             Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_credito VALUES ("
                     + "null"
@@ -55,9 +54,9 @@ public class Credito extends Tarjeta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-    
+
     public Boolean pagar(double importe, String concepto) {
-        MovimientoTarjeta m = new MovimientoTarjeta();
+        MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta,"PAGAR",importe,concepto,"CREDITO");
         return true;
     }
 }

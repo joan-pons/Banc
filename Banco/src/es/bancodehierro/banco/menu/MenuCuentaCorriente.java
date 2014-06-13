@@ -7,6 +7,7 @@ package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
+import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
@@ -23,15 +24,17 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC() throws SQLException {
+    public static void menuCC() throws SQLException, CuentaCorrienteException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), GestionaMenu.llegirDouble("Introduce un Importe"));
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         Sucursal sucursal=new Sucursal(null, null, 0, 0000, null);
+        Banco banco=new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
             String[] opciones = {"Operaciones de Importe",
                 "Operaciones de Titular",
                 "Operaciones de Movimientos",
+                "Operaciones de Cuenta Corriente",
                 "Salir"};
 
             int menu = menuCC.mostrarMenu(opciones);
@@ -55,6 +58,12 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 3: {
+                    boolean repMenuBanco = true;
+                    Cliente cliente = null;
+                    menuCC.metodoBanco(repMenuBanco, cC,cliente,sucursal,banco);
+                    break;
+                }
+                case 4: {
                     Principal.menuPrincipal();
                     break;
                 }
@@ -347,6 +356,49 @@ public class MenuCuentaCorriente {
                         if (menuMov != 2) {
 
                             repMenuMovimiento = algunaCosaMas();
+
+                        }
+                    }
+    }
+
+public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente cliente,Sucursal sucursal,Banco banco) throws SQLException, CuentaCorrienteException{
+        for (; repMenuBanco;) {
+                        String[] opcionesTit = {"Agregar Cuenta Corriente",
+                            "Modificar Cuenta Corriente",
+                            "Eliminar Cuenta Corriente",
+                            "Mostrar Cuenta Corriente",
+                            "Volver atrás"};
+
+                        int menuTit = mostrarMenu(opcionesTit);
+                        switch (menuTit) {
+                            case 0: {
+                               // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                banco.agregarCuentaCorriente(cC, sucursal);
+                                break;
+                            }
+                            case 1: {
+                                banco.modificarCuentaCorriente();
+                                break;
+                            }
+                            case 2: {
+                                //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                                banco.eliminarCuentaCorriente(cC, sucursal);
+                                break;
+                            }
+                            case 3: {
+                                
+                                break;
+                            }
+                            case 4: {
+                                //Retrocede al menu anterior
+                                repMenuBanco = false;
+                                break;
+                            }
+
+                        }
+                        if (menuTit != 4) {
+
+                            repMenuBanco = algunaCosaMas();;
 
                         }
                     }

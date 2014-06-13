@@ -2,25 +2,19 @@ package es.bancodehierro.banco.tarjeta;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.conexion.Conexion;
-import es.bancodehierro.banco.persona.Cliente;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GestionTarjetas {
 
-    public Boolean altaTarjeta(int codigoCliente, CuentaCorriente cuentaCorriente, String tipoTarjeta, Double limite) {
+    public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite) {
         if (limite == null) {
-            //Debito d = new Debito(codigoCliente, cuentaCorriente, tipoTarjeta);
+            Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
         } else {
-            // Credito d = new Credito(codigoCliente, cuentaCorriente, tipoTarjeta, limite);
+            Credito c = new Credito(codigoCliente, cuentaCorriente, sucursal, limite);
         }
         return null;
     }

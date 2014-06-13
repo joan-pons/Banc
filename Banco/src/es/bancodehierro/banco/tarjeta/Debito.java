@@ -1,19 +1,16 @@
-
 package es.bancodehierro.banco.tarjeta;
 
 import es.bancodehierro.banco.conexion.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 public class Debito extends Tarjeta {
 
     private Double saldo;
 
-    public Debito(Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
-        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
-        this.saldo = saldo;
-         try {
+    public Debito(String codigoTitular, String codigoCuentaCorriente, int codigoSucursal) {
+        super(null, codigoTitular, codigoCuentaCorriente, codigoSucursal, null, null);
+        try {
             Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_debito VALUES ("
                     + "null"
                     + ",'" + codigoTitular + "'"
@@ -24,9 +21,9 @@ public class Debito extends Tarjeta {
 
         }
     }
-    
-    public Debito(String codigoTarjeta){
-         super(codigoTarjeta, "CREDITO");
+
+    public Debito(String codigoTarjeta) {
+        super(codigoTarjeta, "CREDITO");
         try {
             ResultSet select = Conexion.conectar().createStatement().executeQuery("SELECT * FROM v_tarjeta_debito WHERE codigo_tarjeta = '" + codigoTarjeta + "'");
             while (select.next()) {
@@ -41,7 +38,7 @@ public class Debito extends Tarjeta {
     public String toString() {
         return "Debito{" + "saldo=" + saldo + '}';
     }
-    
+
     public Double getSaldo() {
         return saldo;
     }
@@ -49,5 +46,15 @@ public class Debito extends Tarjeta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-    
+
+    public Boolean pagar(double importe, String concepto) {
+        MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta, "PAGAR", importe, concepto, "DEBITO");
+        return true;
+    }
+
+    public Boolean ingresar(double importe, String concepto) {
+        MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta, "INGRESAR", importe, concepto, "CREDITO");
+        return true;
+    }
+
 }
