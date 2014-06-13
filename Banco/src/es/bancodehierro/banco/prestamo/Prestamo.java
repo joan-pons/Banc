@@ -9,6 +9,8 @@ import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -194,14 +196,33 @@ public class Prestamo {
     public String updatePrestamo() {
         return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo()+ ") WHERE codiprestamo = " + getCodigoPrestamo();
     }
+    
     /**
-     * Método de eliminación de préstamo (por código)
-     *
-     * @author Jaume Mayol
+     * Eliminar Préstamo
+     * Elimina el préstec per codi, si el troba. Si no, llança excepció de préstec
+     * o excepció SQL.
+     * @author Jaume Mayol Hervás
+     * @param id
      * @return
+     * @throws PrestamoException
+     * @throws SQLException 
      */
-    public String eliminarPrestamo() {
-        return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
+    public boolean eliminarPrestamo(Prestamo Codigo_Prestamo) throws PrestamoException, SQLException {
+
+        Statement sel = (Statement) Conexion.conectar();
+
+        ResultSet comp = sel.executeQuery("SELECT * FROM PRESTAMO WHERE CODIGO_PRESTAMO = '" + getCodigoPrestamo() + "';");
+
+        if (comp.next()) {
+            Statement st = (Statement) Conexion.conectar();
+
+            ResultSet rs = st.executeQuery("DELETE FROM PRESTAMO WHERE CODIGO_PRESTAMO = '" + getCodigoPrestamo() + "';");
+
+            return true;
+
+        } else {
+            throw new PrestamoException();
+        }
     }
 
 }
