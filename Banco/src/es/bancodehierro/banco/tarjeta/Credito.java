@@ -1,6 +1,5 @@
 package es.bancodehierro.banco.Tarjeta;
 
-
 import es.bancodehierro.banco.conexion.Conexion;
 
 import java.sql.ResultSet;
@@ -11,10 +10,8 @@ public class Credito extends Tarjeta {
     private Double limite;
     private Double saldo;
 
-
     public Credito(Double limite, Double saldo, String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
         super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
-
         this.limite = limite;
         this.saldo = saldo;
         try {
@@ -59,7 +56,8 @@ public class Credito extends Tarjeta {
         this.saldo = saldo;
     }
 
-    public Boolean pagar(double importe, String concepto, String codigoTarjeta) {
+    public Boolean pagar(double importe, String concepto) {
+        
         MovimientoTarjeta m = new MovimientoTarjeta();
         return true;
     }

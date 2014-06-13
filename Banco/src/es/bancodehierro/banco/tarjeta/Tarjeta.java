@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import oracle.sql.TIMESTAMP;
 
-public abstract class Tarjeta {
+public class Tarjeta {
 
-    protected String codigoTarjeta;
+    String codigoTarjeta;
     private String codigoTitular;
     private String codigoCuentaCorriente;
     private int codigoSucursal;
@@ -40,8 +40,7 @@ public abstract class Tarjeta {
         }
     }
 
-    @Override
-    public abstract String toString();
+  
 
     public String getFechaTarjeta() {
         return fechaTarjeta;

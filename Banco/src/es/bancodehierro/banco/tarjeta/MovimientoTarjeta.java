@@ -1,9 +1,7 @@
 package es.bancodehierro.banco.tarjeta;
 
 import es.bancodehierro.banco.conexion.Conexion;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class MovimientoTarjeta {
 
@@ -11,35 +9,46 @@ public class MovimientoTarjeta {
     private int codigo;
     private String operacion;
     private String fecha;
-
-    int codigo;
-    char tipo;
-    String fecha;
-    String concepto;
-    double importe;
-    int codigoTarjeta;
-
-    public MovimientoTarjeta(char tipo, String fecha, String concepto, double importe, int codigoTarjeta) {
-        this.tipo = tipo;
-        this.fecha = fecha;
-        this.concepto = concepto;
-        this.importe = importe;
+    private double importe;
+    private String concepto;
+    private String tipoTarjeta;
+    
+    public MovimientoTarjeta(String codigoTarjeta, int codigo, String operacion, String fecha, double importe, String concepto, String tipo) {
         this.codigoTarjeta = codigoTarjeta;
-        try {
-            Connection cn = Conexion.conectar();
-            Statement st = cn.createStatement();
-            String query = "INSERT INTO movimientoTarjeta VALUES "
-                    + "(tipo=" + tipo
-                    + ",fecha=" + fecha
-                    + ",concepto=" + concepto
-                    + ",importe=" + importe
-                    + ",codigoTarjeta=" + codigoTarjeta + ")";
-            st.executeUpdate(query);
-            st.close();
-            Conexion.desconectar();
+        this.codigo = codigo;
+        this.operacion = operacion;
+        this.fecha = fecha;
+        this.importe = importe;
+        this.concepto = concepto;
+        this.tipoTarjeta = tipo;
+    }
 
-        } catch (SQLException ex) {
-            System.out.println("Error en la conexion");
+    public MovimientoTarjeta(String codigoTarjeta, String operacion, String fecha, double importe, String concepto, String tipo) {
+        this.codigoTarjeta = codigoTarjeta;
+        this.operacion = operacion;
+        this.fecha = fecha;
+        this.importe = importe;
+        this.concepto = concepto;
+        this.tipoTarjeta = tipo;
+        try {
+            if (tipo == "DEBITO") {
+                Conexion.conectar().createStatement().executeUpdate("INSERT INTO movimiento_tarjeta_debito VALUES ('"
+                        + codigoTarjeta + "',"
+                        + "null,'"
+                        + operacion + "',"
+                        + "null,"
+                        + importe + ",'"
+                        + concepto + "')");
+            } else {
+                Conexion.conectar().createStatement().executeUpdate("INSERT INTO movimiento_tarjeta_credito VALUES ('"
+                        + codigoTarjeta + "',"
+                        + "null,'"
+                        + operacion + "',"
+                        + "null,"
+                        + importe + ",'"
+                        + concepto + "')");
+            }
+        } catch (SQLException e) {
 
         }
     }
