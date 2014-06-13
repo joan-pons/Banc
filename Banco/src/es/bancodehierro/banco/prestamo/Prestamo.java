@@ -2,10 +2,13 @@ package es.bancodehierro.banco.prestamo;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
+import es.bancodehierro.banco.conexion.Conexion;
 import static es.bancodehierro.banco.enumeraciones.EnumMovimiento.PRESTAMO;
 import es.bancodehierro.banco.excepciones.PrestamoException;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -17,13 +20,13 @@ import java.util.Date;
  */
 public class Prestamo {
 
-    private int codigo_Prestamo;
-    private Double importe_Prestamo;
-    private Date duracion_Mes_Prestamo;
-    private Empleado dni_Trabajador;
-    private Date fecha_Firma_Prestamo;
-    private Sucursal codigo_Suc_Tarjeta;
-    private CuentaCorriente numero_Cc_Prestamo;
+    private int codigoPrestamo;
+    private Double importePrestamo;
+    private Date duracionMesPrestamo;
+    private Empleado dniTrabajador;
+    private Date fechaFirmaPrestamo;
+    private Sucursal codigoSucTarjeta;
+    private CuentaCorriente numeroCcPrestamo;
     private ArrayList<Movimiento> listaMovimientos;
 
     //Els he afegit, cal discutir-ho. Veure mètodes cuotaMensual y
@@ -31,43 +34,43 @@ public class Prestamo {
     private double tasaInteresAnual;
     private int nombreAños;
 
-    public Prestamo(int codigo_Prestamo, Double importe_Prestamo, Date duracion_Mes_Prestamo, Empleado dni_Trabajador, Date fecha_Firma_Prestamo, Sucursal codigo_Suc_Tarjeta, CuentaCorriente numero_Cc_Prestamo) {
-        this.codigo_Prestamo = codigo_Prestamo;
-        this.importe_Prestamo = importe_Prestamo;
-        this.duracion_Mes_Prestamo = duracion_Mes_Prestamo;
-        this.dni_Trabajador = dni_Trabajador;
-        this.fecha_Firma_Prestamo = fecha_Firma_Prestamo;
-        this.codigo_Suc_Tarjeta = codigo_Suc_Tarjeta;
-        this.numero_Cc_Prestamo = numero_Cc_Prestamo;
+    public Prestamo(int codigoPrestamo, Double importePrestamo, Date duracionMesPrestamo, Empleado dniTrabajador, Date fechaFirmaPrestamo, Sucursal codigoSucTarjeta, CuentaCorriente numeroCcPrestamo) {
+        this.codigoPrestamo = codigoPrestamo;
+        this.importePrestamo = importePrestamo;
+        this.duracionMesPrestamo = duracionMesPrestamo;
+        this.dniTrabajador = dniTrabajador;
+        this.fechaFirmaPrestamo = fechaFirmaPrestamo;
+        this.codigoSucTarjeta = codigoSucTarjeta;
+        this.numeroCcPrestamo = numeroCcPrestamo;
         this.listaMovimientos = new ArrayList<>();
     }
 
-    public int getCodigo_Prestamo() {
-        return codigo_Prestamo;
+    public int getCodigoPrestamo() {
+        return codigoPrestamo;
     }
 
-    public Double getImporte_Prestamo() {
-        return importe_Prestamo;
+    public Double getImportePrestamo() {
+        return importePrestamo;
     }
 
-    public Date getDuracion_Mes_Prestamo() {
-        return duracion_Mes_Prestamo;
+    public Date getDuracionMesPrestamo() {
+        return duracionMesPrestamo;
     }
 
-    public Empleado getDni_Trabajador() {
-        return dni_Trabajador;
+    public Empleado getDniTrabajador() {
+        return dniTrabajador;
     }
 
-    public Date getFecha_Firma_Prestamo() {
-        return fecha_Firma_Prestamo;
+    public Date getFechaFirmaPrestamo() {
+        return fechaFirmaPrestamo;
     }
 
-    public Sucursal getCodigo_Suc_Tarjeta() {
-        return codigo_Suc_Tarjeta;
+    public Sucursal getCodigoSucTarjeta() {
+        return codigoSucTarjeta;
     }
 
-    public CuentaCorriente getNumero_Cc_Prestamo() {
-        return numero_Cc_Prestamo;
+    public CuentaCorriente getNumeroCcPrestamo() {
+        return numeroCcPrestamo;
     }
 
     public ArrayList<Movimiento> getListaMovimientos() {
@@ -149,12 +152,12 @@ public class Prestamo {
 //        //eliminarPrestamo();
 //        return pagoFinal;
 //    }
-    public void setImporte_Prestamo(Double importe_Prestamo) {
-        this.importe_Prestamo = importe_Prestamo;
+    public void setImportePrestamo(Double importePrestamo) {
+        this.importePrestamo = importePrestamo;
     }
 
-    public void setFecha_Firma_Prestamo(Date fecha_Firma_Prestamo) {
-        this.fecha_Firma_Prestamo = fecha_Firma_Prestamo;
+    public void setFechaFirmaPrestamo(Date fechaFirmaPrestamo) {
+        this.fechaFirmaPrestamo = fechaFirmaPrestamo;
     }
 
     public void setTasaInteresAnual(double tasaInteresAnual) {
@@ -179,7 +182,7 @@ public class Prestamo {
      * @return
      */
     public String insertarPrestamo() {
-        return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigo_Prestamo() + ", " + getImporte_Prestamo() + ", " + getDuracion_Mes_Prestamo() + ", '" + getDni_Trabajador() + "', " + getFecha_Firma_Prestamo() + ", " + getCodigo_Suc_Tarjeta() + ", '" + getNumero_Cc_Prestamo() + "')";
+        return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", '" + getDniTrabajador() + "', " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", '" + getNumeroCcPrestamo() + "')";
     }
 
     /**
@@ -188,9 +191,9 @@ public class Prestamo {
      * @author Pau Riera.
      * @return
      */
-//    public String updatePrestamo() {
-//        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getTipoPrestamo() + ", " + getFechaInicio() + ", " + getFechaFinal() + ", " + getImportePrestado() + ", " + getImporteRestante() + ", " + getCuotaMensual() + ", " + getEmpleadoAutorizacion() + ", " + getCuentaCorriente() + ") WHERE codiprestamo = " + getCodigoPrestamo();
-//    }
+    public String updatePrestamo() {
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo()+ ") WHERE codiprestamo = " + getCodigoPrestamo();
+    }
     /**
      * Método de eliminación de préstamo (por código)
      *
@@ -198,7 +201,7 @@ public class Prestamo {
      * @return
      */
     public String eliminarPrestamo() {
-        return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigo_Prestamo();
+        return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
     }
 
 }
