@@ -62,7 +62,7 @@ public abstract class Principal {
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
         try(Statement st = conexio.createStatement()){
             ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = "+dni);
-            System.out.println(rs.getString(1));
+            //System.out.println(rs.getString(1));
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
         }
