@@ -22,7 +22,7 @@ public class Prestamo {
 
     private int codigoPrestamo;
     private Double importePrestamo;
-    private Date duracionMesPrestamo;
+    private int duracionMesPrestamo;
     private Empleado dniTrabajador;
     private Date fechaFirmaPrestamo;
     private Sucursal codigoSucTarjeta;
@@ -53,7 +53,7 @@ public class Prestamo {
         return importePrestamo;
     }
 
-    public Date getDuracionMesPrestamo() {
+    public int getDuracionMesPrestamo() {
         return duracionMesPrestamo;
     }
 
