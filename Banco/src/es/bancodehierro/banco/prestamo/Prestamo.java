@@ -203,8 +203,6 @@ public class Prestamo {
      *
      * @author Jaume Mayol Hervás
      * @return
-     * @throws PrestamoException
-     * @throws SQLException
      */
     public String eliminarPrestamo()  {
 return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
