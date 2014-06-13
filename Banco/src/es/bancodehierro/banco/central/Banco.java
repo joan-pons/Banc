@@ -31,12 +31,23 @@ public class Banco {
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
-
+        String function="{? = call INSERCIO_CCB(?,?,?,?)}";
         ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
 
         if (comp.next()) {
-            CallableStatement cS = Conexion.conectar().prepareCall("{call INSERCIO_CCB('" + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}");
-            ResultSet rs = cS.executeQuery();
+            CallableStatement cS = Conexion.conectar().prepareCall(function);
+            cS.registerOutParameter(1, java.sql.Types.VARCHAR);
+            cS.setInt(2, sucursal.getCodi());
+            cS.setInt(3, 0);
+            cS.setString(4, "SYSTIMESTAMP");
+            //ResultSet rs = cS.executeQuery();
+           cS.executeQuery();
+           
+           
+            
+            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
+            
+            
 //ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
 
             //ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
