@@ -12,6 +12,7 @@ import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,17 +29,17 @@ import java.util.logging.Logger;
 public class Banco {
 
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+        Statement st = Conexion.conectar().createStatement();
+        boolean resultado = false;
 
-        Statement sel = (Statement) Conexion.conectar();
+        ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
 
-        ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
+        if (comp.next()) {
+            CallableStatement cS = Conexion.conectar().prepareCall("{call INSERCIO_CCB('" + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}");
+            ResultSet rs = cS.executeQuery();
+//ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
 
-        if (!comp.next()) {
-
-            Statement st = (Statement) Conexion.conectar();
-
-            ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
-
+            //ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
             return true;
 
         } else {
@@ -77,7 +78,7 @@ public class Banco {
             for (int i = 0; rs.next(); i++) {
                 cuentaCorriente.add(new CuentaCorriente(rs.getString("IBAN"), rs.getString("CODIGO_SCC"), rs.getString("dC"), rs.getString("NUMERO_CC"), rs.getDouble("IMPORTE_CC")));
                 resultado = resultado + "\n" + cuentaCorriente.get(i).toString();
-                    //aB.add(biblio);
+                //aB.add(biblio);
                 //System.out.println(biblio);
             }
         }
