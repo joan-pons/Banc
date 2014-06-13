@@ -4,6 +4,7 @@ import es.bancodehierro.banco.conexion.Conexion;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
 
@@ -58,5 +59,17 @@ public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
     public Boolean pagar(double importe, String concepto) {
         MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta,"PAGAR",importe,concepto,"CREDITO");
         return true;
+    }
+    
+    public void verMovimientosCredito(){
+       try {
+            ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,FECHA_MTC,IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='"+codigoTarjeta+"'");
+            while(rs.next()){
+                System.out.println("Codigo tarjeta: "+rs.getString(1)+", Codigo Movimiento: "+rs.getString(2)+", Operacion: "+rs.getString(3)+", Fecha");
+            }
+        } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+        
     }
 }

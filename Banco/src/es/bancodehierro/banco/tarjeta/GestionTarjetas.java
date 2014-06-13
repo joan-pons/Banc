@@ -4,9 +4,12 @@ import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.conexion.Conexion;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GestionTarjetas {
 
@@ -34,7 +37,7 @@ public class GestionTarjetas {
         }
     }
 
-    public Boolean verMovimientos(int codigoTarjeta) {
-        return null;
+    public void verMovimientos(String codigoTarjeta) {
+      
     }
 }
