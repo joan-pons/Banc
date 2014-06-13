@@ -20,6 +20,7 @@ import java.util.logging.Logger;
  * @author Guillem Arrom, Guillem Rotger, Pedro Lladó, François
  */
 public abstract class Principal {
+
     private static Connection conexio = Conexion.conectar();
     private static final int MENU_PRONCIPAL_PREFIX = 69000;
     private static final int MENU_PRINCIPAL_CC = 69000;
@@ -27,10 +28,9 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_TARJETA = 69002;
     private static final int MENU_PRINCIPAL_SUCURSAL = 69003;
     private static final int MENU_PRINCIPAL_SALIR = 69004;
-    
-    
-    public static void menuPrincipal() throws SQLException, CuentaCorrienteException{
-        String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
+
+    public static void menuPrincipal() throws SQLException, CuentaCorrienteException {
+        String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta", "Sucursal", "Salir"};
         boolean menu = true;
         do {
             int op = gestionarMenu("Menu Principal", opciones, "Elige una opción", MENU_PRONCIPAL_PREFIX);
@@ -40,7 +40,7 @@ public abstract class Principal {
                     break;
 
                 case MENU_PRINCIPAL_PRESTAMO:
-                    MenuPrestamo.menuPres();
+                    MenuPrestamo.menuPres(null);
                     break;
 
                 case MENU_PRINCIPAL_TARJETA:
@@ -52,17 +52,18 @@ public abstract class Principal {
                     break;
                 case MENU_PRINCIPAL_SALIR:
                     Conexion.desconectar();
-                    menu=false;
+                    menu = false;
                     System.out.println("Sortint...");
                     break;
             }
         } while (menu);
     }
+
     public static void main(String[] args) throws SQLException, CuentaCorrienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
-        try(Statement st = conexio.createStatement()){
-            ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = "+dni);
+        try (Statement st = conexio.createStatement()) {
+            ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = " + dni);
             //System.out.println(rs.getString(1));
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

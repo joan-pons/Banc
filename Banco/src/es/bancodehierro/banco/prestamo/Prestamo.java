@@ -9,6 +9,8 @@ import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,7 +46,7 @@ public class Prestamo {
         this.numeroCcPrestamo = numeroCcPrestamo;
         this.listaMovimientos = new ArrayList<>();
     }
-    
+
     public int getCodigoPrestamo() {
         return codigoPrestamo;
     }
@@ -192,16 +194,18 @@ public class Prestamo {
      * @return
      */
     public String updatePrestamo() {
-        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo()+ ") WHERE codiprestamo = " + getCodigoPrestamo();
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo() + ") WHERE codiprestamo = " + getCodigoPrestamo();
     }
+
     /**
-     * Método de eliminación de préstamo (por código)
+     * Eliminar Préstamo Elimina el préstec per codi, si el troba. Si no, llança
+     * excepció de préstec o excepció SQL.
      *
-     * @author Jaume Mayol
+     * @author Jaume Mayol Hervás
      * @return
      */
     public String eliminarPrestamo() {
         return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
-    }
 
+    }
 }

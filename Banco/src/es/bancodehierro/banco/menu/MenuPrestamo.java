@@ -24,7 +24,7 @@ public class MenuPrestamo {
 
     public static void menuPres(Empleado empleado) {
 
-        String[] opcions = {"Insertar Prestamo", "Editar Prestamo", "Eliminar Prestamo", "Atras"};
+        String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
         int opcionSeleccionada;
         Banco banco = new Banco();
 
@@ -43,7 +43,7 @@ public class MenuPrestamo {
                     }
                     break;
                 case 2:
-
+                    banco.eliminarPrestamo(null);
                     break;
                 case 3:
 
