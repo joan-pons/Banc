@@ -39,7 +39,7 @@ public class Banco {
 
         //if (comp.next()) {
             CallableStatement cS = Conexion.conectar().prepareCall(function);
-            cS.registerOutParameter(1, java.sql.Types.BOOLEAN);
+            cS.registerOutParameter(1, java.sql.Types.INTEGER);
             cS.setString(2, cc.muestraCC());
             cS.setInt(3, sucursal.getCodi());
             cS.setInt(4, 0);
