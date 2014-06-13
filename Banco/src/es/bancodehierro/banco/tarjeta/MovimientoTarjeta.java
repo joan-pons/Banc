@@ -23,10 +23,9 @@ public class MovimientoTarjeta {
         this.tipoTarjeta = tipo;
     }
 
-    public MovimientoTarjeta(String codigoTarjeta, String operacion, String fecha, double importe, String concepto, String tipo) {
+    public MovimientoTarjeta(String codigoTarjeta, String operacion, double importe, String concepto, String tipo) {
         this.codigoTarjeta = codigoTarjeta;
         this.operacion = operacion;
-        this.fecha = fecha;
         this.importe = importe;
         this.concepto = concepto;
         this.tipoTarjeta = tipo;

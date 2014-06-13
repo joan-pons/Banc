@@ -5,7 +5,7 @@ import es.bancodehierro.banco.conexion.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Credito extends Tarjeta {
+public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
 
     private Double limite;
     private Double saldo;
@@ -55,9 +55,9 @@ public class Credito extends Tarjeta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-    
+
     public Boolean pagar(double importe, String concepto) {
-        MovimientoTarjeta m = new MovimientoTarjeta();
+        MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta,"PAGAR",importe,concepto,"CREDITO");
         return true;
     }
 }
