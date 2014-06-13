@@ -34,7 +34,7 @@ public class Banco {
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
-        String function = "{? = call INSERCIO_CCB(?,?,?,?)}";
+        String function="{? = call INSERCIO_CCB(?,?,?,?)}";
         ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
 
         if (comp.next()) {
@@ -44,7 +44,14 @@ public class Banco {
             cS.setInt(3, 0);
             cS.setString(4, "SYSTIMESTAMP");
             //ResultSet rs = cS.executeQuery();
-            cS.executeQuery();
+           cS.executeQuery();
+           
+           
+            
+            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
+            
+            
+//ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
 
             // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
 //ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
