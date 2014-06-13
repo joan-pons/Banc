@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 
 public class GestionTarjetas {
 
-    public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite) {
-        if (limite == null) {
+    public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite,String tipo) {
+       if (tipo.toUpperCase() == "DEBITO"){
             Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
         } else {
             Credito c = new Credito(codigoCliente, cuentaCorriente, sucursal, limite);
@@ -24,12 +24,10 @@ public class GestionTarjetas {
 
     public Boolean eliminarTarjeta(int codigoTarjeta) {
         try {
-            Connection cn = Conexion.conectar();
-            Statement st = cn.createStatement();
+            Statement st = Conexion.conectar().createStatement();
             String query = "DELETE FROM tarjeta WHERE codigoTarjeta = " + codigoTarjeta;
             st.executeUpdate(query);
             st.close();
-            Conexion.desconectar();
             return true;
         } catch (SQLException ex) {
             System.out.println("Error en la conexion");
@@ -38,6 +36,6 @@ public class GestionTarjetas {
     }
 
     public void verMovimientos(String codigoTarjeta) {
-      
+
     }
 }

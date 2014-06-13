@@ -63,9 +63,9 @@ public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
     
     public void verMovimientosCredito(){
        try {
-            ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,FECHA_MTC,IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='"+codigoTarjeta+"'");
+            ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,to_char(FECHA_MTC),IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='"+codigoTarjeta+"'");
             while(rs.next()){
-                System.out.println("Codigo tarjeta: "+rs.getString(1)+", Codigo Movimiento: "+rs.getString(2)+", Operacion: "+rs.getString(3)+", Fecha");
+                System.out.println("Codigo tarjeta: "+rs.getString(1)+", Codigo Movimiento: "+rs.getInt(2)+", Operacion: "+rs.getString(3)+", Fecha: "+rs.getString(4)+", Importe: "+rs.getDouble(5)+", Concepto: "+rs.getString(6));
             }
         } catch (SQLException ex) {
                 System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());

@@ -95,7 +95,43 @@ public class MenuTarjeta {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
         } while (existe);
-        //eliminarTarjeta(codigoTarjeta);
+        String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
+                + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
+                + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
+                + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
+                + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
+        Statement st;
+        try {
+            st = Conexion.conectar().createStatement();
+            ResultSet rs;
+            rs = st.executeQuery(selectTarjeta);
+            rs.next();
+            int credit = rs.getInt(1);
+            int debit = rs.getInt(2);
+            rs.close();
+            st.close();
+            if (credit == 1) {
+                rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,to_char(FECHA_MTC),IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
+                while (rs.next()) {
+                    System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
+                }
+                rs.close();
+
+            } else {
+                rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTD,OPERACION_MTD,to_char(FECHA_MTD),IMPORTE_MTD,CONCEPTO_MTD FROM MOVIMIENTO_TARJETA_DEBITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
+                while (rs.next()) {
+                    System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
+                }
+                rs.close();
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuTarjeta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (GestionaMenu.llegirCadena("Introduce la ID de la tarjeta(SI/NO: ").toUpperCase()=="SI"){
+            //eliminarTarjeta(codigoTarjeta);
+        }
+        
     }
 
     /**
@@ -219,6 +255,9 @@ public class MenuTarjeta {
             if (credit == 1) {
                 Credito tarjetaCredito = new Credito(codigoTarjeta);
                 tarjetaCredito.verMovimientosCredito();
+            } else {
+                Debito tarjetaDebito = new Debito(codigoTarjeta);
+                tarjetaDebito.verMovimientosDebito();
             }
         } catch (SQLException ex) {
             Logger.getLogger(GestionTarjetas.class.getName()).log(Level.SEVERE, null, ex);
@@ -232,11 +271,12 @@ public class MenuTarjeta {
      * @param codigoTarjeta El codigo de la tarjeta.
      * @return Devuelve un boolean (false si la encuentra o true si no).
      */
-    public Credito devolverTarjetaCredito() {
-        String codigoTarjeta;
+    public Credito devolverTarjetaCredito(String codigoTarjeta) {
         boolean existe;
         do {
-            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            if (codigoTarjeta == null) {
+                codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            }
             existe = comprobarTarjeta(codigoTarjeta);
             if (!existe) {
                 System.out.println("ID de tarjeta erróneo, introduzca uno valido.");
@@ -247,18 +287,20 @@ public class MenuTarjeta {
         return tarjetaCredito;
     }
 
-    public Debito devolverTarjetaDebito() {
-        String codigoTarjeta;
+    public Debito devolverTarjetaDebito(String codigoTarjeta) {
         boolean existe;
         do {
-            codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            if (codigoTarjeta == null) {
+                codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
+            }
             existe = comprobarTarjeta(codigoTarjeta);
             if (!existe) {
                 System.out.println("ID de tarjeta erróneo, introduzca uno valido.");
             }
         } while (existe);
-        return null;
-        // return new Debito(codigoTarjeta);
+        Debito tarjetaDebito = new Debito(codigoTarjeta);
+        System.out.println(tarjetaDebito);
+        return tarjetaDebito;
     }
 
     public boolean comprobarTarjeta(String codigoTarjeta) {
