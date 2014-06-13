@@ -8,9 +8,8 @@ public class Debito extends Tarjeta {
 
     private Double saldo;
 
-    public Debito(String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
-        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, fechaTarjeta);
-        this.saldo = saldo;
+    public Debito(String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo) {
+        super(codigoTarjeta, codigoTitular, codigoCuentaCorriente, codigoSucursal, tipo, null);
         try {
             Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_debito VALUES ("
                     + "null"

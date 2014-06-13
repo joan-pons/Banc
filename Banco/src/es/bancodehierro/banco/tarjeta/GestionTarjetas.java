@@ -14,7 +14,7 @@ public class GestionTarjetas {
         if (limite == null) {
             //Debito d = new Debito(codigoCliente, cuentaCorriente, tipoTarjeta);
         } else {
-            Credito d = new Credito(codigoCliente, cuentaCorriente, tipoTarjeta, limite);
+            //Credito d = new Credito(codigoCliente, cuentaCorriente, tipoTarjeta, limite);
         }
         return null;
     }
