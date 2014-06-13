@@ -28,14 +28,14 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_SALIR = 69004;
     
     
-    public static void menuPrincipal(){
+    public static void menuPrincipal() throws SQLException{
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
         boolean menu = true;
         do {
             int op = gestionarMenu("Menu Principal", opciones, "Elige una opción", MENU_PRONCIPAL_PREFIX);
             switch (op) {
                 case MENU_PRINCIPAL_CC:
-                    //MenuCuentaCorriente.menuCC;
+                    MenuCuentaCorriente.menuCC();
                     break;
 
                 case MENU_PRINCIPAL_PRESTAMO:
@@ -57,7 +57,7 @@ public abstract class Principal {
             }
         } while (menu);
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
         try(Statement st = conexio.createStatement()){

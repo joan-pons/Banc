@@ -56,8 +56,8 @@ public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
         this.saldo = saldo;
     }
 
-    public Boolean pagar(double importe, String concepto) {
+    /*public Boolean pagar(double importe, String concepto) {
         MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta,"PAGAR",importe,concepto,"CREDITO");
         return true;
-    }
+    }*/
 }
