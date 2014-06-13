@@ -58,7 +58,7 @@ public abstract class Principal {
             }
         } while (menu);
     }
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, CuentaCorrienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
         try(Statement st = conexio.createStatement()){
