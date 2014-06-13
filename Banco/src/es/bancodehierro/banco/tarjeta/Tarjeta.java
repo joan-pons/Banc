@@ -4,16 +4,16 @@ import es.bancodehierro.banco.conexion.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import oracle.sql.TIMESTAMP;
+
 
 public class Tarjeta {
 
-    String codigoTarjeta;
-    private String codigoTitular;
-    private String codigoCuentaCorriente;
-    private int codigoSucursal;
-    private String tipo;
-    private String fechaTarjeta;
+    public String codigoTarjeta;
+    public String codigoTitular;
+    public String codigoCuentaCorriente;
+    public int codigoSucursal;
+    public String tipo;
+    public String fechaTarjeta;
 
     public Tarjeta(String codigoTarjeta, String codigoTitular, String codigoCuentaCorriente, int codigoSucursal, String tipo, String fechaTarjeta) {
         this.codigoTarjeta = codigoTarjeta;
@@ -40,7 +40,10 @@ public class Tarjeta {
         }
     }
 
-  
+    @Override
+    public String toString() {
+        return "Tarjeta{" + "codigoTarjeta=" + codigoTarjeta + ", codigoTitular=" + codigoTitular + ", codigoCuentaCorriente=" + codigoCuentaCorriente + ", codigoSucursal=" + codigoSucursal + ", tipo=" + tipo + ", fechaTarjeta=" + fechaTarjeta + '}';
+    }
 
     public String getFechaTarjeta() {
         return fechaTarjeta;

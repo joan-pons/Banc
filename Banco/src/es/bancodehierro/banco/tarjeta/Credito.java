@@ -55,9 +55,8 @@ public class Credito extends Tarjeta {
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
-
+    
     public Boolean pagar(double importe, String concepto) {
-        
         MovimientoTarjeta m = new MovimientoTarjeta();
         return true;
     }
