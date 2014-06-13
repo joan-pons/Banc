@@ -188,7 +188,7 @@ public class CuentaCorriente {
                 } else if (rs.getInt(1) == 1) {
                     System.err.println("ERROR: solo hay un titular");
                 } /*else {
-                     insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET POSICIO= VALUES('" + titular.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",1";
+                     insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET POSICIO= 3 WHERE;
                     
                 }*/
                 filas = st.executeUpdate(insertTitular);
