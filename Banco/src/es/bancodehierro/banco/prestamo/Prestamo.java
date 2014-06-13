@@ -46,7 +46,7 @@ public class Prestamo {
         this.numeroCcPrestamo = numeroCcPrestamo;
         this.listaMovimientos = new ArrayList<>();
     }
-    
+
     public int getCodigoPrestamo() {
         return codigoPrestamo;
     }
@@ -194,18 +194,18 @@ public class Prestamo {
      * @return
      */
     public String updatePrestamo() {
-        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo()+ ") WHERE codiprestamo = " + getCodigoPrestamo();
+        return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo() + ") WHERE codiprestamo = " + getCodigoPrestamo();
     }
-    
+
     /**
-     * Eliminar Préstamo
-     * Elimina el préstec per codi, si el troba. Si no, llança excepció de préstec
-     * o excepció SQL.
+     * Eliminar Préstamo Elimina el préstec per codi, si el troba. Si no, llança
+     * excepció de préstec o excepció SQL.
+     *
      * @author Jaume Mayol Hervás
      * @param id
      * @return
      * @throws PrestamoException
-     * @throws SQLException 
+     * @throws SQLException
      */
     public boolean eliminarPrestamo(Prestamo Codigo_Prestamo) throws PrestamoException, SQLException {
 
