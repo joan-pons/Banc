@@ -34,17 +34,17 @@ public class Prestamo {
     private double tasaInteresAnual;
     private int nombreAños;
 
-    public Prestamo(int codigoPrestamo, Double importePrestamo, Date duracionMesPrestamo, Empleado dniTrabajador, Date fechaFirmaPrestamo, Sucursal codigoSucTarjeta, CuentaCorriente numeroCcPrestamo) {
+    public Prestamo(int codigoPrestamo, Double importePrestamo, int duracionMesPrestamo, Empleado dniTrabajador, CuentaCorriente numeroCcPrestamo) {
         this.codigoPrestamo = codigoPrestamo;
         this.importePrestamo = importePrestamo;
         this.duracionMesPrestamo = duracionMesPrestamo;
         this.dniTrabajador = dniTrabajador;
-        this.fechaFirmaPrestamo = fechaFirmaPrestamo;
-        this.codigoSucTarjeta = codigoSucTarjeta;
+        //this.fechaFirmaPrestamo = GestionaMenu.setFechaNacimiento(fechaFirmaPrestamo);
+        //this.codigoSucTarjeta = codigoSucTarjeta;
         this.numeroCcPrestamo = numeroCcPrestamo;
         this.listaMovimientos = new ArrayList<>();
     }
-
+    
     public int getCodigoPrestamo() {
         return codigoPrestamo;
     }
