@@ -34,16 +34,16 @@ public class Banco {
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
-        String function="{? = call INSERCIO_CCB(?,?,?,?)}";
+        String function="{? = call INSERCIO_CCB(?,?,?)}";
         //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
 
         //if (comp.next()) {
             CallableStatement cS = Conexion.conectar().prepareCall(function);
-            cS.registerOutParameter(1, java.sql.Types.INTEGER);
+            cS.registerOutParameter(1, java.sql.Types.BOOLEAN);
             cS.setString(2, cc.muestraCC());
             cS.setInt(3, sucursal.getCodi());
             cS.setInt(4, 0);
-            cS.setString(5, "SYSTIMESTAMP");
+            
             
             //ResultSet rs = cS.executeQuery();
             cS.executeQuery();
