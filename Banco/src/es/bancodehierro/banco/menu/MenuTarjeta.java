@@ -99,14 +99,81 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para pagar con las tarjetas.
      */
-    public void pagar() {
+public void pagar() {
         String codigoTarjeta;
         boolean existe;
-        do {
+        
+        try {
+        do{
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
-        } while (existe);
+        }while(existe); 
+        Statement st = Conexion.conectar().createStatement();
         String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
+        Double importe = GestionaMenu.llegirDouble("Introduce el importe a pagar: ");
+        String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
+                + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
+                + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
+                + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
+                + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
+        ResultSet rs;
+        rs = st.executeQuery(selectTarjeta);
+        rs.next();
+        int credit = rs.getInt(1);
+        int debit = rs.getInt(2);
+        rs.close();
+        st.close();
+        
+        /*Si resulta que es de credit. */
+        if(credit == 1){         
+            String selectMaxCredito = "SELECT MAX_CREDITO FROM TARJETA_CREDITO"
+                    + "WHERE CODIGO_TARJETA_CREDITO = '" + codigoTarjeta +"' ";
+            rs = st.executeQuery(selectMaxCredito);
+            rs.next();
+            int maxCredit = rs.getInt(1);
+            rs.close();
+            st.close(); 
+            String selectSaldo = "SELECT SALDO FROM v_targeta_credit "
+                    + "WHERE CODIGO_TARJETA = '" + codigoTarjeta + "'";
+            rs = st.executeQuery(selectSaldo);
+            rs.next();
+            int importe_acumulado = rs.getInt(1);
+            rs.close();
+            st.close();
+            /*Sumamos el importe que llevamos acumulado mas el importe que se quiere pagar. */
+            Double importe_actual = importe_acumulado + importe;
+            if(importe_actual > maxCredit){
+                System.out.println("No es pot fer, ja ha superat el credit maxim. ");
+            }
+            else{
+                //pagar(concepto, importe, codigoTarjeta);
+            }
+        }
+        
+            
+  
+        /*Si resulta que es de debit. */
+        else if(debit == 1){         
+            String selectSaldo = "SELECT SALDO FROM v_targeta_debit"
+                    + "WHERE CODIGO_TARJETA = '" + codigoTarjeta + "' ";
+            rs = st.executeQuery(selectSaldo);
+            rs.next();
+            int saldo = rs.getInt(1);
+            rs.close();
+            st.close();
+            Double resultat = saldo - importe;
+            if(resultat < 0){
+                System.out.println("No se puede realizar la operacion, falta saldo.");
+            }
+            else{
+               //pagar(concepto, importe, codigoTarjeta);
+            }
+        }
+        
+    } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+    }
+       
     }
 
     /**
@@ -156,7 +223,9 @@ public class MenuTarjeta {
                 System.out.println("ID de tarjeta erróneo, introduzca uno valido.");
             }
         } while (existe);
-        return new Credito(codigoTarjeta);
+        Credito tarjetaCredito = new Credito(codigoTarjeta);
+        System.out.println(tarjetaCredito);
+        return tarjetaCredito;
     }
     
         public Debito devolverTarjetaDebito() {
