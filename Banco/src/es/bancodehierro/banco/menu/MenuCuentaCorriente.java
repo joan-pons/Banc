@@ -24,10 +24,11 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC() throws SQLException {
+    public static void menuCC() throws SQLException, CuentaCorrienteException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), GestionaMenu.llegirDouble("Introduce un Importe"));
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         Sucursal sucursal=new Sucursal(null, null, 0, 0000, null);
+        Banco banco=new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
             String[] opciones = {"Operaciones de Importe",
@@ -58,7 +59,8 @@ public class MenuCuentaCorriente {
                 }
                 case 3: {
                     boolean repMenuBanco = true;
-                    menuCC.metodoMovimiento(repMenuBanco, cC);
+                    Cliente cliente = null;
+                    menuCC.metodoBanco(repMenuBanco, cC,cliente,sucursal,banco);
                     break;
                 }
                 case 4: {

@@ -6,6 +6,7 @@
 package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -28,7 +29,7 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_SALIR = 69004;
     
     
-    public static void menuPrincipal() throws SQLException{
+    public static void menuPrincipal() throws SQLException, CuentaCorrienteException{
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta","Sucursal","Salir"};
         boolean menu = true;
         do {
