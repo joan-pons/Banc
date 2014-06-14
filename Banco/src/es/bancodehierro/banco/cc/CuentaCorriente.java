@@ -19,70 +19,153 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * Clase cuenta corriente en la que se trabajará con el importe y los movimientos que genera.
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel
  * Angel Cànaves
  */
 public class CuentaCorriente {
 
+    /**
+     * El iban de la cuenta corriente.
+     */
     private String iban;
+    /**
+     * La constante con la entidad de la cuenta corriente.
+     */
     private final String ENTIDAD = "2100";
+    /**
+     * La oficina de la cuenta corriente.
+     */
     private String oficina;
+    /**
+     * El dc de la cuenta corriente.
+     */
     private String dC;
+    /**
+     * La cuenta de la cuenta corriente.
+     */
     private String cuenta;
+    /**
+     * El importe que tendrá la cuenta corriente.
+     */
     private double importe;
+    /**
+     * La lista de movimientos que se generan en la cuenta corriente.
+     */
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
+    /**
+     * La lista de incidencias que se generan en la cuenta corriente.
+     */
     private ArrayList<Movimiento> incidencias = new ArrayList<>();
+    /**
+     * La lista de titulares que tendrá la cuenta corriente (como máximo 2).
+     */
     private HashMap<String, Cliente> titulares = new HashMap<>();
 
+    /**
+     * Devuelve una cadena con el valor de la oficina.
+     * @return Un String con la oficina a la que pertenece la cuenta corriente.
+     */
     public String getOficina() {
         return oficina;
     }
 
+    /**
+     * Para modificar la oficina de la cuenta correinte.
+     * @param oficina La nueva oficina.
+     */
     public void setOficina(String oficina) {
         this.oficina = oficina;
     }
 
+    /**
+     * Devuelve una cadena con el valor de dc.
+     * @return Un string con el dc de la cuenta corriente.
+     */
     public String getdC() {
         return dC;
     }
 
+    /**
+     * Para modificar el dc de cuanta corriente.
+     * @param dC El nuevo dc.
+     */
     public void setdC(String dC) {
         this.dC = dC;
     }
 
+    /**
+     * Devuelve el valor del importe de la cuenta corriente.
+     * @return Un Double con el importe que tiene la cuenta corriente.
+     */
     public double getImporte() {
         return importe;
     }
 
+    /**
+     * Para modificar el valor de importe.
+     * @param importe Un double con el nuevo valor de importe.
+     */
     public void setImporte(double importe) {
         this.importe = importe;
     }
 
+    /**
+     * Devuelve la lista de movimientos de la cuenta corriente.
+     * @return El ArrayList de movimientos.
+     */
     public ArrayList<Movimiento> getMovimientos() {
         return movimientos;
     }
 
+    /**
+     * Para modificar la lista de movimientos de cuenta corriente.
+     * @param movimientos El ArrayList con los movimientos de cuenta corriente.
+     */
     public void setMovimientos(ArrayList<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
 
+    /**
+     * Devuelve la lista con las incidencias de cuenta corriente.
+     * @return El ArrayList de incidencias en la cuenta corriente.
+     */
     public ArrayList<Movimiento> getIncidencia() {
         return incidencias;
     }
 
+    /**
+     * Para modificar la lista de incidencias de cuenta corriente.
+     * @param incidencia El ArrayList con las incidencias de cuenta corriente.
+     */
     public void setIncidencia(ArrayList<Movimiento> incidencia) {
         this.incidencias = incidencia;
     }
 
+    /**
+     * Devuelve la lista de titulares de la cuenta corriente.
+     * @return El HashMap con los titulares de cuenta correinte.
+     */
     public HashMap<String, Cliente> getTitulares() {
         return titulares;
     }
 
+    /**
+     * Para modificar el HashMap de los titulares de cuenta corriente.
+     * @param titulares Un HashMap con los nuevos titulares.
+     */
     public void setTitulares(HashMap<String, Cliente> titulares) {
         this.titulares = titulares;
     }
 
+    /**
+     * Contructor de una cuenta corriente.
+     * @param iban Un String con el valor del iban.
+     * @param oficina Un string con el valor de la oficina.
+     * @param dC Un String con el valor de dc.
+     * @param cuenta Un string con el valor de cuenta.
+     * @param importe Un double con el valor del importe.
+     */
     public CuentaCorriente(String iban, String oficina, String dC, String cuenta, double importe) {
         this.iban = "ES" + iban;
         this.oficina = oficina;
@@ -93,7 +176,6 @@ public class CuentaCorriente {
 
     /**
      * Muestra la cuenta corriente.
-     * 
      * @return Un string con la cadena de la cuenta corriente. 
      */
     public String muestraCC() {
@@ -172,7 +254,7 @@ public class CuentaCorriente {
                 ResultSet rs = st.executeQuery(consultaCountTitular);
                 rs.next();
                 if (rs.getInt(1) == 1) {
-                    System.err.println("No tienes mas titulares, antes da de baja la cuenta");
+                    throw new CuentaCorrienteException("No tienes mas titulares, antes da de baja la cuenta");
                     //insertTitular = "INSERT INTO CLIENTE_CUENTA_CORRIENTE (DNI_CLIENTE_CC,NUMERO_CC,CODIGO_SUCURSAL,FECHA_CREACION,POSICIO) VALUES('" + cliente.getDni() + "','" + muestraCC() + "','" + sucursal.getCodi() + "'," + "SYSTIMESTAMP" + ",2";
 
                 } else if (rs.getInt(1) > 1) {
@@ -186,7 +268,6 @@ public class CuentaCorriente {
                     borrarTitular = "DELETE FROM CLIENTE_CUENTA_CORRIENTE WHERE POSICIO= 2";
                 }
                 filas = st.executeUpdate(borrarTitular);
-                System.out.println("Filas borradas: " + filas);
             }
         }
 
