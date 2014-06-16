@@ -5,16 +5,20 @@
  */
 package es.bancodehierro.banco.menu;
 
+import es.bancodehierro.banco.cc.ControlCC;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.central.Banco;
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
 import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,10 +30,10 @@ import java.util.logging.Logger;
 public class MenuCuentaCorriente {
 
     public static void menuCC() throws SQLException, CuentaCorrienteException, ClienteException {
-        CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
+        //CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
-        Sucursal sucursal=new Sucursal(null, null, 35, 0000, null,null);
-        Banco banco=new Banco();
+        Sucursal sucursal = new Sucursal(null, null, 35, 0000, null, null);
+         Banco banco=new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
             String[] opciones = {"Operaciones de Importe",
@@ -42,26 +46,26 @@ public class MenuCuentaCorriente {
             switch (menu) {
                 case 0: {
                     boolean repMenuImporte = true;
-                        menuCC.metodoImporte(repMenuImporte, cC,sucursal);
+                    menuCC.metodoImporte(repMenuImporte, sucursal);
                     break;
                 }
 
                 case 1: {
                     boolean repMenuTitular = true;
                     Cliente cliente = new Cliente(null, null, null, "12345678L", null, null, null, null);
-                    menuCC.metodoTitular(repMenuTitular,cC,cliente,sucursal);
+                    menuCC.metodoTitular(repMenuTitular, sucursal);
                     break;
                 }
 
                 case 2: {
                     boolean repMenuMovimiento = true;
-                    menuCC.metodoMovimiento(repMenuMovimiento, cC);
+                    menuCC.metodoMovimiento(repMenuMovimiento);
                     break;
                 }
                 case 3: {
                     boolean repMenuBanco = true;
                     Cliente cliente = new Cliente(null, null, null, GestionaMenu.llegirCadena("Introduce el dni del cliente: "), null, null, null, null);
-                    menuCC.metodoBanco(repMenuBanco, cC,cliente,sucursal,banco);
+                    menuCC.metodoBanco(repMenuBanco, sucursal, banco);
                     break;
                 }
                 case 4: {
@@ -109,9 +113,10 @@ public class MenuCuentaCorriente {
                 "\nElegir Opcion:\n\t", opciones,
                 "¿Que quieres ejecutar?", 0);
     }
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     public EnumMovimiento seleccionTipo() {
         boolean respTipoBoolean = false;
@@ -138,224 +143,242 @@ public class MenuCuentaCorriente {
         }
         return respTipoEnum;
     }
+
     /**
      * Metodo que contiene las opciones del menu con las operaciones de Tipo
+     *
      * @param repMenuImporte booleano con true o false
      * @param cC Paso de la cuenta corriente
      */
-    public void metodoImporte(boolean repMenuImporte, CuentaCorriente cC,Sucursal sucursal) throws SQLException, CuentaCorrienteException{
+    public void metodoImporte(boolean repMenuImporte, Sucursal sucursal) throws SQLException, CuentaCorrienteException {
+
+        CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
         for (; repMenuImporte;) {
-                        String[] opcionesImp = {"Modificar Importe",
-                            "Mostrar Importe",
-                            "Volver atrás"};
+            String[] opcionesImp = {"Modificar Importe",
+                "Mostrar Importe",
+                "Volver atrás"};
 
-                        int menuImp = mostrarMenu(opcionesImp);
-                        switch (menuImp) {
-                            case 0: {
-                                //cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
-                                cC.modificarSaldo(sucursal);
-                                break;
-                            }
-                            case 1: {
-                                //System.out.println(cC.getImporte());
-                                System.out.println(cC.mostrarSaldo(sucursal)+"€");
-                                break;
-                            }
-                            case 2: {
-                                //Retrocede al menu anterior
-                                repMenuImporte = false;
-                                break;
-                            }
+            int menuImp = mostrarMenu(opcionesImp);
+            switch (menuImp) {
+                case 0: {
+                    //cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
+                    cC.modificarSaldo(sucursal);
+                    break;
+                }
+                case 1: {
+                    //System.out.println(cC.getImporte());
+                    System.out.println(cC.mostrarSaldo(sucursal) + "€");
+                    break;
+                }
+                case 2: {
+                    //Retrocede al menu anterior
+                    repMenuImporte = false;
+                    break;
+                }
 
-                        }
-                        if (menuImp != 2) {
+            }
+            if (menuImp != 2) {
 
-                            repMenuImporte = algunaCosaMas();
-                        }
-                    }
+                repMenuImporte = algunaCosaMas();
+            }
+        }
     }
+
     /**
      * Metodo que contiene las opciones del menu con las operaciones de Importe
+     *
      * @param repMenuTitular booleano con true o false
      * @param cC Paso de la cuenta corriente
      * @param cliente Cliente a tratar
      */
-    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente,Sucursal sucursal) throws SQLException, CuentaCorrienteException, ClienteException{
+    public void metodoTitular(boolean repMenuTitular, Sucursal sucursal) throws SQLException, CuentaCorrienteException, ClienteException {
+        CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
         for (; repMenuTitular;) {
-                        String[] opcionesTit = {"Agregar Titular",
-                            "Modificar Titular",
-                            "Eliminar Titular",
-                            "Intercambiar Titular",
-                            "Volver atrás"};
+            String[] opcionesTit = {"Agregar Titular",
+                "Modificar Titular",
+                "Eliminar Titular",
+                "Intercambiar Titular",
+                "Volver atrás"};
 
-                        int menuTit = mostrarMenu(opcionesTit);
-                        switch (menuTit) {
-                            case 0: {
+            int menuTit = mostrarMenu(opcionesTit);
+            switch (menuTit) {
+                case 0: {
                                //Cliente cliente2 = new Cliente(0, null, null, null, null, null, null, null, null);
-                                Cliente clienteOperacion= cliente;
-                                try {
-                                    cC.agregarTitular(sucursal);
-                                } catch (SQLException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
-                                break;
-                            }
-                            case 1: {
-                                Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
-                                cC.cambiarTitular(sucursal);
-                                break;
-                            }
-                            case 2: {
-                                cC.eliminarTitular(cliente,sucursal);
-                                break;
-                            }
-                            case 3: {
-                                try {
-                                    cC.intercambiarTitular(sucursal);
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
-                                break;
-                            }
-                            case 4: {
-                                //Retrocede al menu anterior
-                                repMenuTitular = false;
-                                break;
-                            }
-
-                        }
-                        if (menuTit != 4) {
-
-                            repMenuTitular = algunaCosaMas();;
-
-                        }
+                    //Cliente clienteOperacion= cliente;
+                    try {
+                        cC.agregarTitular(sucursal);
+                    } catch (SQLException ex) {
+                        System.err.println(ex.getMessage());
                     }
+                    break;
+                }
+                case 1: {
+                    // Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
+                    cC.cambiarTitular(sucursal);
+                    break;
+                }
+                case 2: {
+                    cC.eliminarTitular(sucursal);
+                    break;
+                }
+                case 3: {
+                    try {
+                        cC.intercambiarTitular(sucursal);
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
+                    break;
+                }
+                case 4: {
+                    //Retrocede al menu anterior
+                    repMenuTitular = false;
+                    break;
+                }
+
+            }
+            if (menuTit != 4) {
+
+                repMenuTitular = algunaCosaMas();;
+
+            }
+        }
     }
+
     /**
-     * Metodo que contiene las opciones del menu con las operaciones de Movimiento
+     * Metodo que contiene las opciones del menu con las operaciones de
+     * Movimiento
+     *
      * @param repMenuMovimiento booleano con true o false
      * @param cC Paso de la cuenta corriente
      */
-    public void metodoMovimiento(boolean repMenuMovimiento,CuentaCorriente cC) throws SQLException{
+    public void metodoMovimiento(boolean repMenuMovimiento) throws SQLException {
+         CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
+       
         for (; repMenuMovimiento;) {
-                                    String[] opcionesMovC = {"Mostrar todos los Movimientos",
-                                        "Mostrar Movimientos segun Tipo",
-                                        "Volver atrás"};
+            String[] opcionesMovC = {"Mostrar todos los Movimientos",
+                "Mostrar Movimientos segun Tipo",
+                "Volver atrás"};
 
-                                    int menuMovC = mostrarMenu(opcionesMovC);
-                                    switch (menuMovC) {
-                                        case 0: {
-                                            for (Movimiento mov : cC.mostrarMovimiento()) {
+            int menuMovC = mostrarMenu(opcionesMovC);
+            switch (menuMovC) {
+                case 0: {
+                    for (Movimiento mov : cC.mostrarMovimiento()) {
 
-                                                System.out.println(mov);
+                        System.out.println(mov);
 
-                                            }
-                                            break;
-                                        }
-                                        case 1: {
-                                            //Retrocede al menu anterior
-                                            repMenuMovimiento = false;
-                                           
-                                            break;
-                                        }
+                    }
+                    break;
+                }
+                case 1: {
+                    //Retrocede al menu anterior
+                    repMenuMovimiento = false;
 
-                                    }
-                                    if (menuMovC != 1) {
+                    break;
+                }
 
-                                        repMenuMovimiento = algunaCosaMas();
-                                        
-                                    }
-                                break;   
+            }
+            if (menuMovC != 1) {
+
+                repMenuMovimiento = algunaCosaMas();
+
+            }
+            break;
         }
-                             
 
-                          
-                            
-                   
-                      
     }
 
-public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente cliente,Sucursal sucursal,Banco banco) throws SQLException, CuentaCorrienteException{
+    public void metodoBanco(boolean repMenuBanco, Sucursal sucursal, Banco banco) throws SQLException, CuentaCorrienteException, ClienteException {
+        CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
+       
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente titular = null;
+        if (Banco.comprobarCliente(dni)) {
+            titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
+
         for (; repMenuBanco;) {
-                        String[] opcionesTit = {"Agregar Cuenta Corriente",                           
-                            "Eliminar Cuenta Corriente",
-                            "Mostrar Cuenta Corriente",
+            String[] opcionesTit = {"Agregar Cuenta Corriente",
+                "Eliminar Cuenta Corriente",
+                "Mostrar Cuenta Corriente",
+                "Volver atrás"};
+
+            int menuTit = mostrarMenu(opcionesTit);
+            switch (menuTit) {
+                case 0: {
+                    // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                    banco.agregarCuentaCorriente(sucursal);
+                    break;
+                }
+                case 1: {
+                    //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                    banco.eliminarCuentaCorriente(cC, sucursal);
+                    break;
+                }
+                case 2: {
+
+                    boolean repMenuMovimientoIncidencia = true;
+                    for (; repMenuMovimientoIncidencia;) {
+                        String[] opcionesMovI = {"Mostrar todas las cuenta corriente",
+                            "Mostrar todas las cuenta corriente de sucursal",
+                            "Mostrar todas las cuenta corriente de cliente",
                             "Volver atrás"};
 
-                        int menuTit = mostrarMenu(opcionesTit);
-                        switch (menuTit) {
+                        int menuMovI = mostrarMenu(opcionesMovI);
+                        switch (menuMovI) {
                             case 0: {
-                               // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                banco.agregarCuentaCorriente(sucursal);
+                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente()) {
+                                    System.out.println(pCC);
+                                }
                                 break;
+
                             }
                             case 1: {
-                                //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                banco.eliminarCuentaCorriente(cC, sucursal);
+
+                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(sucursal)) {
+                                    System.out.println(pCC);
+                                }
                                 break;
                             }
                             case 2: {
-                                
-                                 boolean repMenuMovimientoIncidencia = true;
-                                for (; repMenuMovimientoIncidencia;) {
-                                    String[] opcionesMovI = {"Mostrar todas las cuenta corriente",
-                                        "Mostrar todas las cuenta corriente de sucursal",
-                                        "Mostrar todas las cuenta corriente de cliente",
-                                        "Volver atrás"};
 
-                                    int menuMovI = mostrarMenu(opcionesMovI);
-                                    switch (menuMovI) {
-                                        case 0: {
-                                            for (CuentaCorriente pCC : banco.mostrarCuentaCorriente()) {
-                                                System.out.println(pCC);
-                                            }
-                                        break;
-                                   
-                                        }
-                                        case 1: {
-
-                                            for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(sucursal)) {
-                                                System.out.println(pCC);
-                                            }
-                                            break;
-                                        }
-                                        case 2: {
-
-                                            for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(cliente)) {
-                                                System.out.println(pCC);
-                                            }
-                                            break;
-                                        }
-                                        case 3: {
-                                            //Retrocede al menu anterior
-                                            repMenuMovimientoIncidencia = false;
-                                            menuTit = 4;
-                                            break;
-                                        }
-
-                                    }
-                                    if (menuMovI != 3) {
-
-                                        repMenuMovimientoIncidencia = algunaCosaMas();
-                                        menuTit = 4;
-                                    }
+                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(titular)) {
+                                    System.out.println(pCC);
                                 }
-                               
-                                //banco.mostrarCuentaCorriente(sucursal);
                                 break;
                             }
                             case 3: {
                                 //Retrocede al menu anterior
-                                repMenuBanco = false;
+                                repMenuMovimientoIncidencia = false;
+                                menuTit = 4;
                                 break;
                             }
 
                         }
-                        if (menuTit != 3) {
+                        if (menuMovI != 3) {
 
-                            repMenuBanco = algunaCosaMas();;
-
+                            repMenuMovimientoIncidencia = algunaCosaMas();
+                            menuTit = 4;
                         }
                     }
+
+                    //banco.mostrarCuentaCorriente(sucursal);
+                    break;
+                }
+                case 3: {
+                    //Retrocede al menu anterior
+                    repMenuBanco = false;
+                    break;
+                }
+
+            }
+            if (menuTit != 3) {
+
+                repMenuBanco = algunaCosaMas();;
+
+            }
+        }
     }
 }

@@ -267,7 +267,7 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws SQLException, ClienteException {
+    public int eliminarTitular( Sucursal sucursal) throws SQLException, ClienteException {
         String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
         Statement st = Conexion.conectar().createStatement();
         String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
@@ -327,7 +327,7 @@ public class CuentaCorriente {
         CallableStatement cS = Conexion.conectar().prepareCall(function);
         cS.registerOutParameter(1, java.sql.Types.INTEGER);
         cS.setString(2, muestraCC());
-        cS.setString(3, cliente.getDni());
+        cS.setString(3, titular.getDni());
         cS.setInt(4, sucursal.getCodi());
         cS.setDouble(5, GestionaMenu.llegirDouble("Posicion: "));
 
