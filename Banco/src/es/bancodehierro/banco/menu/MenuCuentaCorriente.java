@@ -27,7 +27,7 @@ public class MenuCuentaCorriente {
     public static void menuCC() throws SQLException, CuentaCorrienteException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
-        Sucursal sucursal=new Sucursal(null, null, 1, 0000, null);
+        //Sucursal sucursal=new Sucursal(null, null, 35, 0000, null);
         Banco banco=new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
@@ -47,7 +47,7 @@ public class MenuCuentaCorriente {
 
                 case 1: {
                     boolean repMenuTitular = true;
-                    Cliente cliente = new Cliente(3, null, null, null, "12345678L", null, null, null, null);
+                    Cliente cliente = new Cliente(null, null, null, "12345678L", null, null, null, null);
                     menuCC.metodoTitular(repMenuTitular,cC,cliente,sucursal);
                     break;
                 }
@@ -194,23 +194,18 @@ public class MenuCuentaCorriente {
                                 Cliente clienteOperacion= cliente;
                                 try {
                                     cC.agregarTitular(cliente,sucursal);
-                                } catch (CuentaCorrienteException | SQLException ex) {
+                                } catch (SQLException ex) {
                                     System.err.println(ex.getMessage());
                                 }
                                 break;
                             }
                             case 1: {
-                                Cliente nuevo=new Cliente(2, null, null, null, "12345789O", null, null, null, null);
+                                Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
                                 cC.cambiarTitular(cliente, nuevo, sucursal);
                                 break;
                             }
                             case 2: {
-                                //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                try {
-                                    cC.eliminarTitular(cliente,sucursal);
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
+                                cC.eliminarTitular(cliente,sucursal);
                                 break;
                             }
                             case 3: {
@@ -242,8 +237,7 @@ public class MenuCuentaCorriente {
      */
     public void metodoMovimiento(boolean repMenuMovimiento,CuentaCorriente cC) throws SQLException{
         for (; repMenuMovimiento;) {
-                        String[] opcionesMov = {"Movimientos",
-                            "Incidencias",
+                        String[] opcionesMov = {"Movimientos",                            
                             "Volver atrás"};
 
                         int menuMov = mostrarMenu(opcionesMov);
@@ -259,30 +253,14 @@ public class MenuCuentaCorriente {
                                     int menuMovC = mostrarMenu(opcionesMovC);
                                     switch (menuMovC) {
                                         case 0: {
-                                        try {
                                             for (Movimiento mov : cC.mostrarMovimiento(false)) {
 
                                                 System.out.println(mov);
 
                                             }
-                                        } catch (CuentaCorrienteException ex) {
-                                            System.err.println(ex.getMessage());
-                                        }
                                             break;
                                         }
                                         case 1: {
-
-                                        try {
-                                            for (Movimiento mov : cC.mostrarMovimiento(false, seleccionTipo())) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                        } catch (CuentaCorrienteException ex) {
-                                        System.err.println(ex.getMessage());}
-                                            break;
-                                        }
-                                        case 2: {
                                             //Retrocede al menu anterior
                                             repMenuMovimientoCorrecto = false;
                                             menuMov = 2;
@@ -290,10 +268,10 @@ public class MenuCuentaCorriente {
                                         }
 
                                     }
-                                    if (menuMovC != 2) {
+                                    if (menuMovC != 1) {
 
                                         repMenuMovimientoCorrecto = algunaCosaMas();
-                                        menuMov = 2;
+                                        menuMov = 1;
                                     }
                                 }
                                 break;
@@ -310,14 +288,11 @@ public class MenuCuentaCorriente {
                                     int menuMovI = mostrarMenu(opcionesMovI);
                                     switch (menuMovI) {
                                         case 0: {
-                                        try {
                                             for (Movimiento mov : cC.mostrarMovimiento(true)) {
 
                                                 System.out.println(mov);
 
                                             }
-                                        } catch (CuentaCorrienteException ex) {
-                                        System.err.println(ex.getMessage());}
                                             break;
                                         }
                                         case 1: {
@@ -375,7 +350,7 @@ public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente client
                         switch (menuTit) {
                             case 0: {
                                // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                banco.agregarCuentaCorriente(cC, sucursal);
+                                banco.agregarCuentaCorriente(sucursal);
                                 break;
                             }
                             case 1: {
@@ -429,37 +404,18 @@ public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente client
                                         menuTit = 4;
                                     }
                                 }
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
                                
                                 //banco.mostrarCuentaCorriente(sucursal);
                                 break;
                             }
-                            case 4: {
+                            case 3: {
                                 //Retrocede al menu anterior
                                 repMenuBanco = false;
                                 break;
                             }
 
                         }
-                        if (menuTit != 4) {
+                        if (menuTit != 3) {
 
                             repMenuBanco = algunaCosaMas();;
 

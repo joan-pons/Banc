@@ -1,10 +1,6 @@
 package es.bancodehierro.banco.menu;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.tarjeta.Credito;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.tarjeta.Debito;
@@ -17,16 +13,22 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author antonio
+ * @author tarjetas
  */
 public class MenuTarjeta {
 
-    public void altaTarjeta() {
+    /**
+     * Este metodo sirve para recopilar los datos que necesitaremos para el
+     * metodo de altaTarjeta. Ademas, ejecuta las comprobaciones necesarias
+     * sobre estos datos.
+     */
+    public static void altaTarjeta() {
         //Obtener el cliente.
-        String codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
+        String codigoCliente = null;
         int clienteEncontrado = 0;
         while (clienteEncontrado == 0) {
             try {
+                codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
                 Statement st = Conexion.conectar().createStatement();
                 String selectCliente = "select count(*) from Cliente where DNI_CLIENTE_TARJETA='" + codigoCliente + "'";
                 ResultSet rs = st.executeQuery(selectCliente);
@@ -80,7 +82,8 @@ public class MenuTarjeta {
             } while (limite < 0);
         }
         //llamar al metodo de GestionTarjetas
-        //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase(),limite);
+        Banco bancoTarjetas = new Banco();
+        bancoTarjetas.altaTarjeta(codigoCliente, codigoCuenta, codigoSucursal, limite, tipo.toUpperCase());
 
     }
 
@@ -88,60 +91,51 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para eliminar una tarjeta de la base de datos.
      */
-    public void eliminarTarjeta() {
+    public static void eliminarTarjeta() {
         String codigoTarjeta;
         boolean existe;
         do {
             codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
             existe = comprobarTarjeta(codigoTarjeta);
         } while (existe);
-        String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
-                + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
-                + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
-                + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
-                + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
-        Statement st;
-        try {
-            st = Conexion.conectar().createStatement();
-            ResultSet rs;
-            rs = st.executeQuery(selectTarjeta);
-            rs.next();
-            int credit = rs.getInt(1);
-            int debit = rs.getInt(2);
-            rs.close();
-            st.close();
-            if (credit == 1) {
+        ResultSet rs;
+        String resultat = comprobarTipoTarjeta(codigoTarjeta);
+        if (resultat == "CREDITO") {
+            try {
                 rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,to_char(FECHA_MTC),IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
                 while (rs.next()) {
                     System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
                 }
                 rs.close();
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+            }
 
-            } else {
+        } else if (resultat == "DEBITO") {
+            try {
                 rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTD,OPERACION_MTD,to_char(FECHA_MTD),IMPORTE_MTD,CONCEPTO_MTD FROM MOVIMIENTO_TARJETA_DEBITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
                 while (rs.next()) {
                     System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
                 }
                 rs.close();
-                
+            } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(MenuTarjeta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (GestionaMenu.llegirCadena("Introduce la ID de la tarjeta(SI/NO: ").toUpperCase()=="SI"){
-            //eliminarTarjeta(codigoTarjeta);
+        if (GestionaMenu.llegirCadena("¿Quieres borrar la tarjeta?(SI/NO: ").toUpperCase() == "SI") {
+            Banco bancoTarjetas = new Banco();
+            bancoTarjetas.eliminarTarjeta(codigoTarjeta);
         }
-        
+
     }
 
     /**
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para pagar con las tarjetas.
      */
-    public void pagar() {
+    public static void pagar() {
         String codigoTarjeta;
         boolean existe;
-
         try {
             do {
                 codigoTarjeta = GestionaMenu.llegirCadena("Introduce la ID de la tarjeta: ");
@@ -150,21 +144,11 @@ public class MenuTarjeta {
             Statement st = Conexion.conectar().createStatement();
             String concepto = GestionaMenu.llegirCadena("Introduce el concepto (opcional): ");
             Double importe = GestionaMenu.llegirDouble("Introduce el importe a pagar: ");
-            String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
-                    + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
-                    + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
-                    + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
-                    + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
-            ResultSet rs;
-            rs = st.executeQuery(selectTarjeta);
-            rs.next();
-            int credit = rs.getInt(1);
-            int debit = rs.getInt(2);
-            rs.close();
-            st.close();
+            String resultat = comprobarTipoTarjeta(codigoTarjeta);
+            ResultSet rs = null;
 
             /*Si resulta que es de credit. */
-            if (credit == 1) {
+            if (resultat == "CREDITO") {
                 String selectMaxCredito = "SELECT MAX_CREDITO FROM TARJETA_CREDITO"
                         + "WHERE CODIGO_TARJETA_CREDITO = '" + codigoTarjeta + "' ";
                 rs = st.executeQuery(selectMaxCredito);
@@ -187,7 +171,7 @@ public class MenuTarjeta {
                     Credito tarjetaCredito = new Credito(codigoTarjeta);
                     tarjetaCredito.pagar(importe, concepto);
                 }
-            } /*Si resulta que es de debit. */ else if (debit == 1) {
+            } /*Si resulta que es de debit. */ else if (resultat == "DEBITO") {
                 String selectSaldo = "SELECT SALDO FROM v_targeta_debit"
                         + "WHERE CODIGO_TARJETA = '" + codigoTarjeta + "' ";
                 rs = st.executeQuery(selectSaldo);
@@ -195,8 +179,8 @@ public class MenuTarjeta {
                 int saldo = rs.getInt(1);
                 rs.close();
                 st.close();
-                Double resultat = saldo - importe;
-                if (resultat < 0) {
+                Double total = saldo - importe;
+                if (total < 0) {
                     System.out.println("No se puede realizar la operacion, falta saldo.");
                 } else {
                     Debito tarjetaDebito = new Debito(codigoTarjeta);
@@ -214,7 +198,7 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilitzaremos en el
      * metodo para ingresar en tarjetas de debito.
      */
-    public void ingresarDebito() {
+    public static void ingresarDebito() {
         String codigoTarjeta;
         boolean existe;
         do {
@@ -231,7 +215,7 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para ver los movimientos de las tarjetas.
      */
-    public void verMovimientos() {
+    public static void verMovimientos() {
         String codigoTarjeta;
         boolean existe;
         do {
@@ -240,27 +224,16 @@ public class MenuTarjeta {
         } while (existe);
         try {
             Statement st = Conexion.conectar().createStatement();
-            String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
-                    + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
-                    + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
-                    + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
-                    + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
-            ResultSet rs;
-            rs = st.executeQuery(selectTarjeta);
-            rs.next();
-            int credit = rs.getInt(1);
-            int debit = rs.getInt(2);
-            rs.close();
-            st.close();
-            if (credit == 1) {
+            String resultat = comprobarTipoTarjeta(codigoTarjeta);
+            if (resultat == "CREDITO") {
                 Credito tarjetaCredito = new Credito(codigoTarjeta);
                 tarjetaCredito.verMovimientosCredito();
-            } else {
+            } else if (resultat == "DEBITO") {
                 Debito tarjetaDebito = new Debito(codigoTarjeta);
                 tarjetaDebito.verMovimientosDebito();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(GestionTarjetas.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
         }
     }
 
@@ -271,7 +244,7 @@ public class MenuTarjeta {
      * @param codigoTarjeta El codigo de la tarjeta.
      * @return Devuelve un boolean (false si la encuentra o true si no).
      */
-    public Credito devolverTarjetaCredito(String codigoTarjeta) {
+    public static Credito devolverTarjetaCredito(String codigoTarjeta) {
         boolean existe;
         do {
             if (codigoTarjeta == null) {
@@ -287,7 +260,14 @@ public class MenuTarjeta {
         return tarjetaCredito;
     }
 
-    public Debito devolverTarjetaDebito(String codigoTarjeta) {
+    /**
+     * Muestra por pantalla la informacion sobre una tarjeta de debito y
+     * devuelve el objeto debito.
+     *
+     * @param codigoTarjeta Codigo de la tarjeta.
+     * @return Devuelve un objeto de tipo debito.
+     */
+    public static Debito devolverTarjetaDebito(String codigoTarjeta) {
         boolean existe;
         do {
             if (codigoTarjeta == null) {
@@ -303,7 +283,14 @@ public class MenuTarjeta {
         return tarjetaDebito;
     }
 
-    public boolean comprobarTarjeta(String codigoTarjeta) {
+    /**
+     * Muestra por pantalla la informacion sobre una tarjeta de credito y
+     * devuelve el objeto credito.
+     *
+     * @param codigoTarjeta Codigo de la tarjeta.
+     * @return Devuelve un objeto de tipo credito.
+     */
+    public static boolean comprobarTarjeta(String codigoTarjeta) {
         boolean flag = true;
         try {
             Statement st = Conexion.conectar().createStatement();
@@ -326,7 +313,43 @@ public class MenuTarjeta {
         return flag;
     }
 
-    public void ejecutarMenu() {
+    /**
+     * Este metodo sirve para comprobar si una tarjeta es de debito o de credito
+     * y devuelve un String con el tipo que es escrito en mayusculas.
+     *
+     * @param codigoTarjeta El codigo de la tarjeta a comprobar.
+     * @return Devuelve un String con el tipo de tarjeta en mayusculas.
+     */
+    public static String comprobarTipoTarjeta(String codigoTarjeta) {
+        int credit = 0;
+        try {
+            Statement st = Conexion.conectar().createStatement();
+            String selectTarjeta = "SELECT COUNT(TARJETA_CREDITO.CODIGO_TARJETA_CREDITO), "
+                    + "COUNT(TARJETA_DEBITO.CODIGO_TARJETA_DEBITO) FROM TARJETA "
+                    + "ALTER JOIN TARJETA_CREDITO ON TARJETA_CREDITO.CODIGO_TARJETA_CREDITO = TARJETA.CODIGO_TARJETA "
+                    + "ALTER JOIN TARJETA_DEBITO ON TARJETA_DEBITO.CODIGO_TARJETA_DEBITO = TARJETA.CODIGO_TARJETA"
+                    + "WHERE TARJETA.CODIGO_TARJETA = '" + codigoTarjeta + "' ";
+            ResultSet rs;
+            rs = st.executeQuery(selectTarjeta);
+            rs.next();
+            credit = rs.getInt(1);
+            int debit = rs.getInt(2);
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionTarjetas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (credit == 1) {
+            return "CREDITO";
+        } else {
+            return "DEBITO";
+        }
+    }
+
+    /**
+     * Metodo que sirve para ejecutar el menu de las tarjetas.
+     */
+    public static void ejecutarMenu() {
         boolean flag = true;
         do {
             System.out.println("Opcion 1: Dar de alta una tarjeta.");
@@ -334,7 +357,8 @@ public class MenuTarjeta {
             System.out.println("Opcion 3: Realizar un pago.");
             System.out.println("Opcion 4: Ingresar (sólo débito).");
             System.out.println("Opcion 5: Ver movimientos tarjeta.");
-            System.out.println("Opcion 6: Salir.");
+            System.out.println("Opcion 6: Ver tarjeta.");
+            System.out.println("Opcion 7: Salir.");
             int opcion = GestionaMenu.llegirSencer("Introduce la opción: ");
             switch (opcion) {
                 case 1: {
@@ -358,6 +382,14 @@ public class MenuTarjeta {
                     break;
                 }
                 case 6: {
+                    String tipoTarjeta = GestionaMenu.llegirCadena("¿Qué tipo de tarjeta? (CREDITO/DEBITO): ");
+                    if (tipoTarjeta.toUpperCase() == "CREDITO") {
+                        devolverTarjetaCredito(null);
+                    } else {
+                        devolverTarjetaDebito(null);
+                    }
+                }
+                case 7: {
                     flag = false;
                     break;
                 }

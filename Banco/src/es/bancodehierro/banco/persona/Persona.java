@@ -3,18 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package es.bancodehierro.banco.persona;
-
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * Clase Persona para generar englobar metodos y variables comunes entre
+ * empleado y cliente
  *
- * @author guillem
+ * @author Guillem
  */
 public class Persona {
+
     private String nombre;
     private String apellido1;
     private String apellido2;
@@ -39,13 +38,15 @@ public class Persona {
     public void setApellido1(String apellido1) {
         this.apellido1 = apellido1;
     }
-public String getApellido2() {
+
+    public String getApellido2() {
         return apellido2;
     }
 
     public void setApellido2(String apellido2) {
         this.apellido2 = apellido2;
     }
+
     public String getDni() {
         return dni;
     }
@@ -69,8 +70,8 @@ public String getApellido2() {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
-    
-     public String getTlf() {
+
+    public String getTlf() {
         return tlf;
     }
 
@@ -86,6 +87,18 @@ public String getApellido2() {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    /**
+     * Constructor basico de persona con todos sus parametros que sera llamado por sus subclases.
+     *
+     * @param nombre El nombre de la persona
+     * @param apellido1 El primer apellido de una persona
+     * @param apellido2 El segundo apellido de una persona
+     * @param dni El dni de la persona (identificador unico)
+     * @param poblacion Poblacion de la persona (debe existir)
+     * @param direccion Direccion de la persona
+     * @param fechaNacimiento Fecha de nacimiento de la persona
+     * @param tlf Telefono de la persona
+     */
     public Persona(String nombre, String apellido1, String apellido2, String dni, String poblacion, String direccion, Date fechaNacimiento, String tlf) {
         this.nombre = nombre;
         this.apellido1 = apellido1;
@@ -96,5 +109,5 @@ public String getApellido2() {
         this.fechaNacimiento = fechaNacimiento;
         this.tlf = tlf;
     }
-    
+
 }

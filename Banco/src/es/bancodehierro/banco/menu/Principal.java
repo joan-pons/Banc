@@ -44,7 +44,7 @@ public abstract class Principal {
                     break;
 
                 case MENU_PRINCIPAL_TARJETA:
-                    //Aqui debe llamar al metodo principal del menu de tarjeta
+                    MenuTarjeta.ejecutarMenu();
                     break;
                 case MENU_PRINCIPAL_SUCURSAL:
                     //Aqui debe llamar al metodo principal del menu de sucursal
