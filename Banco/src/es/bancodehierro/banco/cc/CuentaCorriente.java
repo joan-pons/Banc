@@ -409,7 +409,22 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int cambiarTitular(Cliente viejo, Cliente nuevo, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+    public int cambiarTitular(Sucursal sucursal) throws CuentaCorrienteException, SQLException, ClienteException {
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI del cliente viejo: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente viejo = null;
+        if (Banco.comprobarCliente(dni)){
+            viejo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
+        dni = GestionaMenu.llegirCadena("Introduce el DNI del cliente nuevo: ");
+        consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        rs = st.executeQuery(consulta);
+        Cliente nuevo = null;
+        if (Banco.comprobarCliente(dni)){
+            nuevo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
         /*if (!titulares.containsKey("Segundo")) {
          agregarTitular(nuevo, sucursal);
          eliminarTitular(viejo, sucursal);
@@ -424,10 +439,9 @@ public class CuentaCorriente {
          }
          }*/
         int filas = '\0';
-        try (Statement st = Conexion.conectar().createStatement()) {
             String insertTitular = null;
             String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
-            ResultSet rs = st.executeQuery(consultaCountTitular);
+            rs = st.executeQuery(consultaCountTitular);
             rs.next();
             if (rs.getInt(1) == 0) {
                 throw new CuentaCorrienteException("ERROR");
@@ -454,14 +468,15 @@ public class CuentaCorriente {
             }
             filas = st.executeUpdate(insertTitular);
             //filas = st.executeUpdate(insertTitular);
-        }
+            st.close();
+            return filas;
         /*
          Cliente auxiliar = titulares.get("Titular");
          eliminarTitular(titulares.get("Titular"), sucursal);
          agregarTitular(auxiliar, sucursal);
          */
-        return filas;
     }
+        
 
     /**
      * Devuelve los movimientos de la cuenta corriente.
