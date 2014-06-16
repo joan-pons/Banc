@@ -6,8 +6,10 @@
 package es.bancodehierro.banco.sucursal;
 
 /**
+ * Clase sucursal para generar objetos de tipo sucursal con toda la informacion
+ * referente a una sucursal
  *
- * @author guillem
+ * @author Guillem Arrom
  */
 public class Sucursal {
 
@@ -16,13 +18,25 @@ public class Sucursal {
     private int codi;
     private int codiPostal;
     private Sucursal central;
+    private String telefono;
 
-    public Sucursal(String poblacio, String direccio, int codi, int codiPostal, Sucursal central) {
+    /**
+     * Constructor basico de sucursal con todos sus parametros
+     * 
+     * @param poblacio String de la poblacion donde se ubica
+     * @param direccio String de la direccion de donde se ubica
+     * @param codi Codigo especifico y unico de sucursal
+     * @param codiPostal Codigo postal de donde se ubica
+     * @param central Objeto Sucursal con toda la informacion sobre su central (null=no tiene central)
+     * @param telefono String telefono con su telefono.
+     */
+    public Sucursal(String poblacio, String direccio, int codi, int codiPostal, Sucursal central, String telefono) {
         this.poblacio = poblacio;
         this.direccio = direccio;
         this.codi = codi;
         this.codiPostal = codiPostal;
         this.central = central;
+        this.telefono = telefono;
     }
 
     public String getPoblacio() {
@@ -31,6 +45,14 @@ public class Sucursal {
 
     public void setPoblacio(String poblacio) {
         this.poblacio = poblacio;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getDireccio() {
