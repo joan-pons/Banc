@@ -28,64 +28,160 @@ import java.util.logging.Logger;
  */
 public class CuentaCorriente {
 
+    /**
+     * El iban de la cuenta corriente.
+     */
     private String iban;
+    /**
+     * La constante con la entidad de la cuenta corriente.
+     */
     private final String ENTIDAD = "2100";
+    /**
+     * La oficina de la cuenta corriente.
+     */
     private String oficina;
+    /**
+     * El dc de la cuenta corriente.
+     */
     private String dC;
+    /**
+     * La cuenta de la cuenta corriente.
+     */
     private String cuenta;
+    /**
+     * El importe que tendrá la cuenta corriente.
+     */
     private double importe;
+    /**
+     * La lista de movimientos que se generan en la cuenta corriente.
+     */
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
+    /**
+     * La lista de incidencias que se generan en la cuenta corriente.
+     */
     private ArrayList<Movimiento> incidencias = new ArrayList<>();
+    /**
+     * La lista de titulares que tendrá la cuenta corriente (como máximo 2).
+     */
     private HashMap<String, Cliente> titulares = new HashMap<>();
 
+    /**
+     * Devuelve una cadena con el valor de la oficina.
+     *
+     * @return Un String con la oficina a la que pertenece la cuenta corriente.
+     */
     public String getOficina() {
         return oficina;
     }
 
+    /**
+     * Para modificar la oficina de la cuenta correinte.
+     *
+     * @param oficina La nueva oficina.
+     */
     public void setOficina(String oficina) {
         this.oficina = oficina;
     }
 
+    /**
+     * Devuelve una cadena con el valor de dc.
+     *
+     * @return Un string con el dc de la cuenta corriente.
+     */
     public String getdC() {
         return dC;
     }
 
+    /**
+     * Para modificar el dc de cuanta corriente.
+     *
+     * @param dC El nuevo dc.
+     */
     public void setdC(String dC) {
         this.dC = dC;
     }
 
+    /**
+     * Devuelve el valor del importe de la cuenta corriente.
+     *
+     * @return Un Double con el importe que tiene la cuenta corriente.
+     */
     public double getImporte() {
         return importe;
     }
 
+    /**
+     * Para modificar el valor de importe.
+     *
+     * @param importe Un double con el nuevo valor de importe.
+     */
     public void setImporte(double importe) {
         this.importe = importe;
     }
 
+    /**
+     * Devuelve la lista de movimientos de la cuenta corriente.
+     *
+     * @return El ArrayList de movimientos.
+     */
     public ArrayList<Movimiento> getMovimientos() {
         return movimientos;
     }
 
+    /**
+     * Para modificar la lista de movimientos de cuenta corriente.
+     *
+     * @param movimientos El ArrayList con los movimientos de cuenta corriente.
+     */
     public void setMovimientos(ArrayList<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
 
+    /**
+     * Devuelve la lista con las incidencias de cuenta corriente.
+     *
+     * @return El ArrayList de incidencias en la cuenta corriente.
+     */
     public ArrayList<Movimiento> getIncidencia() {
         return incidencias;
     }
 
+    /**
+     * Para modificar la lista de incidencias de cuenta corriente.
+     *
+     * @param incidencia El ArrayList con las incidencias de cuenta corriente.
+     */
     public void setIncidencia(ArrayList<Movimiento> incidencia) {
         this.incidencias = incidencia;
     }
 
+    /**
+     * Devuelve la lista de titulares de la cuenta corriente.
+     *
+     * @return El HashMap con los titulares de cuenta correinte.
+     */
     public HashMap<String, Cliente> getTitulares() {
         return titulares;
     }
 
+    /**
+     * Para modificar el HashMap de los titulares de cuenta corriente.
+     *
+     * @param titulares Un HashMap con los nuevos titulares.
+     */
     public void setTitulares(HashMap<String, Cliente> titulares) {
         this.titulares = titulares;
     }
 
+    /**
+     * Contructor de una cuenta corriente.
+     *
+     * @param iban Un String con el valor del iban.
+     * @param oficina Un string con el valor de la oficina.
+     * @param dC Un String con el valor de dc.
+     * @param cuenta Un string con el valor de cuenta.
+     * @param importe Un double con el valor del importe.
+     */
     public CuentaCorriente(String iban, String oficina, String dC, String cuenta, double importe) {
         this.iban = "ES" + iban;
         this.oficina = oficina;
@@ -112,12 +208,10 @@ public class CuentaCorriente {
      * @param titular El cliente que se desea asociar a la cuenta corriente.
      * @param sucursal La sucursal a la que pertenece la cuenta corriente.
      * @return El número de filas afectadas.
-     * @throws CuentaCorrienteException En caso que ya existean dos clientes en
-     * la cuenta corriente o ya exista el cliente nuevo en la cuenta correinte.
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int agregarTitular(Cliente titular, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+    public int agregarTitular(Cliente titular, Sucursal sucursal) throws SQLException {
 
         int filas = '\0';
         /* try (Statement st = Conexion.conectar().createStatement()) {
@@ -182,11 +276,10 @@ public class CuentaCorriente {
      * @param cliente El cliente que se desea eliminar de la cuenta corriente.
      * @param sucursal La sucursal a la que pertenece la cuenta corriente.
      * @return El número de filas afectadas.
-     * @throws CuentaCorrienteException
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+    public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws SQLException {
         int filas = '\0';
         /*try (Statement st = Conexion.conectar().createStatement()) {
          String consultaTitular = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE='" + cliente.getDni() + "'";
@@ -295,7 +388,7 @@ public class CuentaCorriente {
      * @param viejo El cliente que se desea desvincular.
      * @param nuevo El cliente que se desea vincular a la cuenta corriente.
      * @param sucursal La sucursal a la que pertenece la cuenta corriente.
-     * @throws CuentaCorrienteException
+     * @throws CuentaCorrienteException En el caso que solo haya un titular asiciado a la cuenta corriente.
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
@@ -359,9 +452,10 @@ public class CuentaCorriente {
      * @param incidencia true en el caso que quieran las incidencias, false si
      * quieren los movimientos.
      * @return Un ArrayList con los movimientos filtrados.
-     * @throws CuentaCorrienteException En el caso que no haya movimientos.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
      */
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws CuentaCorrienteException, SQLException {
+    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws SQLException {
         /* if (incidencia == true) {
          if (incidencias.isEmpty()) {
          return incidencias;
@@ -421,7 +515,7 @@ public class CuentaCorriente {
 
                 return movimientos;
             } else {
-movimientos.clear();
+                movimientos.clear();
                 String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
                 ResultSet rs = st.executeQuery(consultaCC);
 
@@ -483,59 +577,60 @@ movimientos.clear();
      * @throws CuentaCorrienteException En el caso que no haya movimientos.
      */
     public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia, EnumMovimiento tipo) throws CuentaCorrienteException, SQLException {
- Movimiento movimiento = null;
- ResultSet rs = null;
+        Movimiento movimiento = null;
+        ResultSet rs = null;
         try (Statement st = Conexion.conectar().createStatement()) {
             if (!incidencia) {
-                if(tipo == EnumMovimiento.CUENTA_CORRIENTE){
-                movimientos.clear();
-                String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                rs = st.executeQuery(consultaCC);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    movimientos.add(movimiento);
-                }
-                
-            } else if (tipo == EnumMovimiento.PRESTAMO) {
-movimientos.clear();
-                String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                rs = st.executeQuery(consultaPrestamo);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    movimientos.add(movimiento);
-                }
-            } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
-movimientos.clear();
-                String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                rs = st.executeQuery(consultaCredito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    movimientos.add(movimiento);
-                }
-
-            } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
-                movimientos.clear();
-                String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                rs = st.executeQuery(consultaDebito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    movimientos.add(movimiento);
-                }
-
-               
-            } return movimientos;} else {
                 if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
                     movimientos.clear();
                     String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                     rs = st.executeQuery(consultaCC);
+                    rs = st.executeQuery(consultaCC);
+
+                    for (; rs.next();) {
+                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
+                        // resultado = resultado + "\n" + cuentaCorriente.toString();
+                        movimientos.add(movimiento);
+                    }
+
+                } else if (tipo == EnumMovimiento.PRESTAMO) {
+                    movimientos.clear();
+                    String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
+                    rs = st.executeQuery(consultaPrestamo);
+
+                    for (; rs.next();) {
+                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
+                        // resultado = resultado + "\n" + cuentaCorriente.toString();
+                        movimientos.add(movimiento);
+                    }
+                } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
+                    movimientos.clear();
+                    String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
+                    rs = st.executeQuery(consultaCredito);
+
+                    for (; rs.next();) {
+                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
+                        // resultado = resultado + "\n" + cuentaCorriente.toString();
+                        movimientos.add(movimiento);
+                    }
+
+                } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
+                    movimientos.clear();
+                    String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
+                    rs = st.executeQuery(consultaDebito);
+
+                    for (; rs.next();) {
+                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
+                        // resultado = resultado + "\n" + cuentaCorriente.toString();
+                        movimientos.add(movimiento);
+                    }
+
+                }
+                return movimientos;
+            } else {
+                if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
+                    movimientos.clear();
+                    String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
+                    rs = st.executeQuery(consultaCC);
 
                     for (; rs.next();) {
                         movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), true);
@@ -573,102 +668,117 @@ movimientos.clear();
                         incidencias.add(movimiento);
                     }
 
-                    
                 }
                 return incidencias;
             }
         }
     }
-        /*  ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
-         if (incidencia == true) {
-         if (incidencias.isEmpty()) {
-         for (Movimiento inci : movimientos) {
-         if (inci.getTipo() == tipo) {
-         movimientoFiltrado.add(inci);
-         }
-         }
-         } else {
-         throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
-         }
-         } else {
-         if (movimientos.isEmpty()) {
-         for (Movimiento movi : movimientos) {
-         if (movi.getTipo() == tipo) {
-         movimientoFiltrado.add(movi);
-         }
-         }
-         } else {
-         throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
-         }
-         }
+    /*  ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
+     if (incidencia == true) {
+     if (incidencias.isEmpty()) {
+     for (Movimiento inci : movimientos) {
+     if (inci.getTipo() == tipo) {
+     movimientoFiltrado.add(inci);
+     }
+     }
+     } else {
+     throw new CuentaCorrienteException("Error: No existen incidencias en su cuenta corriente.");
+     }
+     } else {
+     if (movimientos.isEmpty()) {
+     for (Movimiento movi : movimientos) {
+     if (movi.getTipo() == tipo) {
+     movimientoFiltrado.add(movi);
+     }
+     }
+     } else {
+     throw new CuentaCorrienteException("Error: No existen movimientos en su cuenta corriente.");
+     }
+     }
 
-         if (movimientoFiltrado.isEmpty()) {
-         return movimientoFiltrado;
-         } else {
-         throw new CuentaCorrienteException("Error: No se han encontrados movimientos.");
-         }
-         */
-    
+     if (movimientoFiltrado.isEmpty()) {
+     return movimientoFiltrado;
+     } else {
+     throw new CuentaCorrienteException("Error: No se han encontrados movimientos.");
+     }
+     */
 
-         @Override
-         public String toString() {
-         return "CuentaCorriente{" + "cuenta=" + muestraCC() + ", importe=" + importe + '}';
-         }
+    @Override
+    public String toString() {
+        return "CuentaCorriente: " + "Cuenta: " + muestraCC() + "\tImporte: " + importe;
+    }
 
-         public boolean modificarSaldo(Sucursal sucursal) throws SQLException {
-         String function = "{? = call INSERTAR_MOVIMIENTO_CCB(?,?,?,?,?)}";
-         //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
-         MenuCuentaCorriente mCC = new MenuCuentaCorriente();
-         boolean menuTipo = false;
-         //if (comp.next()) {
-         CallableStatement cS = Conexion.conectar().prepareCall(function);
-         cS.registerOutParameter(1, java.sql.Types.INTEGER);
-         cS.setString(2, muestraCC());
-         cS.setInt(3, sucursal.getCodi());
-         cS.setDouble(4, GestionaMenu.llegirDouble("Importe: "));
-         for (; !menuTipo;) {
-         String[] tipos = {"ABONO",
-         "CARGO"};
+    /**
+     * Para modificar el saldo de la cuenta corriente.
+     * 
+     * @param sucursal La sucursal a la que pertenece la cuenta corriente.
+     * @return Devuelve true en caso que haya ido bien o false en caso contrario.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     */
+    public boolean modificarSaldo(Sucursal sucursal) throws SQLException {
+        String function = "{? = call INSERTAR_MOVIMIENTO_CCB(?,?,?,?,?)}";
+        //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
+        MenuCuentaCorriente mCC = new MenuCuentaCorriente();
+        boolean menuTipo = false;
+        //if (comp.next()) {
+        CallableStatement cS = Conexion.conectar().prepareCall(function);
+        cS.registerOutParameter(1, java.sql.Types.INTEGER);
+        cS.setString(2, muestraCC());
+        cS.setInt(3, sucursal.getCodi());
+        cS.setDouble(4, GestionaMenu.llegirDouble("Importe: "));
+        for (; !menuTipo;) {
+            String[] tipos = {"ABONO",
+                "CARGO"};
 
-         int menuImp = mCC.mostrarMenu(tipos);
-         switch (menuImp) {
-         case 0: {
-         cS.setString(5, "ABONO");
-         menuTipo = true;
-         break;
-         }
-         case 1: {
-         cS.setString(5, "CARGO");
-         menuTipo = true;
-         break;
-         }
+            int menuImp = mCC.mostrarMenu(tipos);
+            switch (menuImp) {
+                case 0: {
+                    cS.setString(5, "ABONO");
+                    menuTipo = true;
+                    break;
+                }
+                case 1: {
+                    cS.setString(5, "CARGO");
+                    menuTipo = true;
+                    break;
+                }
 
-         }
+            }
 
-         }
-         cS.setString(6, GestionaMenu.llegirCadena("Concepto: "));
+        }
+        cS.setString(6, GestionaMenu.llegirCadena("Concepto: "));
 
-         //ResultSet rs = cS.executeQuery();
-         cS.executeQuery();
-         cS.close();
+        //ResultSet rs = cS.executeQuery();
+        cS.executeQuery();
+        cS.close();
 
-         return true;
-         }
+        return true;
+    }
 
-         public double mostrarSaldo(Sucursal sucursal) throws SQLException, CuentaCorrienteException {
+    /**
+     * Muestra el saldo que contiene la cuenta corriente.
+     *
+     * @param sucursal La sucursal a la que pertenece la cuenta corriente.
+     * @return El importe que contiene la cuenta corriente.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     * @throws CuentaCorrienteException En el caso que no haya ningúna cuenta corriente.
+     */
+    public double mostrarSaldo(Sucursal sucursal) throws SQLException, CuentaCorrienteException {
 
-         try (Statement st = Conexion.conectar().createStatement()) {
+        try (Statement st = Conexion.conectar().createStatement()) {
 
-         String consultaSaldo = "SELECT IMPORTE_CC FROM CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SCC=" + sucursal.getCodi();
-         ResultSet rs = st.executeQuery(consultaSaldo);
-         rs.next();
-         if (rs.getInt(1) == 0) {
-         throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
-         } else {
-         return rs.getDouble(1);
-         }
-         //filas = st.executeUpdate(insertTitular);
-         }
+            String consultaSaldo = "SELECT IMPORTE_CC FROM CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SCC=" + sucursal.getCodi();
+            ResultSet rs = st.executeQuery(consultaSaldo);
+            rs.next();
+            if (rs.getInt(1) == 0) {
+                throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
+            } else {
+                return rs.getDouble(1);
+            }
+            //filas = st.executeUpdate(insertTitular);
+        }
 
-         }
-         }
+    }
+}
