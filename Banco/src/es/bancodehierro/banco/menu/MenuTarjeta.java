@@ -4,7 +4,6 @@ import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.tarjeta.Credito;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.tarjeta.Debito;
-import es.bancodehierro.banco.tarjeta.GestionTarjetas;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -337,7 +336,7 @@ public class MenuTarjeta {
             rs.close();
             st.close();
         } catch (SQLException ex) {
-            Logger.getLogger(GestionTarjetas.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
         }
         if (credit == 1) {
             return "CREDITO";
