@@ -513,7 +513,7 @@ public class CuentaCorriente {
                 ResultSet rs = st.executeQuery(consultaCC);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
+                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -522,7 +522,7 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaPrestamo);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
+                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -531,7 +531,7 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaCredito);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -540,51 +540,12 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaDebito);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
 
                 return movimientos;
-            } else {
-                movimientos.clear();
-                String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                ResultSet rs = st.executeQuery(consultaCC);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                rs = st.executeQuery(consultaPrestamo);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                rs = st.executeQuery(consultaCredito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                rs = st.executeQuery(consultaDebito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                return incidencias;
             }
 
         }
@@ -596,7 +557,7 @@ public class CuentaCorriente {
          return rs.getDouble(1);
          } */
         //filas = st.executeUpdate(insertTitular);
-    }
+    
 
     /**
      * Muestra todos los movimientos o las incidencias de la cuenta corriente
@@ -608,18 +569,18 @@ public class CuentaCorriente {
      * @return Un ArrayList con los movimientos filtrados.
      * @throws CuentaCorrienteException En el caso que no haya movimientos.
      */
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia, EnumMovimiento tipo) throws CuentaCorrienteException, SQLException {
+    public ArrayList<Movimiento> mostrarMovimiento(EnumMovimiento tipo) throws CuentaCorrienteException, SQLException {
         Movimiento movimiento = null;
         ResultSet rs = null;
         try (Statement st = Conexion.conectar().createStatement()) {
-            if (!incidencia) {
+          
                 if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
                     movimientos.clear();
                     String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
                     rs = st.executeQuery(consultaCC);
 
                     for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
+                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"));
                         // resultado = resultado + "\n" + cuentaCorriente.toString();
                         movimientos.add(movimiento);
                     }
@@ -630,7 +591,7 @@ public class CuentaCorriente {
                     rs = st.executeQuery(consultaPrestamo);
 
                     for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
+                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"));
                         // resultado = resultado + "\n" + cuentaCorriente.toString();
                         movimientos.add(movimiento);
                     }
@@ -640,7 +601,7 @@ public class CuentaCorriente {
                     rs = st.executeQuery(consultaCredito);
 
                     for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
+                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"));
                         // resultado = resultado + "\n" + cuentaCorriente.toString();
                         movimientos.add(movimiento);
                     }
@@ -651,59 +612,15 @@ public class CuentaCorriente {
                     rs = st.executeQuery(consultaDebito);
 
                     for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
+                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"));
                         // resultado = resultado + "\n" + cuentaCorriente.toString();
                         movimientos.add(movimiento);
                     }
 
                 }
                 return movimientos;
-            } else {
-                if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
-                    movimientos.clear();
-                    String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                    rs = st.executeQuery(consultaCC);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.PRESTAMO) {
-                    movimientos.clear();
-                    String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                    rs = st.executeQuery(consultaPrestamo);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
-                    movimientos.clear();
-                    String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                    rs = st.executeQuery(consultaCredito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
-                    movimientos.clear();
-                    String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                    rs = st.executeQuery(consultaDebito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-
-                }
-                return incidencias;
-            }
-        }
+            
+        
     }
     /*  ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
      if (incidencia == true) {
