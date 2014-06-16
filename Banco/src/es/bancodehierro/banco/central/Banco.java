@@ -37,7 +37,14 @@ import java.util.logging.Logger;
  */
 public class Banco {
 
-   public boolean agregarCuentaCorriente(Sucursal sucursal) throws CuentaCorrienteException, SQLException{
+    /**
+     * Agregación de una cuenta corriente en la base de datos.
+     * @param sucursal La sucursal a la que pertenece la cuenta corriente
+     * @return Un boolean con el resultado de la consulta.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     */
+   public boolean agregarCuentaCorriente(Sucursal sucursal) throws SQLException{
        CuentaCorriente cc= new CuentaCorriente(GestionaMenu.llegirCadena("Introduce un IBAN: "), GestionaMenu.llegirCadena("Introduce una Oficina: "), GestionaMenu.llegirCadena("Introduce un DC: "), GestionaMenu.llegirCadena("Introduce un Numero de Cuenta: "), 0);
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
@@ -73,7 +80,15 @@ public class Banco {
     }
 
 
-    public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+   /**
+    * Elimina la cuenta corriente que se le pasa por parámetro.
+    * @param cc La cuenta corriente que se desea eliminar.
+    * @param sucursal La surcursal a la que pertenece la cuenta corriente.
+    * @return Un boolean con el resultado de la sentencia.
+    * @throws SQLException En el caso que haya fallado alguna sentencia a la
+    * base de datos.
+    */
+    public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws SQLException {
        
         /*Statement sel = (Statement) Conexion.conectar();
 
@@ -106,6 +121,12 @@ public class Banco {
              return true;
     }
 
+    /**
+     * Método que devuelve las cuentas corrientes de la base de datos.
+     * @return La lista de todas las cuentas corrientes de la base de datos.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     */
     public ArrayList<CuentaCorriente> mostrarCuentaCorriente() throws SQLException {
         /*String resultado = null;
         try (Statement st = Conexion.conectar().createStatement()) {
@@ -146,6 +167,13 @@ public class Banco {
         return aCC;
     }
 
+    /**
+     * Método que devuelve las cuentas corrientes asociadas a la sucursal.
+     * @param sucursal La sucursal de la que queremos saber sus cuentas corrientes.
+     * @return La lista con las cuentas corrientes de la sucursal.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     */
     public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Sucursal sucursal) throws SQLException {
         ArrayList<CuentaCorriente> aCC= new ArrayList<>();
         CuentaCorriente cuentaCorriente = null;
@@ -171,6 +199,13 @@ public class Banco {
         return aCC;
     }
 
+    /**
+     * Método que devuelve las cuentas corrientes asociadas a un cliente.
+     * @param cliente El cliente del que queremos saber sus cuentas corrientes.
+     * @return La lista con las cuentas corrientes asociadas a un cliente.
+     * @throws SQLException En el caso que haya fallado alguna sentencia a la
+     * base de datos.
+     */
     public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Cliente cliente) throws SQLException {
           ArrayList<CuentaCorriente> aCC= new ArrayList<>();
         CuentaCorriente cuentaCorriente = null;
