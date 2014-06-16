@@ -82,73 +82,32 @@ public class Prestamo {
         return listaMovimientos;
     }
 
-    /**
-     * Buscador de préstamos El método parte del listado Movimiento y selecciona
-     * sólo los de tipo Préstamo.
-     *
-     * @author Jaume Mayol
-     * @param listaMovimientos
-     * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
-     * @see es.bancodehierro.banco.cc.Movimiento
-     */
-    public ArrayList<Movimiento> buscadorPrestamos(ArrayList<Movimiento> listaMovimientos) {
-        ArrayList<Movimiento> prestamos = new ArrayList<>();
-        for (int i = 0; i < listaMovimientos.size(); ++i) {
-            Movimiento aux = listaMovimientos.get(i);
-            //Get para conseguir el tipo y lo igualamos a PRESTAMO
-            //PRESTAMO, tipo de dato enumerario importado de la clase Enumeración.
-            if (aux.getTipo() == PRESTAMO) {
-                prestamos.add(aux);
-            }
-        }
-        return prestamos;
-    }
+    //Ver Movimientos Préstamo
+    public void verMovimientosPrestamo(){
+       try {
+            ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_MP,"
+                    + "CODIGO_PRESTAMO_MP,"
+                    + "OPERACION_MP"
+                    + "to_char(FECHA_MP),"
+                    + "IMPORTE_MP,"
+                    + "CONCEPTO_MP "
+                    + "FROM MOVIMIENTO_PRESTAMO "
+                    + "WHERE CODIGO_PRESTAMO_MP='"+codigoPrestamo+"'");
+            while(rs.next()){
+                System.out.println(
+                        "Codigo Movimiento: "+rs.getString(1)+
+                        ", Codigo Préstamo: "+rs.getInt(2)+
+                        ", Operacion: "+rs.getString(3)+
+                        ", Fecha: "+rs.getString(4)+
+                        ", Importe: "+rs.getDouble(5)+
+                        ", Concepto: "+rs.getString(6));
 
-    /**
-     * <b>Cálculo cuota mensual</b> Si pedimos un préstamo de 1.000 € a 18 meses
-     * con un Interés del 3,5, entonces para obtener la cuota mensual es 1.000 x
-     * 3,5/1,200 (12 mesos) x 18 (durada préstec) I = 1000 x 3.5/1,200 x 18 =
-     * 52.50€.
-     *
-     * @author Jaume Mayol
-     * @return
-     */
-//    public double cuotaMensual() {
-//        double taxaInteresMensual = tasaInteresAnual / 1200;
-//        double importeMensual = importePrestado * taxaInteresMensual / (1
-//                - (Math.pow(1 / (1 + taxaInteresMensual), nombreAños * 12)));
-//        return importeMensual;
-//    }
-    /**
-     * Cálculo total a pagar (capital prestado + intereses) Se utiliza el método
-     * cuotaMensual y se hace la sencilla de operación de multiplicar su
-     * resultado por el nombre de Años del préstamo por los 12 meses del año.
-     *
-     * @author Jaume Mayol
-     * @see cuotaMensual
-     * @return el pago total que deberà el prestatario
-     */
-//    public double calculoTotalAPagar() {
-//        double pagoTotal = cuotaMensual() * nombreAños * 12;
-//        return pagoTotal;
-//    }
-    /**
-     * Cancelar Préstamo Versió molt "experimental" També es pot calcular com:
-     * [deuda pendint x interes Esperado x meses restantes] / 12
-     *
-     * @author Jaume Mayol
-     * @param importePagado
-     * @param tasaInteresMensual
-     * @param tasaInteresEsperado
-     * @return
-     */
-//    public double cancelarPrestamo(double importePagado, double tasaInteresMensual, double tasaInteresEsperado) {
-//        double interesesCancelacion = importePrestado * tasaInteresMensual / (1
-//                - (Math.pow(1 / (1 + tasaInteresEsperado), nombreAños * 12)));
-//        double pagoFinal = calculoTotalAPagar() - importePagado + interesesCancelacion;
-//        //eliminarPrestamo();
-//        return pagoFinal;
-//    }
+            }
+        } catch (SQLException ex) {
+                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+        
+    }
     
     public void setImportePrestamo(Double importePrestamo) {
         this.importePrestamo = importePrestamo;
