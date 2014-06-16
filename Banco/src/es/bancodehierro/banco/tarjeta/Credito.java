@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Clase credito, subclase de Tarjeta.
  *
- * @author bernadi,marc,cristian,alejandro
+ * @author Grupo Tarjetas.
  */
 public class Credito extends es.bancodehierro.banco.tarjeta.Tarjeta {
 

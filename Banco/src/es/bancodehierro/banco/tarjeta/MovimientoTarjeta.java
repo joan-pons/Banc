@@ -2,7 +2,10 @@ package es.bancodehierro.banco.tarjeta;
 
 import es.bancodehierro.banco.conexion.Conexion;
 import java.sql.SQLException;
-
+/**
+ * Clase para crear un movimiento de una tarjeta.
+ * @author antonio
+ */
 public class MovimientoTarjeta {
 
     private String codigoTarjeta;
