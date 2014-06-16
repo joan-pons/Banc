@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC() throws SQLException, CuentaCorrienteException, ClienteException {
+    public static void menuCC(){
         //CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         Sucursal sucursal = new Sucursal(null, null, GestionaMenu.llegirSencer("Introduce un codigo de Sucursal (Cuatro digitos): "), 0000, null, null);
@@ -69,7 +69,15 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 4: {
+                try {
                     Principal.menuPrincipal();
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (CuentaCorrienteException ex) {
+                    System.err.println(ex.getMessage());
+                } catch (ClienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
 
@@ -150,7 +158,7 @@ public class MenuCuentaCorriente {
      * @param repMenuImporte booleano con true o false
      * @param cC Paso de la cuenta corriente
      */
-    public void metodoImporte(boolean repMenuImporte, Sucursal sucursal) throws SQLException, CuentaCorrienteException {
+    public void metodoImporte(boolean repMenuImporte, Sucursal sucursal) {
 
         CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
         for (; repMenuImporte;) {
@@ -161,13 +169,23 @@ public class MenuCuentaCorriente {
             int menuImp = mostrarMenu(opcionesImp);
             switch (menuImp) {
                 case 0: {
+                try {
                     //cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
                     cC.modificarSaldo(sucursal);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                }
                     break;
                 }
                 case 1: {
+                try {
                     //System.out.println(cC.getImporte());
                     System.out.println(cC.mostrarSaldo(sucursal) + "€");
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (CuentaCorrienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
                 case 2: {
@@ -191,7 +209,7 @@ public class MenuCuentaCorriente {
      * @param cC Paso de la cuenta corriente
      * @param cliente Cliente a tratar
      */
-    public void metodoTitular(boolean repMenuTitular, Sucursal sucursal) throws SQLException, CuentaCorrienteException, ClienteException {
+    public void metodoTitular(boolean repMenuTitular, Sucursal sucursal) {
         CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
         for (; repMenuTitular;) {
             String[] opcionesTit = {"Agregar Titular",
@@ -208,25 +226,43 @@ public class MenuCuentaCorriente {
                     try {
                         cC.agregarTitular(sucursal);
                     } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClienteException ex) {
                         System.err.println(ex.getMessage());
                     }
                     break;
                 }
                 case 1: {
+                try {
                     // Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
                     cC.cambiarTitular(sucursal);
+                } catch (CuentaCorrienteException ex) {
+                    System.err.println(ex.getMessage());
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
                 case 2: {
+                try {
                     cC.eliminarTitular(sucursal);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
                 case 3: {
-                    try {
-                        cC.intercambiarTitular(sucursal);
-                    } catch (CuentaCorrienteException ex) {
-                        System.err.println(ex.getMessage());
-                    }
+                try {
+                    cC.intercambiarTitular(sucursal);
+                } catch (CuentaCorrienteException ex) {
+                    System.err.println(ex.getMessage());
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                }
                     break;
                 }
                 case 4: {
@@ -251,7 +287,7 @@ public class MenuCuentaCorriente {
      * @param repMenuMovimiento booleano con true o false
      * @param cC Paso de la cuenta corriente
      */
-    public void metodoMovimiento(boolean repMenuMovimiento) throws SQLException {
+    public void metodoMovimiento(boolean repMenuMovimiento) {
         CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
 
         for (; repMenuMovimiento;) {
@@ -262,11 +298,15 @@ public class MenuCuentaCorriente {
             int menuMovC = mostrarMenu(opcionesMovC);
             switch (menuMovC) {
                 case 0: {
+                try {
                     for (Movimiento mov : cC.mostrarMovimiento()) {
 
                         System.out.println(mov);
 
                     }
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                }
                     break;
                 }
                 case 1: {
@@ -287,7 +327,7 @@ public class MenuCuentaCorriente {
 
     }
 
-    public void metodoBanco(boolean repMenuBanco, Sucursal sucursal, Banco banco) throws SQLException, CuentaCorrienteException, ClienteException {
+    public void metodoBanco(boolean repMenuBanco, Sucursal sucursal, Banco banco) {
         /*CuentaCorriente cC = new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
          */
 
@@ -302,13 +342,25 @@ public class MenuCuentaCorriente {
             int menuTit = mostrarMenu(opcionesTit);
             switch (menuTit) {
                 case 0: {
+                try {
                     // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                     banco.agregarCuentaCorriente(sucursal);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
                 case 1: {
+                try {
                     //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                     banco.eliminarCuentaCorriente(sucursal);
+                } catch (SQLException ex) {
+                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClienteException ex) {
+                    System.err.println(ex.getMessage());
+                }
                     break;
                 }
                 case 2: {
@@ -323,34 +375,49 @@ public class MenuCuentaCorriente {
                         int menuMovC = mostrarMenu(opcionesMovC);
                         switch (menuMovC) {
                             case 0: {
+                            try {
                                 for (CuentaCorriente pCC : banco.mostrarCuentaCorriente()) {
                                     System.out.println(pCC);
                                 }
                                 break;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
 
                             }
                             case 1: {
-
+                            try {
                                 for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(sucursal)) {
                                     System.out.println(pCC);
                                 }
+                            } catch (SQLException ex) {
+                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                                 break;
                             }
                             case 2: {
+                            try {
                                 String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
                                 Statement st = Conexion.conectar().createStatement();
                                 String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
                                 ResultSet rs = st.executeQuery(consulta);
                                 rs.next();
                                 Cliente titular = null;
-                                if (Banco.comprobarCliente(dni)) {
-                                    titular = new Cliente(null, null, null, dni, null, null, null, null);
+                                try {
+                                    if (Banco.comprobarCliente(dni)) {
+                                        titular = new Cliente(null, null, null, dni, null, null, null, null);
+                                    }
+                                } catch (ClienteException ex) {
+                                    System.err.println(ex.getMessage());
                                 }
 
                                 for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(titular)) {
                                     System.out.println(pCC);
                                 }
                                 break;
+                            } catch (SQLException ex) {
+                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             }
                             case 3: {
                                 //Retrocede al menu anterior
