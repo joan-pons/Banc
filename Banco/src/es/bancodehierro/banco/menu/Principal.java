@@ -62,13 +62,13 @@ public abstract class Principal {
 
     public static void main(String[] args) throws SQLException, CuentaCorrienteException, ClienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
-        String dni = GestionaMenu.llegirCadena("inserta tu DNI");
-        try (Statement st = conexio.createStatement()) {
+       // String dni = GestionaMenu.llegirCadena("inserta tu DNI");
+       /* try (Statement st = conexio.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = " + dni);
             //System.out.println(rs.getString(1));
         } catch (SQLException ex) {
             Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         menuPrincipal();
     }
 
