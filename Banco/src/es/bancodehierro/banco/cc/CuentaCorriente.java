@@ -58,10 +58,7 @@ public class CuentaCorriente {
      * La lista de movimientos que se generan en la cuenta corriente.
      */
     private ArrayList<Movimiento> movimientos = new ArrayList<>();
-    /**
-     * La lista de incidencias que se generan en la cuenta corriente.
-     */
-    private ArrayList<Movimiento> incidencias = new ArrayList<>();
+
     /**
      * La lista de titulares que tendrá la cuenta corriente (como máximo 2).
      */
@@ -140,24 +137,6 @@ public class CuentaCorriente {
     }
 
     /**
-     * Devuelve la lista con las incidencias de cuenta corriente.
-     *
-     * @return El ArrayList de incidencias en la cuenta corriente.
-     */
-    public ArrayList<Movimiento> getIncidencia() {
-        return incidencias;
-    }
-
-    /**
-     * Para modificar la lista de incidencias de cuenta corriente.
-     *
-     * @param incidencia El ArrayList con las incidencias de cuenta corriente.
-     */
-    public void setIncidencia(ArrayList<Movimiento> incidencia) {
-        this.incidencias = incidencia;
-    }
-
-    /**
      * Devuelve la lista de titulares de la cuenta corriente.
      *
      * @return El HashMap con los titulares de cuenta correinte.
@@ -213,13 +192,13 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int agregarTitular(Sucursal sucursal) throws SQLException, ClienteException{
+    public int agregarTitular(Sucursal sucursal) throws SQLException, ClienteException {
         String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
         Statement st = Conexion.conectar().createStatement();
-        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
         ResultSet rs = st.executeQuery(consulta);
         Cliente titular = null;
-        if (Banco.comprobarCliente(dni)){
+        if (Banco.comprobarCliente(dni)) {
             titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
         }
         int filas = '\0';
@@ -291,10 +270,10 @@ public class CuentaCorriente {
     public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws SQLException, ClienteException {
         String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
         Statement st = Conexion.conectar().createStatement();
-        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
         ResultSet rs = st.executeQuery(consulta);
         Cliente titular = null;
-        if (Banco.comprobarCliente(dni)){
+        if (Banco.comprobarCliente(dni)) {
             titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
         }
         int filas = '\0';
@@ -405,11 +384,27 @@ public class CuentaCorriente {
      * @param viejo El cliente que se desea desvincular.
      * @param nuevo El cliente que se desea vincular a la cuenta corriente.
      * @param sucursal La sucursal a la que pertenece la cuenta corriente.
-     * @throws CuentaCorrienteException En el caso que solo haya un titular asiciado a la cuenta corriente.
+     * @throws CuentaCorrienteException En el caso que solo haya un titular
+     * asiciado a la cuenta corriente.
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int cambiarTitular(Cliente viejo, Cliente nuevo, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+    public int cambiarTitular(Sucursal sucursal) throws CuentaCorrienteException, SQLException, ClienteException {
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI del cliente viejo: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente viejo = null;
+        if (Banco.comprobarCliente(dni)) {
+            viejo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
+        dni = GestionaMenu.llegirCadena("Introduce el DNI del cliente nuevo: ");
+        consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
+        rs = st.executeQuery(consulta);
+        Cliente nuevo = null;
+        if (Banco.comprobarCliente(dni)) {
+            nuevo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
         /*if (!titulares.containsKey("Segundo")) {
          agregarTitular(nuevo, sucursal);
          eliminarTitular(viejo, sucursal);
@@ -424,43 +419,42 @@ public class CuentaCorriente {
          }
          }*/
         int filas = '\0';
-        try (Statement st = Conexion.conectar().createStatement()) {
-            String insertTitular = null;
-            String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
-            ResultSet rs = st.executeQuery(consultaCountTitular);
-            rs.next();
-            if (rs.getInt(1) == 0) {
-                throw new CuentaCorrienteException("ERROR");
-            } else if (rs.getInt(1) == 1) {
-                insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET DNI_CLIENTE_CC='" + nuevo.getDni() + "' WHERE POSICIO=1 AND NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+        String insertTitular = null;
+        String consultaCountTitular = "SELECT count(*) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+        rs = st.executeQuery(consultaCountTitular);
+        rs.next();
+        if (rs.getInt(1) == 0) {
+            throw new CuentaCorrienteException("ERROR");
+        } else if (rs.getInt(1) == 1) {
+            insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET DNI_CLIENTE_CC='" + nuevo.getDni() + "' WHERE POSICIO=1 AND NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
 
-            } else {
-                MenuCuentaCorriente mCC = new MenuCuentaCorriente();
-                boolean puesto = false;
-                int menuPuesto = '\0';
-                for (; !puesto;) {
-                    String[] tipos = {"Puesto 1",
-                        "Puesto 2"};
+        } else {
+            MenuCuentaCorriente mCC = new MenuCuentaCorriente();
+            boolean puesto = false;
+            int menuPuesto = '\0';
+            for (; !puesto;) {
+                String[] tipos = {"Puesto 1",
+                    "Puesto 2"};
 
-                    menuPuesto = mCC.mostrarMenu(tipos);
-                    if (menuPuesto == 0 || menuPuesto == 1) {
+                menuPuesto = mCC.mostrarMenu(tipos);
+                if (menuPuesto == 0 || menuPuesto == 1) {
 
-                        puesto = true;
-                    }
-
+                    puesto = true;
                 }
-                insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET DNI_CLIENTE_CC='" + nuevo.getDni() + "' WHERE POSICIO=" + (menuPuesto + 1) + " AND NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
 
             }
-            filas = st.executeUpdate(insertTitular);
-            //filas = st.executeUpdate(insertTitular);
+            insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET DNI_CLIENTE_CC='" + nuevo.getDni() + "' WHERE POSICIO=" + (menuPuesto + 1) + " AND NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
+
         }
+        filas = st.executeUpdate(insertTitular);
+        //filas = st.executeUpdate(insertTitular);
+        st.close();
+        return filas;
         /*
          Cliente auxiliar = titulares.get("Titular");
          eliminarTitular(titulares.get("Titular"), sucursal);
          agregarTitular(auxiliar, sucursal);
          */
-        return filas;
     }
 
     /**
@@ -472,7 +466,7 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia) throws SQLException {
+    public ArrayList<Movimiento> mostrarMovimiento() throws SQLException {
         /* if (incidencia == true) {
          if (incidencias.isEmpty()) {
          return incidencias;
@@ -492,13 +486,13 @@ public class CuentaCorriente {
         //String resultado = null;
 
         try (Statement st = Conexion.conectar().createStatement()) {
-            if (!incidencia) {
+           
                 movimientos.clear();
                 String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
                 ResultSet rs = st.executeQuery(consultaCC);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
+                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -507,7 +501,7 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaPrestamo);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
+                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -516,7 +510,7 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaCredito);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
@@ -525,170 +519,84 @@ public class CuentaCorriente {
                 rs = st.executeQuery(consultaDebito);
 
                 for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"));
                     // resultado = resultado + "\n" + cuentaCorriente.toString();
                     movimientos.add(movimiento);
                 }
 
-                return movimientos;
-            } else {
-                movimientos.clear();
-                String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                ResultSet rs = st.executeQuery(consultaCC);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                rs = st.executeQuery(consultaPrestamo);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                rs = st.executeQuery(consultaCredito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                rs = st.executeQuery(consultaDebito);
-
-                for (; rs.next();) {
-                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), true);
-                    // resultado = resultado + "\n" + cuentaCorriente.toString();
-                    incidencias.add(movimiento);
-                }
-
-                return incidencias;
-            }
+            
 
         }
-
-            //rs.next();
-           /* if (rs.getInt(1) == 0) {
-         throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
-         } else{
-         return rs.getDouble(1);
-         } */
-        //filas = st.executeUpdate(insertTitular);
+        return movimientos;
     }
+        //rs.next();
+        /* if (rs.getInt(1) == 0) {
+     throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
+     } else{
+     return rs.getDouble(1);
+     } */
+    //filas = st.executeUpdate(insertTitular);
 
     /**
      * Muestra todos los movimientos o las incidencias de la cuenta corriente
      * filtradas por el tipo de movimiento.
      *
-     * @param incidencia true en el caso que quieran las incidencias, false si
-     * quieren los movimientos.
      * @param tipo El tipo de movimiento que desean.
      * @return Un ArrayList con los movimientos filtrados.
-     * @throws CuentaCorrienteException En el caso que no haya movimientos.
+     * @throws java.sql.SQLException
      */
-    public ArrayList<Movimiento> mostrarMovimiento(Boolean incidencia, EnumMovimiento tipo) throws CuentaCorrienteException, SQLException {
+    public ArrayList<Movimiento> mostrarMovimiento(EnumMovimiento tipo) throws SQLException {
         Movimiento movimiento = null;
         ResultSet rs = null;
         try (Statement st = Conexion.conectar().createStatement()) {
-            if (!incidencia) {
-                if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
-                    movimientos.clear();
-                    String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                    rs = st.executeQuery(consultaCC);
 
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), false);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        movimientos.add(movimiento);
-                    }
+            if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
+                movimientos.clear();
+                String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
+                rs = st.executeQuery(consultaCC);
 
-                } else if (tipo == EnumMovimiento.PRESTAMO) {
-                    movimientos.clear();
-                    String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                    rs = st.executeQuery(consultaPrestamo);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), false);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        movimientos.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
-                    movimientos.clear();
-                    String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                    rs = st.executeQuery(consultaCredito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), false);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        movimientos.add(movimiento);
-                    }
-
-                } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
-                    movimientos.clear();
-                    String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                    rs = st.executeQuery(consultaDebito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), false);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        movimientos.add(movimiento);
-                    }
-
+                for (; rs.next();) {
+                    movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"));
+                    // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    movimientos.add(movimiento);
                 }
-                return movimientos;
-            } else {
-                if (tipo == EnumMovimiento.CUENTA_CORRIENTE) {
-                    movimientos.clear();
-                    String consultaCC = "SELECT * FROM MOVIMIENTO_CUENTA_CORRIENTE";
-                    rs = st.executeQuery(consultaCC);
 
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.CUENTA_CORRIENTE, rs.getInt("CODIGO_MCC"), rs.getString("CONCEPTO_MCC"), rs.getDouble("IMPORTE_MCC"), rs.getTimestamp("FECHA_MCC"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.PRESTAMO) {
-                    movimientos.clear();
-                    String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
-                    rs = st.executeQuery(consultaPrestamo);
+            } else if (tipo == EnumMovimiento.PRESTAMO) {
+                movimientos.clear();
+                String consultaPrestamo = "SELECT * FROM MOVIMIENTO_PRESTAMO";
+                rs = st.executeQuery(consultaPrestamo);
 
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
-                    movimientos.clear();
-                    String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
-                    rs = st.executeQuery(consultaCredito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-                } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
-                    movimientos.clear();
-                    String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
-                    rs = st.executeQuery(consultaDebito);
-
-                    for (; rs.next();) {
-                        movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"), true);
-                        // resultado = resultado + "\n" + cuentaCorriente.toString();
-                        incidencias.add(movimiento);
-                    }
-
+                for (; rs.next();) {
+                    movimiento = new Movimiento(EnumMovimiento.PRESTAMO, rs.getInt("CODIGO_MP"), rs.getString("CONCEPTO_MP"), rs.getDouble("IMPORTE_MP"), rs.getTimestamp("FECHA_MP"));
+                    // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    movimientos.add(movimiento);
                 }
-                return incidencias;
+            } else if (tipo == EnumMovimiento.TARJETA_CREDITO) {
+                movimientos.clear();
+                String consultaCredito = "SELECT * FROM MOVIMIENTO_TARJETA_CREDITO";
+                rs = st.executeQuery(consultaCredito);
+
+                for (; rs.next();) {
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_CREDITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTC"), rs.getDouble("IMPORTE_MTC"), rs.getTimestamp("FECHA_MTC"));
+                    // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    movimientos.add(movimiento);
+                }
+
+            } else if (tipo == EnumMovimiento.TARJETA_DEBITO) {
+                movimientos.clear();
+                String consultaDebito = "SELECT * FROM MOVIMIENTO_TARJETA_DEBITO";
+                rs = st.executeQuery(consultaDebito);
+
+                for (; rs.next();) {
+                    movimiento = new Movimiento(EnumMovimiento.TARJETA_DEBITO, rs.getInt("CODIGO_TARJETA"), rs.getString("CONCEPTO_MTD"), rs.getDouble("IMPORTE_MTD"), rs.getTimestamp("FECHA_MTD"));
+                    // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    movimientos.add(movimiento);
+                }
+
             }
+
         }
+        return movimientos;
     }
     /*  ArrayList<Movimiento> movimientoFiltrado = new ArrayList<>();
      if (incidencia == true) {
@@ -727,9 +635,10 @@ public class CuentaCorriente {
 
     /**
      * Para modificar el saldo de la cuenta corriente.
-     * 
+     *
      * @param sucursal La sucursal a la que pertenece la cuenta corriente.
-     * @return Devuelve true en caso que haya ido bien o false en caso contrario.
+     * @return Devuelve true en caso que haya ido bien o false en caso
+     * contrario.
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
@@ -780,7 +689,8 @@ public class CuentaCorriente {
      * @return El importe que contiene la cuenta corriente.
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
-     * @throws CuentaCorrienteException En el caso que no haya ningúna cuenta corriente.
+     * @throws CuentaCorrienteException En el caso que no haya ningúna cuenta
+     * corriente.
      */
     public double mostrarSaldo(Sucursal sucursal) throws SQLException, CuentaCorrienteException {
 
