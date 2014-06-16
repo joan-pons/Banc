@@ -34,10 +34,7 @@ public class Movimiento {
      * La fecha en la que se realiza el movimiento.
      */
     private Date fecha;
-    /**
-     * Si es una incidencia o no.
-     */
-    private boolean incidencia;
+
 
     /**
      * Devuelve el valor del código de movimiento.
@@ -72,14 +69,6 @@ public class Movimiento {
     }
 
     /**
-     * Devuelve el valor de la incidencia.
-     * @return Un boolean con la especificación del movimiento.
-     */
-    public boolean getIncidencia() {
-        return incidencia;
-    }
-
-    /**
      * Devuelve el valor del tipo de movimeinto.
      * @return El tipo de movimiento.
      */
@@ -96,18 +85,17 @@ public class Movimiento {
      * @param fecha La fecha en la que se realiza el movimiento.
      * @param incidencia Si es una incidencia o no.
      */
-    public Movimiento(EnumMovimiento tipo, int codigo, String concepto, double importe, Date fecha, boolean incidencia) {
+    public Movimiento(EnumMovimiento tipo, int codigo, String concepto, double importe, Date fecha) {
         this.tipo = tipo;
         this.codigo = codigo;
         this.concepto = concepto;
         this.importe = importe;
         this.fecha = fecha;
-        this.incidencia = incidencia;
     }
 
     @Override
     public String toString() {
-        return "Código: " + codigo + "Tipo: " + tipo + " ..... Concepto: " + concepto + " Importe: " + importe + "€ Fecha: " + fecha + "Incidencia: " + incidencia + "\n";
+        return "Código: " + codigo + "Tipo: " + tipo + " ..... Concepto: " + concepto + " Importe: " + importe + "€ Fecha: " + fecha +  "\n";
     }
     
     
