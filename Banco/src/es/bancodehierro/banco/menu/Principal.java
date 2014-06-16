@@ -10,11 +10,8 @@ import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -27,11 +24,13 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_CC = 69000;
     private static final int MENU_PRINCIPAL_PRESTAMO = 69001;
     private static final int MENU_PRINCIPAL_TARJETA = 69002;
-    private static final int MENU_PRINCIPAL_SUCURSAL = 69003;
-    private static final int MENU_PRINCIPAL_SALIR = 69004;
+    private static final int MENU_PRINCIPAL_EMPLEADO = 69003;
+    private static final int MENU_PRINCIPAL_CLIENTE = 69004;
+    private static final int MENU_PRINCIPAL_SUCURSAL = 69005;
+    private static final int MENU_PRINCIPAL_SALIR = 69006;
 
     public static void menuPrincipal() throws SQLException, CuentaCorrienteException, ClienteException {
-        String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta", "Sucursal", "Salir"};
+        String[] opciones = {"Cunta corriente", "Prestamo","Empleado", "Cliente",  "Tarjeta", "Sucursal", "Salir"};
         boolean menu = true;
         do {
             int op = gestionarMenu("Menu Principal", opciones, "Elige una opción", MENU_PRONCIPAL_PREFIX);
@@ -43,7 +42,12 @@ public abstract class Principal {
                 case MENU_PRINCIPAL_PRESTAMO:
                     MenuPrestamo.menuPres(null);
                     break;
-
+                case MENU_PRINCIPAL_EMPLEADO:
+                    MenuEmpleado.menuEmpleado();
+                    break;
+                case MENU_PRINCIPAL_CLIENTE:
+                    MenuCliente.menuClientes();
+                    break;
                 case MENU_PRINCIPAL_TARJETA:
                     MenuTarjeta.ejecutarMenu();
                     break;
@@ -62,6 +66,7 @@ public abstract class Principal {
 
     public static void main(String[] args) throws SQLException, CuentaCorrienteException, ClienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
+        //Esto era para inciar sesion...
        // String dni = GestionaMenu.llegirCadena("inserta tu DNI");
        /* try (Statement st = conexio.createStatement()) {
             ResultSet rs = st.executeQuery("SELECT CODIGO_TRABAJADOR FROM TRABAJADOR WHERE DNI_TRABAJADOR = " + dni);

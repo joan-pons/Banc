@@ -13,11 +13,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * Todo lo referente a las acciones sobre sucursales se ejecutaran en este menu.
+ * Classe que contiene lo referente a las acciones sobre sucursales se
+ * ejecutaran en este menu.
  *
  * @author Guillem Arrom, Guillem Rotger, Pedro Lladó, François
  */
@@ -38,7 +37,7 @@ public abstract class MenuSucursal {
      *
      * @throws SQLException Cuando ha ocurrido un error inesperado de SQL
      */
-    private static void crearSucursal() throws SQLException {
+    private static void crearSucursal() throws SQLException, SucursalException {
         Sucursal central;
         String poblacio = GestionaMenu.llegirCadena("Mete poblacion ");
         String direccio = GestionaMenu.llegirCadena("Mete direccion ");
@@ -55,12 +54,9 @@ public abstract class MenuSucursal {
         do {
             if (GestionaMenu.menuSiNo("", "Tiene central?")) {
                 int codiSuc = GestionaMenu.llegirSencer("Cual es el codigo de sucursal?");
-                try {
-                    central = Banco.devuelveSucursal(codiSuc);
-                } catch (SucursalException ex) {
-                    System.out.println(ex.getMessage());
-                    central = null;
-                }
+
+                central = Banco.devuelveSucursal(codiSuc);
+
             } else {
                 flagCentral = false;
                 central = null;
@@ -101,9 +97,10 @@ public abstract class MenuSucursal {
     }
 
     /**
-     *
-     * @param sucursal
-     * @throws SucursalException
+     * Enseña toda la informacion de la sucursal
+     * 
+     * @param sucursal El objeto sucursal de donde cogera la informacion
+     * @throws SucursalException Si la sucursal es null
      */
     private static void mostrarSucursal(Sucursal sucursal) throws SucursalException {
         if (sucursal != null) {
@@ -124,9 +121,10 @@ public abstract class MenuSucursal {
     }
 
     /**
-     *
-     * @throws SucursalException
-     * @throws SQLException
+     * Pide todo lo necesario para modificar sucursal y la modifica
+     *  
+     * @throws SucursalException Cuando hay errores con sucursales
+     * @throws SQLException Cuando hay errores SQL
      */
     private static void modificarSucursal() throws SucursalException, SQLException {
         Sucursal sucursal;
@@ -168,8 +166,10 @@ public abstract class MenuSucursal {
 
     /**
      *
-     * @throws SucursalException
-     * @throws SQLException
+     * Pide que sucursal eliminar y la elimina
+     * 
+     * @throws SucursalException Si no existe la sucursal
+     * @throws SQLException Si hay un error de bdd
      */
     private static void eliminarSucursal() throws SucursalException, SQLException {
         Sucursal sucursal;
@@ -188,8 +188,7 @@ public abstract class MenuSucursal {
     }
 
     /**
-     *
-     * @param conexion
+     * Genera el menu principal
      */
     public static void menu() {
         try {
@@ -221,19 +220,19 @@ public abstract class MenuSucursal {
                     break;
             }
         } catch (SucursalException ex) {
-            System.out.println(ex.getMessage());
-            Logger.getLogger(MenuSucursal.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         } catch (SQLException ex) {
-            Logger.getLogger(MenuSucursal.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println(ex.getMessage());
         }
 
     }
 
     /**
      *
-     * @throws SQLException
+     * Muestra todas las sucursales de la bdd
+     * @throws SQLException cuando hay un error inesperado de bdd
      */
-    private static void mostrarTodas() throws SQLException {
+    private static void mostrarTodas() throws SQLException, SucursalException {
         Connection conexion = Conexion.conectar();
         Statement st = conexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT MAX(CODIGO_SUCURSAL) FROM SUCURSAL");
@@ -245,24 +244,19 @@ public abstract class MenuSucursal {
         if (maxSuc != 0) {
             for (int index = 1; index <= maxSuc; index++) {
                 boolean existente = true;
-                try {
-                    existente = Banco.comprobarSucursal(index);
-                } catch (SucursalException ex) {
-                    existente = false;
-                }
+                existente = Banco.comprobarSucursal(index);
+
                 if (existente) {
-                    try {
-                        sucursal = Banco.devuelveSucursal(index);
-                        System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
-                        mostrarSucursal(sucursal);
-                        System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
-                    } catch (SucursalException ex) {
-                        System.out.println("Se ha borrado una sucursal mientras se estaba intentando listar.");
-                    }
+
+                    sucursal = Banco.devuelveSucursal(index);
+                    System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
+                    mostrarSucursal(sucursal);
+                    System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
+
                 }
             }
         } else {
-            System.out.println("No hay ninguna sucursal!4");
+            throw new SucursalException("No hay ninguna sucursal");
         }
 
     }
