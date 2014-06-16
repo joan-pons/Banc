@@ -9,13 +9,16 @@ package es.bancodehierro.banco.cc;
 import es.bancodehierro.banco.menu.GestionaMenu;
 
 /**
- *
+ * Clase con métodos estáticos para hacer el control de los datos introducido para el número de la cuenta corriente.
  * @author Andreu Oliver, Juanjo Macanás, Roberto Simón, Xavi Jimenez, Miquel
  * Angel Cànaves
  */
 public class ControlCC {
-    
-    public static String ControlIBAN(){
+    /**
+     * Método para controlar los datos introducidos en el IBAN de la cuenta corriente.
+     * @return Un string con el contenido del IBAN.
+     */
+    public static String controlIBAN(){
         String iban = null;
         boolean op = true;
         while(op){
@@ -27,7 +30,11 @@ public class ControlCC {
         return iban;
     }
     
-    public static String ControlOficina(){
+    /**
+     * Método para controlar los datos introducidos en la oficina de la cuenta corriente.
+     * @return Un string con el contenido de la oficina.
+     */
+    public static String controlOficina(){
         String oficina = null;
         boolean op = true;
         while(op){
@@ -39,7 +46,11 @@ public class ControlCC {
         return oficina;
     }
     
-    public static String ControlDc(){
+    /**
+     * Método para controlar los datos introducidos en el dc de la cuenta conrriente.
+     * @return Un string con el contenido del dc.
+     */
+    public static String controlDc(){
         String dc = null;
         boolean op = true;
         while(op){
@@ -51,7 +62,11 @@ public class ControlCC {
         return dc;
     }
     
-    public static String ControlCC(){
+    /**
+     * Método para controlar los datos introducidos en la cuenta de la cuenta corriente.
+     * @return Un string con el contenido del cc de la ccuenta corriente.
+     */
+    public static String controlCC(){
         String cc = null;
         boolean op = true;
         while(op){
