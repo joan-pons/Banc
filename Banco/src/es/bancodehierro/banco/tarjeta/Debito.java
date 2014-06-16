@@ -21,14 +21,16 @@ public class Debito extends Tarjeta {
     public Debito(String codigoTitular, String codigoCuentaCorriente, int codigoSucursal) {
         super(null, codigoTitular, codigoCuentaCorriente, codigoSucursal, null, null);
         try {
-            Conexion.conectar().createStatement().executeUpdate("INSERT INTO v_tarjeta_debito VALUES ("
+            String sentencia = "INSERT INTO v_tarjeta_debito VALUES ("
                     + "null"
                     + ",'" + codigoTitular + "'"
                     + ",'" + codigoCuentaCorriente
                     + "'," + codigoSucursal
-                    + ",null)");
+                    + ",null,null)";
+            Conexion.conectar().createStatement().executeUpdate(sentencia);
+            System.out.println(sentencia);
         } catch (SQLException e) {
-
+            System.out.println("error");
         }
     }
 /**
@@ -36,7 +38,7 @@ public class Debito extends Tarjeta {
  * @param codigoTarjeta Codigo de la tarjeta.
  */
     public Debito(String codigoTarjeta) {
-        super(codigoTarjeta, "CREDITO");
+        super(codigoTarjeta, "DEBITO");
         try {
             ResultSet select = Conexion.conectar().createStatement().executeQuery("SELECT * FROM v_tarjeta_debito WHERE codigo_tarjeta = '" + codigoTarjeta + "'");
             while (select.next()) {

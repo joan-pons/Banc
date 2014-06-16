@@ -30,7 +30,7 @@ public class MenuTarjeta {
 
             codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
             Statement st = Conexion.conectar().createStatement();
-            String selectCliente = "select count(*) from Cliente where DNI_CLIENTE_TARJETA='" + codigoCliente + "'";
+            String selectCliente = "select count(*) from Cliente where DNI_CLIENTE='" + codigoCliente + "'";
             ResultSet rs = st.executeQuery(selectCliente);
             rs.next();
             clienteEncontrado = rs.getInt(1);
@@ -50,7 +50,7 @@ public class MenuTarjeta {
         while (cuentaEncontrada == 0) {
 
             Statement st = Conexion.conectar().createStatement();
-            String selectCuenta = "select count(*) from CuentaCorriente where CODIGO_SUC_TARJETA=" + codigoSucursal + " and NUMERO_CC_TARJETA='" + codigoCuenta + "'";
+            String selectCuenta = "select count(*) from Cuenta_Corriente where CODIGO_SCC=" + codigoSucursal + " and NUMERO_CC='" + codigoCuenta + "'";
             ResultSet rs = st.executeQuery(selectCuenta);
             rs.next();
             cuentaEncontrada = rs.getInt(1);
@@ -78,6 +78,13 @@ public class MenuTarjeta {
             } while (limite < 0);
         }
         //llamar al metodo de GestionTarjetas
+        String sentencia = "INSERT INTO v_tarjeta_debito VALUES ("
+                + "null"
+                + ",'" + codigoCliente + "'"
+                + ",'" + codigoCuenta
+                + "'," + codigoSucursal
+                + ",null,null)";
+        Conexion.conectar().createStatement().executeUpdate(sentencia);
         Banco bancoTarjetas = new Banco();
         bancoTarjetas.altaTarjeta(codigoCliente, codigoCuenta, codigoSucursal, limite, tipo.toUpperCase());
 
@@ -95,28 +102,9 @@ public class MenuTarjeta {
             existe = comprobarTarjeta(codigoTarjeta);
         } while (existe);
         ResultSet rs;
-        String resultat = comprobarTipoTarjeta(codigoTarjeta);
-        if (resultat == "CREDITO") {
 
-            rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTC,OPERACION_MTC,to_char(FECHA_MTC),IMPORTE_MTC,CONCEPTO_MTC FROM MOVIMIENTO_TARJETA_CREDITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
-            while (rs.next()) {
-                System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
-            }
-            rs.close();
-
-        } else if (resultat == "DEBITO") {
-
-            rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_TARJETA,CODIGO_MTD,OPERACION_MTD,to_char(FECHA_MTD),IMPORTE_MTD,CONCEPTO_MTD FROM MOVIMIENTO_TARJETA_DEBITO WHERE CODIGO_TARJETA='" + codigoTarjeta + "'");
-            while (rs.next()) {
-                System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
-            }
-            rs.close();
-
-        }
-        if (GestionaMenu.llegirCadena("¿Quieres borrar la tarjeta?(SI/NO: ").toUpperCase() == "SI") {
             Banco bancoTarjetas = new Banco();
-            bancoTarjetas.eliminarTarjeta(codigoTarjeta);
-        }
+            System.out.println(bancoTarjetas.eliminarTarjeta(codigoTarjeta));
 
     }
 
@@ -155,6 +143,7 @@ public class MenuTarjeta {
             rs.close();
             st.close();
             /*Sumamos el importe que llevamos acumulado mas el importe que se quiere pagar. */
+        
             Double importeActual = importeAcumulado + importe;
             if (importeActual > maxCredit) {
                 System.out.println("No es pot fer, ja ha superat el credit maxim. ");
