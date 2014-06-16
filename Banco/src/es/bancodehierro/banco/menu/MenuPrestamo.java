@@ -26,7 +26,7 @@ public class MenuPrestamo {
      * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol.
      * @param empleado Se pasa el objeto del empleado que hará las opciones.
      */
-    public static void menuPres(Empleado empleado, Prestamo presta) {
+    public static void menuPres(Empleado empleado) {
 
         String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
         int opcionSeleccionada;
