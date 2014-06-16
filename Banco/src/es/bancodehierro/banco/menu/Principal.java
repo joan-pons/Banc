@@ -6,6 +6,7 @@
 package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import static es.bancodehierro.banco.menu.GestionaMenu.gestionarMenu;
 import java.sql.Connection;
@@ -29,7 +30,7 @@ public abstract class Principal {
     private static final int MENU_PRINCIPAL_SUCURSAL = 69003;
     private static final int MENU_PRINCIPAL_SALIR = 69004;
 
-    public static void menuPrincipal() throws SQLException, CuentaCorrienteException {
+    public static void menuPrincipal() throws SQLException, CuentaCorrienteException, ClienteException {
         String[] opciones = {"Cunta corriente", "Prestamo", "Tarjeta", "Sucursal", "Salir"};
         boolean menu = true;
         do {
@@ -59,7 +60,7 @@ public abstract class Principal {
         } while (menu);
     }
 
-    public static void main(String[] args) throws SQLException, CuentaCorrienteException {
+    public static void main(String[] args) throws SQLException, CuentaCorrienteException, ClienteException {
         System.out.println("BIENVENIDO AL BANCO DE HIERRO");
         String dni = GestionaMenu.llegirCadena("inserta tu DNI");
         try (Statement st = conexio.createStatement()) {

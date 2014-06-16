@@ -14,9 +14,9 @@ public class Debito extends Tarjeta {
 /**
  * Metodo para la agregacion en la base de datos de una tarjeta de debito,
  * pasa los parametros necesarios al constructor de la superclasse
- * @param codigoTitular
- * @param codigoCuentaCorriente
- * @param codigoSucursal 
+ * @param codigoTitular Codigo del titular de la tarjeta.
+ * @param codigoCuentaCorriente Codigo de la cuenta corriente asociada.
+ * @param codigoSucursal Codigo de la sucursal.
  */
     public Debito(String codigoTitular, String codigoCuentaCorriente, int codigoSucursal) {
         super(null, codigoTitular, codigoCuentaCorriente, codigoSucursal, null, null);
@@ -33,7 +33,7 @@ public class Debito extends Tarjeta {
     }
 /**
  * Constructor para recuperar una tarjeta de credito ya existente en la base de datos, crea un objeto tarjeta.
- * @param codigoTarjeta 
+ * @param codigoTarjeta Codigo de la tarjeta.
  */
     public Debito(String codigoTarjeta) {
         super(codigoTarjeta, "CREDITO");
@@ -48,7 +48,7 @@ public class Debito extends Tarjeta {
     }
 /**
  * metodo para recuperar un string con informacion del objeto
- * @return 
+ * @return Devuelve un String con la informacion de la tarjeta de debito.
  */
     @Override
     public String toString() {
@@ -56,23 +56,23 @@ public class Debito extends Tarjeta {
     }
 /**
  * metodo para recuperar la informacion del atributo saldo
- * @return 
+ * @return Devuelve el saldo de la tarjeta de debito.
  */
     public Double getSaldo() {
         return saldo;
     }
 /**
  * metodo para especificar el valor de atributo saldo
- * @param saldo 
+ * @param saldo Establece el saldo de la tarjeta de debito.
  */
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
     }
 /**
  * metodo para pagar con una tarjeta de credito, crea un objeto movimientotarjeta, pasandole los parametros necesarios
- * @param importe
- * @param concepto
- * @return 
+ * @param importe Cantidad a pagar.
+ * @param concepto Concepto del pago.
+ * @return Devuelve un true si todo ha salido bien.
  */
     public Boolean pagar(double importe, String concepto) {
         MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta, "PAGAR", importe, concepto, "DEBITO");
@@ -80,9 +80,9 @@ public class Debito extends Tarjeta {
     }
 /**
  * metodo realizar un ingreso por tarjeta de cfedito, crea un objeto movimiento tarjeta pasandole los parametros necesarios
- * @param importe
- * @param concepto
- * @return 
+ * @param importe Cantidad a ingresar.
+ * @param concepto Concepto del ingreos.
+ * @return Devuelve un true si todo ha salido bien.
  */
     public Boolean ingresar(double importe, String concepto) {
         MovimientoTarjeta m = new MovimientoTarjeta(codigoTarjeta, "INGRESAR", importe, concepto, "CREDITO");

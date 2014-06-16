@@ -191,7 +191,7 @@ public abstract class MenuSucursal {
      *
      * @param conexion
      */
-    public static void menu(Connection conexion) {
+    public static void menu() {
         try {
             String[] menu = {"Crear sucursal", "listar sucursal", "Modificar sucursal", "Eliminar sucursal", "Mostrar todas", "Atrás..."};
             switch (GestionaMenu.gestionarMenu("Menu sucursal", menu, "", MENU_SUCURSAL_PREFIX)) {
