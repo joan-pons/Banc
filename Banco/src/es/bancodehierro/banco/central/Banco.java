@@ -7,8 +7,11 @@ package es.bancodehierro.banco.central;
 
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.conexion.Conexion;
+import es.bancodehierro.banco.enumeraciones.EnumCargo;
 import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
+import es.bancodehierro.banco.excepciones.EmpleadoException;
+import es.bancodehierro.banco.excepciones.SucursalException;
 import es.bancodehierro.banco.menu.GestionaMenu;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
@@ -23,6 +26,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -190,64 +194,456 @@ public class Banco {
         return aCC;
     }
 
-    //Part del grup de Guillem Arrom, Rotger, Pedro i François
-    public Persona devuelvePersona(String dni) {
-        return null;
+        //Part del grup de Guillem Arrom, Rotger, Pedro i François
+    /**
+     * Metodo que devuelve un objeto cliente con los datos del cliente cuyo dni
+     * es el que le pasas por parametro
+     *
+     * @param dniCliente DNI del cliente al cual se devolvera toda la
+     * informacion
+     * @return Objeto cliente con toda la informacion
+     * @throws SQLException Cuando hay un error inesperado de bdd
+     * @throws ClienteException Cuando el cliente no ha sido encontrado
+     */
+    public static Cliente devuelveCliente(String dniCliente) throws SQLException, ClienteException {
+        Connection conexion = Conexion.conectar();
+        comprobarCliente(dniCliente);
+        Statement st = conexion.createStatement();
+        ResultSet rs1 = st.executeQuery("SELECT * FROM CLIENTE WHERE DNI =" + dniCliente);//FALTA BDD
+        int idclient = rs1.getInt("idClient");
+        String nombre = rs1.getString("nombre");
+        String apellido1 = rs1.getString("apellido1");
+        String apellido2 = rs1.getString("apellido2");
+        String poblacion = rs1.getString("poblacion");
+        String direccion = rs1.getString("direccion");
+        Date fn = rs1.getDate("fechaNacimiento");
+        String telefono = rs1.getString("telefono");
+        Cliente cliente = new Cliente(nombre, apellido1, apellido2, dniCliente, poblacion, direccion, fn, telefono);
+        return cliente;
     }
 
-    public Cliente devuelveCliente(String dni) {
-        return null;
-    }
+    /**
+     * Metodo que devuelve un objeto empleado con los datos del empleatdo cuyo
+     * dni es el que le pasas por parametro
+     *
+     * @param dniEmpleado DNI del empleado al cual se devolvera toda la
+     * informacion
+     * @return Objeto cliente con toda la informacion
+     * @throws SQLException Cuando hay un error inesperado de bdd
+     * @throws EmpleadoException Cuando el empleado no ha sido encontrado
+     */
+    public static Empleado devuelveEmpleado(String dniEmpleado) throws SQLException, EmpleadoException {
+        Connection conexion = Conexion.conectar();
+        comprobarEmpleado(dniEmpleado);
+        EnumCargo car = null;
+        Statement st = conexion.createStatement();
+        ResultSet rs1 = st.executeQuery("SELECT * FROM V_EMPLEAT WHERE DNI_PERSONA ='" + dniEmpleado + "'");
+        rs1.next();
+        int idEmpleado = rs1.getInt("CODIGO_TRABAJADOR");
+        String nombre = rs1.getString("NOMBRE_PERSONA");
+        String cargo = rs1.getString("CARGO_TRABAJADOR");
+        String apellido1 = rs1.getString("PRIMER_APELLIDO_PERSONA");
+        String apellido2 = rs1.getString("SEGUNDO_APELLIDO_PERSONA");
+        String poblacion = rs1.getString("NOMBRE_POBLACION");
+        String direccion = rs1.getString("DIRECCION_PERSONA");
+        Date fn = rs1.getDate("FECHA_NACIMIENTO_PERSONA");
+        String telefono = rs1.getString("TELEFONO_PERSONA");
+        int sucursal = rs1.getInt("CODIGO_SUCURSAL");
 
-    public Empleado devuelveEmpleado(String dni) {
-        return null;
-    }
-
-    public static boolean insertarCliente(Cliente cliente, Connection con) {
-        boolean sortida = false;
-        try {
-            //no se le pasa
-
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery("select * from cliente where DNI_CLIENTE =" + cliente.getIdCliente());
-
-            if (rs.next() == false) {
-
-                st.executeUpdate("insert into persona values(" + cliente.getDni() + ", " + cliente.getNombre() + ", " + cliente.getApellido1() + ", " + cliente.getApellido2() + ", " + cliente.getFechaNacimiento() + ", " + cliente.getDireccion() + ", " + cliente.getPoblacion() + ", " + cliente.getTlf() + ")");
-                st.executeUpdate("insert into cliente value" + cliente.getIdCliente() + ", " + cliente.getDni() + ")");
-                rs.close();
-                rs.close();
-                st.close();
-                return sortida = true;
-            } else {
-                rs.close();
-                rs.close();
-                st.close();
-                return sortida = false;
-
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(Banco.class.getName()).log(Level.SEVERE, null, ex);
+        if ("EMPLEADO SUCURSAL".equalsIgnoreCase(cargo)) {
+            car = EnumCargo.EMPLEADOSUCURSAL;
+        } else if ("DIRECTOR BANCO".equalsIgnoreCase(cargo)) {
+            car = EnumCargo.DIRECTORBANCO;
+        } else if ("DIRECTOR SUCURSAL".equalsIgnoreCase(cargo)) {
+            car = EnumCargo.DIRECTORSUCURSAL;
         }
-        return sortida;
+        Empleado empleado;
+        empleado = new Empleado(car, nombre, apellido1, apellido2, dniEmpleado, poblacion, direccion, fn, telefono, sucursal);
+        return empleado;
     }
 
-    public static boolean insertaSucursal(Sucursal sucursal) {
+    /**
+     *
+     * Metodo que devuelve sucursal segun su codigo.
+     *
+     * @param codigoSucursal Codigo de la sucursal
+     * @return la central demanada
+     * @throws SucursalException Quan la central solicitada no existeix
+     * @throws SQLException Quan hi ha un error en les sentencies SQL
+     */
+    public static Sucursal devuelveSucursal(int codigoSucursal) throws SucursalException, SQLException {
+        Connection conexion = Conexion.conectar();
+        comprobarSucursal(codigoSucursal);
+        Statement st = conexion.createStatement();
+        ResultSet rs1 = st.executeQuery("SELECT * FROM SUCURSAL WHERE CODIGO_SUCURSAL =" + codigoSucursal);
+        rs1.next();
+        String direccion = rs1.getString("DIRECCION_SUCURSAL");
+        int codigoP = rs1.getInt("CP_SUCURSAL");
+        int codiPob = rs1.getInt("CODIGO_POBLACION_SUCURSAL");
+        int codigoSuc = rs1.getInt("CODIGO_SUCURSAL");
+        String telefono = rs1.getString("TELEFONO_SUCURSAL");
+        int codCentral = rs1.getInt("CODIGO_CENTRAL_SUCURSAL");
+        rs1.close();
+        ResultSet rs2 = st.executeQuery("SELECT NOMBRE_POBLACION FROM POBLACION WHERE CODIGO_POBLACION = " + codiPob);
+        rs2.next();
+        String poblacion = rs2.getString(1);
+        rs2.close();
+        Sucursal central;
+        if (codCentral != 0) {
+            central = devuelveSucursal(codCentral);
+        } else {
+            central = null;
+        }
+        Sucursal suc = new Sucursal(poblacion, direccion, codigoSuc, codigoP, central, telefono);
+        st.close();
 
-        return false;
-    }
-
-    public static Sucursal devuelveSucursal(int codigo) {
-        Sucursal suc = null;
         return suc;
     }
 
-    public static boolean eliminarSucursal(Sucursal sucursal) {
-        return false;
+    /**
+     * Este método se encarga de eliminar los clientes. Crea una conexión con la
+     * base de datos. Comprueba gracias al método "comprobarCliente" de que el
+     * DNI introducido está asignado a algún cliente para seguidamente
+     * eliminarlo. En el caso de que el DNI no atienda a ningún cliente, lanzará
+     * una excepción para indicar que no existe tal cliente.
+     *
+     * @param dniCliente recibe por parámetro un String que debe atender al DNI
+     * del cliente que se desee eliminar.
+     * @throws ClienteException
+     */
+    public static void eliminarCliente(String dniCliente) throws ClienteException, SQLException {
+        Connection con = Conexion.conectar();
+        Statement st = con.createStatement();
+        String sql = "DELETE FROM V_CLIENT WHERE DNI_PERSONA ='" + dniCliente + "'";
+        if (comprobarCliente(dniCliente)) {
+            st.executeUpdate(sql);
+            st.close();
+        } else {
+            st.close();
+            throw new ClienteException("No existe el cliente");
+        }
     }
 
-    //Fi de la part del grup de Guillem Arrom, Rotger, Pedro i François
+    /**
+     * Este método se encarga de eliminar los empleados. Crea una conexión con
+     * la base de datos. Comprueba gracias al método "comprobarEmpleado" de que
+     * el DNI introducido está asignado a algún empleado para seguidamente
+     * eliminarlo. En el caso de que el DNI no atienda a ningún empleado,
+     * lanzará una excepción para indicar que no existe tal empleado.
+     *
+     * @param dniEmpleado recibe por parámetro un String que debe atender al DNI
+     * del empleado que se desee eliminar.
+     * @throws EmpleadoException
+     */
+    public static void eliminarEmpleado(String dniEmpleado) throws EmpleadoException, SQLException {
+        Connection con = Conexion.conectar();
+        Statement st = con.createStatement();
+        String sql = "DELETE FROM V_EMPLEAT WHERE DNI_PERSONA ='" + dniEmpleado + "'";
+        if (comprobarEmpleado(dniEmpleado)) {
+            st.executeUpdate(sql);
+            st.close();
+        } else {
+            st.close();
+            throw new EmpleadoException("No existe el empleado");
+        }
+    }
+
+    /**
+     * Este método se encarga de eliminar una sucursal indicando su código de
+     * referencia. Primero verifica la existencia de la sucursal gracias al
+     * método "comprobarSucursal" y en el caso de encontrarse la sucursal,
+     * realiza el DETELE en la base de datos"
+     *
+     * @param sucursal La sucursal a eliminar.
+     * @return True si la central se ha eliminat correctement
+     * @throws SQLException Avisa cuando la instrucción falla inesperadamente.
+     * @throws SucursalException Avisa de un error en relación a la sucursal.
+     */
+    public static boolean eliminarSucursal(Sucursal sucursal) throws SQLException, SucursalException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        String sql = "DELETE FROM SUCURSAL WHERE CODIGO_SUCURSAL =" + sucursal.getCodi();
+        if (comprobarSucursal(sucursal.getCodi()) == true) {
+            st.executeQuery(sql);
+            st.close();
+            return true;
+        } else {
+            st.close();
+            throw new SucursalException("No existe la sucursal que deseea eliminar");
+        }
+    }
+
+    /**
+     * Utiliza un objeto de tipo cliente para coger todos los datos para
+     * insertarlo en la bdd.
+     *
+     * @param cliente Objeto del cual sacara todos los datos
+     * @throws ClienteException Cuando el cliente ya existe
+     * @throws SQLException Si hay un error inesperado con la bdd
+     */
+    public static int insertarCliente(Cliente cliente) throws ClienteException, SQLException {
+        Connection con = Conexion.conectar();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("select * from CLIENTE where DNI_CLIENTE ='" + cliente.getDni() + "'");
+        //si es dnitrabajador no existeix
+        if (rs.next() == false) {
+            st.executeUpdate("insert into V_CLIENT (DNI_PERSONA) values ( '" + cliente.getDni() + "', '" + cliente.getNombre() + "','" + cliente.getApellido1() + "','" + cliente.getApellido2() + "','" + cliente.getFechaNacimiento() + "','" + cliente.getDireccion() + "','" + cliente.getPoblacion() + "', '" + cliente.getTlf() + "', 0)");
+            st.close();
+            rs.close();
+        } else {
+            st.close();
+            rs.close();
+            throw new ClienteException("Error: El cliente ya existe");
+        }
+
+        return 0;
+
+    }
+
+    /**
+     * Utiliza un objeto de tipo empleado para coger todos los datos para
+     * insertarlo en la bdd
+     *
+     * @param empleado Objeto del cual sacara todos los datos
+     * @throws EmpleadoException Cuando el cliente ya existe
+     * @throws SQLException Si hay un error inesperado con la bdd
+     */
+    public static int insertarEmpleado(Empleado empleado) throws EmpleadoException, SQLException {
+        Connection con = Conexion.conectar();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("select * from TRABAJADOR where DNI_TRABAJADOR ='" + empleado.getDni() + "'");
+        //si es dnitrabajador no existeix
+        if (rs.next() == false) {
+            st.executeUpdate("insert into V_EMPLEAT values ( 0, '" + empleado.getDni() + "', '" + empleado.getNombre() + "', '" + empleado.getApellido1() + "', '" + empleado.getApellido2() + "', '" + "01-01-1990" + "', '" + empleado.getTlf() + "', '" + empleado.getDireccion() + "', '" + empleado.getPoblacion() + "', '" + empleado.getCargo() + "', " + empleado.getSucursal() + ",'01-01-1990')");
+            st.close();
+            rs.close();
+        } else {
+            st.close();
+            rs.close();
+            throw new EmpleadoException("Error: El empleado ya existe");
+        }
+        return 0;
+    }
+
+    /**
+     *
+     * Inserta la sucursal que le pasas por parametro.
+     *
+     * @param sucursal objeto sucursal a insertar
+     *
+     * @throws SQLException Cuando hay un fallo inesperado de bdd
+     * @throws SucursalException cuando la central de la sucursal no es
+     * encontrada, no encuentra poblacion o un error desconocido.
+     */
+    public static int insertaSucursal(Sucursal sucursal) throws SQLException, SucursalException {
+        Connection conexion = Conexion.conectar();
+        String procedure = "{? = call INSERIR_SUCURSAL (?,?,?,?,?)}";
+        CallableStatement statement = conexion.prepareCall(procedure);
+        statement.registerOutParameter(1, java.sql.Types.INTEGER);
+        statement.setString(2, sucursal.getDireccio());
+        statement.setInt(3, sucursal.getCodiPostal());
+        Statement st = conexion.createStatement();
+        ResultSet rs2 = st.executeQuery("SELECT CODIGO_POBLACION FROM POBLACION WHERE NOMBRE_POBLACION = '" + sucursal.getPoblacio().toUpperCase() + "'");
+        rs2.next();
+        int codPoblacion = rs2.getInt("CODIGO_POBLACION");
+        rs2.close();
+        st.close();
+        statement.setInt(4, codPoblacion);
+        statement.setString(5, sucursal.getTelefono());
+        if (sucursal.getCentral() != null) {
+            statement.setInt(6, sucursal.getCentral().getCodi());
+        } else {
+            statement.setInt(6, 0);
+        }
+        statement.executeQuery();
+        int resultat = statement.getInt(1);
+        if (resultat > 0) {
+            return resultat;
+        } else if (resultat == -20001) {
+            throw new SucursalException("Central no encontrada");
+        } else if (resultat == -20002) {
+            throw new SucursalException("Poblacion no encontrada");
+        } else {
+            throw new SucursalException("Error desconegut");
+        }
+    }
+
+    /**
+     * Coge un objeto sucursal para utilizarlo para coger los datos y
+     * sobrescribirlos a la bdd
+     *
+     * @param sucursal El objeto sucursal con LOS DATOS YA MODIFICADOS
+     * @throws java.sql.SQLException Cuando hay un fallo inesperado en la bdd
+     */
+    public static void modificarSucursal(Sucursal sucursal) throws SQLException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        Statement st2 = conexion.createStatement();
+        ResultSet rs2 = st2.executeQuery("SELECT CODIGO_POBLACION FROM POBLACION WHERE NOMBRE_POBLACION = '" + sucursal.getPoblacio().toUpperCase() + "'");
+        rs2.next();
+        int codiPob = rs2.getInt(1);
+        rs2.close();
+        st2.close();
+        conexion.setAutoCommit(false);
+        String central = "'";
+        if (sucursal.getCentral() == null) {
+            central = "'";
+        } else {
+            central = "',CODIGO_CENTRAL_SUCURSAL = " + sucursal.getCentral().getCodi();
+        }
+        int resultats = st.executeUpdate("UPDATE SUCURSAL SET "
+                + "DIRECCION_SUCURSAL ='" + sucursal.getDireccio()
+                + "', CP_SUCURSAL ='" + sucursal.getCodiPostal()
+                + "', CODIGO_POBLACION_SUCURSAL =" + codiPob
+                + ", TELEFONO_SUCURSAL = ' " + sucursal.getTelefono()
+                + central
+                + "WHERE CODIGO_SUCURSAL=" + sucursal.getCodi());
+        if (resultats != 1) {
+            conexion.rollback();
+            conexion.setAutoCommit(true);
+            st.close();
+            throw new SQLException("Se esperaba que solo se modificara un registro");
+        }
+        conexion.setAutoCommit(true);
+        st.close();
+    }
+
+    /**
+     * Modifica cliente.
+     *
+     * Coge el dni del objeto cliene y todos sus atributos y lo utiliza para
+     * generar una sentencia SQL de actualizacion
+     *
+     * @param cliente El objeto de donde sacara los datos
+     * @throws java.sql.SQLException Cuando hay un fallo en la sentencia SQL o
+     * cuando la actualizacion afecta a mas lineas de las esperadas (1)
+     */
+    public static void modificarCliente(Cliente cliente) throws SQLException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        conexion.setAutoCommit(false);
+        int resultats = st.executeUpdate("UPDATE V_CLIENT SET "
+                + "NOMBRE_PERSONA = " + cliente.getNombre()
+                + ", PRIMER_APELLIDO_PERSONA = " + cliente.getApellido1()
+                + ", SEGUNDO_APELLIDO_PERSONA = " + cliente.getApellido2()
+                + ", FECHA_NACIMIENTO_PERSONA = " + cliente.getFechaNacimiento()
+                + ", DIRECCION_PERSONA = " + cliente.getDireccion()
+                + ", CODIGO_POBLACION_PERSONA = " + cliente.getPoblacion()
+                + ", TELEFONO_PERSONA = " + cliente.getTlf()
+                + ", DNI_CLIENTE = " + cliente.getDni()
+                // + ", CODIGO_CLIENTE =" + cliente.getIdCliente() 
+                + "WHERE DNI_PERSONA=" + cliente.getDni() + " )");
+        if (resultats != 1) {
+            conexion.rollback();
+            conexion.setAutoCommit(true);
+            throw new SQLException("Se esperaba que solo se modificara un registro");
+        }
+        conexion.setAutoCommit(true);
+        st.close();
+    }
+
+    /**
+     * Modifica empleado.
+     *
+     * Coge el dni del objeto empleado y todos sus atributos y lo utiliza para
+     * generar una sentencia SQL de actualizacion
+     *
+     * @param empleado El objeto de donde sacara los datos
+     * @throws java.sql.SQLException Cuando hay un fallo en la sentencia SQL o
+     * cuando la actualizacion afecta a mas lineas de las esperadas (1)
+     */
+    public static void modificarEmpleado(Empleado empleado) throws SQLException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        conexion.setAutoCommit(false);
+        int resultats = st.executeUpdate("UPDATE V_CLIENT SET "
+                + "NOMBRE_PERSONA = " + empleado.getNombre()
+                + ", PRIMER_APELLIDO_PERSONA = " + empleado.getApellido1()
+                + ", SEGUNDO_APELLIDO_PERSONA = " + empleado.getApellido2()
+                + ", FECHA_NACIMIENTO_PERSONA = " + empleado.getFechaNacimiento()
+                + ", DIRECCION_PERSONA = " + empleado.getDireccion()
+                + ", CODIGO_POBLACION_PERSONA = " + empleado.getPoblacion()
+                + ", TELEFONO_PERSONA = " + empleado.getTlf()
+                + ", DNI_CLIENTE = " + empleado.getDni()
+                // + ", CODIGO_CLIENTE =" + empleado.getIdCliente() 
+                + "WHERE DNI_PERSONA=" + empleado.getDni() + " )");
+        if (resultats != 1) {
+            conexion.rollback();
+            conexion.setAutoCommit(true);
+            throw new SQLException("Se esperaba que solo se modificara un registro");
+        }
+        conexion.setAutoCommit(true);
+        st.close();
+    }
+
+    /**
+     *
+     * @param dniCliente recibe un parámetro String (dni) el cual indica el DNI
+     * del cliente que se quiere comprobar si existe como tal
+     * @return True si el cliente existe
+     * @throws SQLException cuando hay un error inesperado de BDD
+     * @throws ClienteException cuando el cliente no ha sido encontrado
+     */
+    public static boolean comprobarCliente(String dniCliente) throws SQLException, ClienteException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        ResultSet rs = st.executeQuery("select count(DNI_PERSONA) from V_CLIENT where DNI_PERSONA = '" + dniCliente + "'");
+        rs.next();
+        int a = rs.getInt(1);
+        if (a == 1) {
+            return true;
+        } else  {
+            throw new ClienteException("Cliente no encontrado");
+        }
+    }
+
+    /**
+     * @param dniEmpleado recibe un parámetro String (dni) el cual indica el DNI
+     * del empleado que se quiere comprobar si existe como tal
+     *
+     * @return true si existe el empleado
+     * @throws SQLException Si hubo un error inesperado con la bdd
+     * @throws EmpleadoException Si el empleado no ha sido encontrado
+     */
+    public static boolean comprobarEmpleado(String dniEmpleado) throws SQLException, EmpleadoException {
+        Connection con = Conexion.conectar();
+        Statement st = con.createStatement();
+        ResultSet rs = st.executeQuery("SELECT COUNT(DNI_PERSONA) FROM V_EMPLEAT WHERE DNI_PERSONA ='" + dniEmpleado + "'");
+        rs.next();
+        int a = rs.getInt(1);
+        if (a == 1) {
+            return true;
+        } else {
+            throw new EmpleadoException("Empleado no encontrado");
+
+        }
+    }
+
+    /**
+     * Metode que comprueba si una Sucursal existe en la base de datos de la
+     * conexion
+     *
+     * @param codigoSucursal Codigo de la sucursal que queremos comprobar si
+     * existe en la BDD
+     * @return devuelve un true si la sucursal se ha encontrado
+     * @throws SucursalException Lanza esta excepcion cuando no se encuentra
+     * ninguna sucursal
+     * @throws SQLException Lanza esta excepcion cuando no está bien formada la
+     * consulta
+     */
+    public static boolean comprobarSucursal(int codigoSucursal) throws SucursalException, SQLException {
+        Connection conexion = Conexion.conectar();
+        Statement st = conexion.createStatement();
+        //Aqui posam la query que faci falta
+        ResultSet rs = st.executeQuery("select count(CODIGO_SUCURSAL) from SUCURSAL where CODIGO_SUCURSAL =" + codigoSucursal);
+        rs.next();
+        int a = rs.getInt(1);
+        if (a == 1) {
+            return true;
+        } else {
+            throw new SucursalException("Sucursal no encontrado");
+        }
+    }
     /**
      * MÉTODO INSERTAR PRESTAMO. Se pide el DNI del cliente para ver si existe y
      * se consulta las cuentas que tiene ese cliente para despues seleccionar
