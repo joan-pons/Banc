@@ -245,7 +245,7 @@ public class MenuCuentaCorriente {
                                     int menuMovC = mostrarMenu(opcionesMovC);
                                     switch (menuMovC) {
                                         case 0: {
-                                            for (Movimiento mov : cC.mostrarMovimiento(false)) {
+                                            for (Movimiento mov : cC.mostrarMovimiento()) {
 
                                                 System.out.println(mov);
 
