@@ -9,6 +9,7 @@ import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.enumeraciones.EnumMovimiento;
+import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC() throws SQLException, CuentaCorrienteException {
+    public static void menuCC() throws SQLException, CuentaCorrienteException, ClienteException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         Sucursal sucursal=new Sucursal(null, null, 35, 0000, null,null);
@@ -179,7 +180,7 @@ public class MenuCuentaCorriente {
      * @param cC Paso de la cuenta corriente
      * @param cliente Cliente a tratar
      */
-    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente,Sucursal sucursal) throws SQLException, CuentaCorrienteException{
+    public void metodoTitular(boolean repMenuTitular, CuentaCorriente cC, Cliente cliente,Sucursal sucursal) throws SQLException, CuentaCorrienteException, ClienteException{
         for (; repMenuTitular;) {
                         String[] opcionesTit = {"Agregar Titular",
                             "Modificar Titular",
@@ -193,7 +194,7 @@ public class MenuCuentaCorriente {
                                //Cliente cliente2 = new Cliente(0, null, null, null, null, null, null, null, null);
                                 Cliente clienteOperacion= cliente;
                                 try {
-                                    cC.agregarTitular(cliente,sucursal);
+                                    cC.agregarTitular(sucursal);
                                 } catch (SQLException ex) {
                                     System.err.println(ex.getMessage());
                                 }
