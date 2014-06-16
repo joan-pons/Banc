@@ -639,7 +639,8 @@ public class Banco {
     }
 
     /**
-     *
+     * Metodo que te dice si existe el cliente
+     * 
      * @param dniCliente recibe un parámetro String (dni) el cual indica el DNI
      * del cliente que se quiere comprobar si existe como tal
      * @return True si el cliente existe
@@ -660,6 +661,9 @@ public class Banco {
     }
 
     /**
+     * 
+     * Metodo que te comprueba si existe unempleado
+     * 
      * @param dniEmpleado recibe un parámetro String (dni) el cual indica el DNI
      * del empleado que se quiere comprobar si existe como tal
      *
