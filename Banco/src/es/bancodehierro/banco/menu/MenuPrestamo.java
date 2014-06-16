@@ -28,14 +28,14 @@ public class MenuPrestamo {
      */
     public static void menuPres(Empleado empleado) {
 
-        String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
+        String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo","Ver movimientos préstamo","Comprobar préstamo", "Atras"};
         int opcionSeleccionada;
         Banco banco = new Banco();
 
         do {
 
             opcionSeleccionada = GestionaMenu.gestionarMenu("Prestamo", opcions, "Insertar opcion:", 1);
-
+            
             switch (opcionSeleccionada) {
                 case 1:
                     try {
@@ -52,8 +52,11 @@ public class MenuPrestamo {
                     banco.eliminarPrestamo(null);
                     break;
                 case 3:
-                    verMovimientosPrestamo();
+                    verMovimientosPrestamo(null);
                     break;
+                case 4:
+                    int numPres = GestionaMenu.llegirSencer("Introduce el código del préstamo: ");
+                    comprobarPrestamo(numPres);
                 default:
 
                     break;
@@ -66,8 +69,9 @@ public class MenuPrestamo {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para ver los movimientos de un préstamo.
      *
+     * @param prest prestec a veure els moviments.
      */
-    public static void verMovimientosPrestamo() {
+    public static void verMovimientosPrestamo(Prestamo prest) {
         int codigoPrestamo;
         boolean existe;
         do {
@@ -78,7 +82,6 @@ public class MenuPrestamo {
             Statement st = Conexion.conectar().createStatement();
             boolean resultat = comprobarPrestamo(codigoPrestamo);
             if (resultat == true) {
-                Prestamo prest = new Prestamo(codigoPrestamo, null, 0, null, null);
                 prest.verMovimientosPrestamo();
             } else if (resultat == false) {
 
@@ -105,6 +108,7 @@ public class MenuPrestamo {
             int existeix = rs.getInt(1);
             if (existeix == 1) {
                 System.out.println("Préstamo encontrado!");
+                
                 flag = false;
             } else {
                 System.out.println("Préstamo no encontrado!");
@@ -117,5 +121,6 @@ public class MenuPrestamo {
         }
         return flag;
     }
+            
 
 }

@@ -13,14 +13,17 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Clase de Prestamo.
- * Toma el control sobre los préstamos y las operaciones sobre ellos.
+ * Clase de Prestamo. Toma el control sobre los préstamos y las operaciones
+ * sobre ellos.
+ *
  * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol i Tomeu
  * Moranta.
  */
 public class Prestamo {
+
     /**
-     * Atributos de la clase préstamo, almacenan información sobre el préstamo en cuestión.
+     * Atributos de la clase préstamo, almacenan información sobre el préstamo
+     * en cuestión.
      */
     private int codigoPrestamo;
     private Double importePrestamo;
@@ -33,11 +36,13 @@ public class Prestamo {
 
     /**
      * Constructor de la clase Préstamo
+     *
      * @param codigoPrestamo Código único que identifica el préstamo.
      * @param importePrestamo Cantidad mensual a pagar.
      * @param duracionMesPrestamo Cuántos meses durará el préstamo.
      * @param dniTrabajador DNI del trabajador que dará de alta el préstamo
-     * @param numeroCcPrestamo Cuenta Corriente en la cual se asociará el préstamo.
+     * @param numeroCcPrestamo Cuenta Corriente en la cual se asociará el
+     * préstamo.
      */
     public Prestamo(int codigoPrestamo, Double importePrestamo, int duracionMesPrestamo, Empleado dniTrabajador, CuentaCorriente numeroCcPrestamo) {
         this.codigoPrestamo = codigoPrestamo;
@@ -81,12 +86,13 @@ public class Prestamo {
     }
 
     /**
-     * Ver Movimientos Préstamo
-     * Busca todos los movimientos de un préstamo.
+     * Ver Movimientos Préstamo Busca todos los movimientos de un préstamo.
+     *
      * @author Jaume Mayol
      */
-    public void verMovimientosPrestamo(){
-       try {
+    public ArrayList<String> verMovimientosPrestamo() {
+        ArrayList<String> resultSet = null;
+        try {
             ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_MP,"
                     + "CODIGO_PRESTAMO_MP,"
                     + "OPERACION_MP"
@@ -94,23 +100,23 @@ public class Prestamo {
                     + "IMPORTE_MP,"
                     + "CONCEPTO_MP "
                     + "FROM MOVIMIENTO_PRESTAMO "
-                    + "WHERE CODIGO_PRESTAMO_MP='"+codigoPrestamo+"'");
-            while(rs.next()){
-                System.out.println(
-                        "Codigo Movimiento: "+rs.getString(1)+
-                        ", Codigo Préstamo: "+rs.getInt(2)+
-                        ", Operacion: "+rs.getString(3)+
-                        ", Fecha: "+rs.getString(4)+
-                        ", Importe: "+rs.getDouble(5)+
-                        ", Concepto: "+rs.getString(6));
+                    + "WHERE CODIGO_PRESTAMO_MP='" + codigoPrestamo + "'");
+            while (rs.next()) {
+                resultSet.add(
+                        "Codigo Movimiento: " + rs.getString(1)
+                        + ", Codigo Préstamo: " + rs.getInt(2)
+                        + ", Operacion: " + rs.getString(3)
+                        + ", Fecha: " + rs.getString(4)
+                        + ", Importe: " + rs.getDouble(5)
+                        + ", Concepto: " + rs.getString(6));
 
             }
         } catch (SQLException ex) {
-                System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
         }
-        
+        return resultSet;
     }
-    
+
     public void setImportePrestamo(Double importePrestamo) {
         this.importePrestamo = importePrestamo;
     }
@@ -121,6 +127,7 @@ public class Prestamo {
 
     /**
      * Añade un movimiento a la lista de movimientos propia del préstamo.
+     *
      * @param mov Parámetre movimiento
      * @return boolean
      * @throws PrestamoException Lanza excepción
@@ -132,27 +139,27 @@ public class Prestamo {
         }
         return false;
     }
-    
+
     /**
- * Buscador de préstamos El método parte del listado Movimiento y selecciona
- * sólo los de tipo Préstamo.
- *
- * @author Jaume Mayol
- * @param listaMovimientos listaMovimientos
- * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
- * @see es.bancodehierro.banco.cc.Movimiento
- */
+     * Buscador de préstamos El método parte del listado Movimiento y selecciona
+     * sólo los de tipo Préstamo.
+     *
+     * @author Jaume Mayol
+     * @param listaMovimientos listaMovimientos
+     * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
+     * @see es.bancodehierro.banco.cc.Movimiento
+     */
     public ArrayList<Movimiento> buscadorPrestamos(ArrayList<Movimiento> listaMovimientos) {
-    ArrayList<Movimiento> prestamos = new ArrayList<>();
-    for (int i = 0; i < listaMovimientos.size(); ++i) {
-        Movimiento aux = listaMovimientos.get(i);
+        ArrayList<Movimiento> prestamos = new ArrayList<>();
+        for (int i = 0; i < listaMovimientos.size(); ++i) {
+            Movimiento aux = listaMovimientos.get(i);
         //Get para conseguir el tipo y lo igualamos a PRESTAMO
-        //PRESTAMO, tipo de dato enumerario importado de la clase Enumeración.
-        if (aux.getTipo() == PRESTAMO) {
-            prestamos.add(aux);
+            //PRESTAMO, tipo de dato enumerario importado de la clase Enumeración.
+            if (aux.getTipo() == PRESTAMO) {
+                prestamos.add(aux);
+            }
         }
-    }
-    return prestamos;
+        return prestamos;
     }
 
     /**
@@ -176,8 +183,8 @@ public class Prestamo {
     }
 
     /**
-     * Eliminar Préstamo Elimina el préstamo por código, si lo encuentra. Si no, lanza
-     * una excepción de préstamo o de SQL.
+     * Eliminar Préstamo Elimina el préstamo por código, si lo encuentra. Si no,
+     * lanza una excepción de préstamo o de SQL.
      *
      * @author Jaume Mayol Hervás
      * @return String
