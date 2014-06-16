@@ -27,7 +27,7 @@ public class MenuCuentaCorriente {
     public static void menuCC() throws SQLException, CuentaCorrienteException {
         CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
-        //Sucursal sucursal=new Sucursal(null, null, 35, 0000, null);
+        Sucursal sucursal=new Sucursal(null, null, 35, 0000, null,null);
         Banco banco=new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
@@ -59,7 +59,7 @@ public class MenuCuentaCorriente {
                 }
                 case 3: {
                     boolean repMenuBanco = true;
-                    Cliente cliente = new Cliente(2, null, null, null, GestionaMenu.llegirCadena("Introduce el dni del cliente: "), null, null, null, null);
+                    Cliente cliente = new Cliente(null, null, null, GestionaMenu.llegirCadena("Introduce el dni del cliente: "), null, null, null, null);
                     menuCC.metodoBanco(repMenuBanco, cC,cliente,sucursal,banco);
                     break;
                 }
@@ -237,15 +237,6 @@ public class MenuCuentaCorriente {
      */
     public void metodoMovimiento(boolean repMenuMovimiento,CuentaCorriente cC) throws SQLException{
         for (; repMenuMovimiento;) {
-                        String[] opcionesMov = {"Movimientos",                            
-                            "Volver atrás"};
-
-                        int menuMov = mostrarMenu(opcionesMov);
-                        switch (menuMov) {
-                            case 0: {
-
-                                boolean repMenuMovimientoCorrecto = true;
-                                for (; repMenuMovimientoCorrecto;) {
                                     String[] opcionesMovC = {"Mostrar todos los Movimientos",
                                         "Mostrar Movimientos segun Tipo",
                                         "Volver atrás"};
@@ -262,81 +253,25 @@ public class MenuCuentaCorriente {
                                         }
                                         case 1: {
                                             //Retrocede al menu anterior
-                                            repMenuMovimientoCorrecto = false;
-                                            menuMov = 2;
+                                            repMenuMovimiento = false;
+                                           
                                             break;
                                         }
 
                                     }
                                     if (menuMovC != 1) {
 
-                                        repMenuMovimientoCorrecto = algunaCosaMas();
-                                        menuMov = 1;
+                                        repMenuMovimiento = algunaCosaMas();
+                                        
                                     }
-                                }
-                                break;
+                                break;   
+        }
+                             
 
-                            }
-                            case 1: {
-
-                                boolean repMenuMovimientoIncidencia = true;
-                                for (; repMenuMovimientoIncidencia;) {
-                                    String[] opcionesMovI = {"Mostrar todos las Incidencias",
-                                        "Mostrar Incidencias segun Tipo",
-                                        "Volver atrás"};
-
-                                    int menuMovI = mostrarMenu(opcionesMovI);
-                                    switch (menuMovI) {
-                                        case 0: {
-                                            for (Movimiento mov : cC.mostrarMovimiento(true)) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                            break;
-                                        }
-                                        case 1: {
-
-                                        try {
-                                            for (Movimiento mov : cC.mostrarMovimiento(true, seleccionTipo())) {
-
-                                                System.out.println(mov);
-
-                                            }
-                                        } catch (CuentaCorrienteException ex) {
-                                        System.err.println(ex.getMessage()); }
-                                            break;
-                                        }
-                                        case 2: {
-                                            //Retrocede al menu anterior
-                                            repMenuMovimientoIncidencia = false;
-                                            menuMov = 2;
-                                            break;
-                                        }
-
-                                    }
-                                    if (menuMovI != 2) {
-
-                                        repMenuMovimientoIncidencia = algunaCosaMas();
-                                        menuMov = 2;
-                                    }
-                                }
-                                break;
-
-                            }
-                            case 2: {
-                                //Retrocede al menu anterior
-                                repMenuMovimiento = false;
-                                break;
-                            }
-
-                        }
-                        if (menuMov != 2) {
-
-                            repMenuMovimiento = algunaCosaMas();
-
-                        }
-                    }
+                          
+                            
+                   
+                      
     }
 
 public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente cliente,Sucursal sucursal,Banco banco) throws SQLException, CuentaCorrienteException{
