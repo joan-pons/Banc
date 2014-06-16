@@ -15,6 +15,8 @@ import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.persona.Persona;
 import es.bancodehierro.banco.prestamo.Prestamo;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import es.bancodehierro.banco.tarjeta.Credito;
+import es.bancodehierro.banco.tarjeta.Debito;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -323,5 +325,29 @@ public class Banco {
         }
 
     }
+
+    public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite, String tipo) {
+        if (tipo.toUpperCase() == "DEBITO") {
+            Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
+        } else {
+            Credito c = new Credito(codigoCliente, cuentaCorriente, sucursal, limite);
+        }
+        return null;
+    }
+
+    public Boolean eliminarTarjeta(String codigoTarjeta) {
+        try {
+            Statement st = Conexion.conectar().createStatement();
+            String query = "DELETE FROM tarjeta WHERE codigoTarjeta = " + codigoTarjeta;
+            st.executeUpdate(query);
+            st.close();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println("Error en la conexion");
+            return false;
+        }
+    }
+    
+    
 
 }

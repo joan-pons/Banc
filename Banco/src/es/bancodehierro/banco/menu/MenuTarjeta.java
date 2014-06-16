@@ -5,6 +5,7 @@ package es.bancodehierro.banco.menu;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.tarjeta.Credito;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.tarjeta.Debito;
@@ -21,12 +22,13 @@ import java.util.logging.Logger;
  */
 public class MenuTarjeta {
 
-    public void altaTarjeta() {
+    public static void altaTarjeta() {
         //Obtener el cliente.
-        String codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
+        String codigoCliente = null;
         int clienteEncontrado = 0;
         while (clienteEncontrado == 0) {
             try {
+                codigoCliente = GestionaMenu.llegirCadena("Introdueix el codi del client.");
                 Statement st = Conexion.conectar().createStatement();
                 String selectCliente = "select count(*) from Cliente where DNI_CLIENTE_TARJETA='" + codigoCliente + "'";
                 ResultSet rs = st.executeQuery(selectCliente);
@@ -80,7 +82,8 @@ public class MenuTarjeta {
             } while (limite < 0);
         }
         //llamar al metodo de GestionTarjetas
-        //GestionTarjetas.altaTarjeta(codigoCliente,codigoSucursal,codigoCuenta,tipo.toUpperCase(),limite);
+        Banco bancoTarjetas = new Banco();
+        bancoTarjetas.altaTarjeta(codigoCliente, codigoCuenta, codigoSucursal, limite, tipo.toUpperCase());
 
     }
 
@@ -88,7 +91,7 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para eliminar una tarjeta de la base de datos.
      */
-    public void eliminarTarjeta() {
+    public static void eliminarTarjeta() {
         String codigoTarjeta;
         boolean existe;
         do {
@@ -123,22 +126,23 @@ public class MenuTarjeta {
                     System.out.println("Codigo tarjeta: " + rs.getString(1) + ", Codigo Movimiento: " + rs.getInt(2) + ", Operacion: " + rs.getString(3) + ", Fecha: " + rs.getString(4) + ", Importe: " + rs.getDouble(5) + ", Concepto: " + rs.getString(6));
                 }
                 rs.close();
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(MenuTarjeta.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (GestionaMenu.llegirCadena("Introduce la ID de la tarjeta(SI/NO: ").toUpperCase()=="SI"){
-            //eliminarTarjeta(codigoTarjeta);
+        if (GestionaMenu.llegirCadena("¿Quieres borrar la tarjeta?(SI/NO: ").toUpperCase() == "SI") {
+           Banco bancoTarjetas = new Banco();
+           bancoTarjetas.eliminarTarjeta(codigoTarjeta);
         }
-        
+
     }
 
     /**
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para pagar con las tarjetas.
      */
-    public void pagar() {
+    public static void pagar() {
         String codigoTarjeta;
         boolean existe;
 
@@ -214,7 +218,7 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilitzaremos en el
      * metodo para ingresar en tarjetas de debito.
      */
-    public void ingresarDebito() {
+    public static void ingresarDebito() {
         String codigoTarjeta;
         boolean existe;
         do {
@@ -231,7 +235,7 @@ public class MenuTarjeta {
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para ver los movimientos de las tarjetas.
      */
-    public void verMovimientos() {
+    public static void verMovimientos() {
         String codigoTarjeta;
         boolean existe;
         do {
@@ -271,7 +275,7 @@ public class MenuTarjeta {
      * @param codigoTarjeta El codigo de la tarjeta.
      * @return Devuelve un boolean (false si la encuentra o true si no).
      */
-    public Credito devolverTarjetaCredito(String codigoTarjeta) {
+    public static Credito devolverTarjetaCredito(String codigoTarjeta) {
         boolean existe;
         do {
             if (codigoTarjeta == null) {
@@ -287,7 +291,7 @@ public class MenuTarjeta {
         return tarjetaCredito;
     }
 
-    public Debito devolverTarjetaDebito(String codigoTarjeta) {
+    public static Debito devolverTarjetaDebito(String codigoTarjeta) {
         boolean existe;
         do {
             if (codigoTarjeta == null) {
@@ -303,7 +307,7 @@ public class MenuTarjeta {
         return tarjetaDebito;
     }
 
-    public boolean comprobarTarjeta(String codigoTarjeta) {
+    public static boolean comprobarTarjeta(String codigoTarjeta) {
         boolean flag = true;
         try {
             Statement st = Conexion.conectar().createStatement();
@@ -326,7 +330,7 @@ public class MenuTarjeta {
         return flag;
     }
 
-    public void ejecutarMenu() {
+    public static void ejecutarMenu() {
         boolean flag = true;
         do {
             System.out.println("Opcion 1: Dar de alta una tarjeta.");
@@ -334,7 +338,8 @@ public class MenuTarjeta {
             System.out.println("Opcion 3: Realizar un pago.");
             System.out.println("Opcion 4: Ingresar (sólo débito).");
             System.out.println("Opcion 5: Ver movimientos tarjeta.");
-            System.out.println("Opcion 6: Salir.");
+            System.out.println("Opcion 6: Ver tarjeta.");
+            System.out.println("Opcion 7: Salir.");
             int opcion = GestionaMenu.llegirSencer("Introduce la opción: ");
             switch (opcion) {
                 case 1: {
@@ -358,6 +363,15 @@ public class MenuTarjeta {
                     break;
                 }
                 case 6: {
+                    String tipoTarjeta = GestionaMenu.llegirCadena("¿Qué tipo de tarjeta? (CREDITO/DEBITO): ");
+                    if (tipoTarjeta.toUpperCase()=="CREDITO"){
+                        devolverTarjetaCredito(null);
+                    }
+                    else {
+                        devolverTarjetaDebito(null);
+                    }
+                }
+                case 7: {
                     flag = false;
                     break;
                 }
