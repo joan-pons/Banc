@@ -15,13 +15,15 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Classe de Prestamo.
- *
+ * Clase de Prestamo.
+ * Toma el control sobre los préstamos y las operaciones sobre ellos.
  * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol i Tomeu
  * Moranta.
  */
 public class Prestamo {
-
+    /**
+     * Atributos de la clase préstamo, almacenan información sobre el préstamo en cuestión.
+     */
     private int codigoPrestamo;
     private Double importePrestamo;
     private int duracionMesPrestamo;
@@ -31,18 +33,19 @@ public class Prestamo {
     private CuentaCorriente numeroCcPrestamo;
     private ArrayList<Movimiento> listaMovimientos;
 
-    //Els he afegit, cal discutir-ho. Veure mètodes cuotaMensual y
-    //Cálculo total a Pagar (Jaume)
-    private double tasaInteresAnual;
-    private int nombreAños;
-
+    /**
+     * Constructor de la clase Préstamo
+     * @param codigoPrestamo Código único que identifica el préstamo.
+     * @param importePrestamo Cantidad mensual a pagar.
+     * @param duracionMesPrestamo Cuántos meses durará el préstamo.
+     * @param dniTrabajador DNI del trabajador que dará de alta el préstamo
+     * @param numeroCcPrestamo Cuenta Corriente en la cual se asociará el préstamo.
+     */
     public Prestamo(int codigoPrestamo, Double importePrestamo, int duracionMesPrestamo, Empleado dniTrabajador, CuentaCorriente numeroCcPrestamo) {
         this.codigoPrestamo = codigoPrestamo;
         this.importePrestamo = importePrestamo;
         this.duracionMesPrestamo = duracionMesPrestamo;
         this.dniTrabajador = dniTrabajador;
-        //this.fechaFirmaPrestamo = GestionaMenu.setFechaNacimiento(fechaFirmaPrestamo);
-        //this.codigoSucTarjeta = codigoSucTarjeta;
         this.numeroCcPrestamo = numeroCcPrestamo;
         this.listaMovimientos = new ArrayList<>();
     }
@@ -79,17 +82,9 @@ public class Prestamo {
         return listaMovimientos;
     }
 
-    public double getTasaInteresAnual() {
-        return tasaInteresAnual;
-    }
-
-    public int getNombreAños() {
-        return nombreAños;
-    }
-
     /**
      * Buscador de préstamos El método parte del listado Movimiento y selecciona
-     * sólo los de tipo Préstamo. Se puede reaprovechar para otros grupos!
+     * sólo los de tipo Préstamo.
      *
      * @author Jaume Mayol
      * @param listaMovimientos
@@ -154,6 +149,7 @@ public class Prestamo {
 //        //eliminarPrestamo();
 //        return pagoFinal;
 //    }
+    
     public void setImportePrestamo(Double importePrestamo) {
         this.importePrestamo = importePrestamo;
     }
@@ -162,26 +158,25 @@ public class Prestamo {
         this.fechaFirmaPrestamo = fechaFirmaPrestamo;
     }
 
-    public void setTasaInteresAnual(double tasaInteresAnual) {
-        this.tasaInteresAnual = tasaInteresAnual;
-    }
-
+    /**
+     * Añade un movimiento a la lista de movimientos propia del préstamo.
+     * @param mov
+     * @return boolean
+     * @throws PrestamoException 
+     */
     public boolean añadirMovimiento(Movimiento mov) throws PrestamoException {
-
         if (mov != null) {
             this.listaMovimientos.add(mov);
             return true;
         }
-
         return false;
-
     }
 
     /**
      * Mètodo de inserción de prestamo.
      *
      * @author Rafel Sastre.
-     * @return
+     * @return String
      */
     public String insertarPrestamo() {
         return "INSERT INTO PRESTAMO (CODIGO_PRESTAMO, IMPORTE_PRESTAMO, DURACION_MES_PRESTAMO, DNI_TRABAJADOR, FECHA_FIRMA_PRESTAMO, CODIGO_SUC_TARJETA, NUMERO_CC_PRESTAMO) VALUES (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", '" + getDniTrabajador() + "', " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", '" + getNumeroCcPrestamo() + "')";
@@ -191,18 +186,18 @@ public class Prestamo {
      * Método de modificación de préstamo (por código)
      *
      * @author Pau Riera.
-     * @return
+     * @return String
      */
     public String updatePrestamo() {
         return "UPDATE Prestamo SET (" + getCodigoPrestamo() + ", " + getImportePrestamo() + ", " + getDuracionMesPrestamo() + ", " + getDniTrabajador() + ", " + getFechaFirmaPrestamo() + ", " + getCodigoSucTarjeta() + ", " + getNumeroCcPrestamo() + ") WHERE codiprestamo = " + getCodigoPrestamo();
     }
 
     /**
-     * Eliminar Préstamo Elimina el préstec per codi, si el troba. Si no, llança
-     * excepció de préstec o excepció SQL.
+     * Eliminar Préstamo Elimina el préstamo por código, si lo encuentra. Si no, lanza
+     * una excepción de préstamo o de SQL.
      *
      * @author Jaume Mayol Hervás
-     * @return
+     * @return String
      */
     public String eliminarPrestamo() {
         return "DELETE FROM Prestamo WHERE Codigo_Prestamo=" + getCodigoPrestamo();
