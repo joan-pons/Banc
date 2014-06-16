@@ -8,12 +8,12 @@ import java.text.SimpleDateFormat;
 
 public class Tarjeta {
 
-    public String codigoTarjeta;
-    public String codigoTitular;
-    public String codigoCuentaCorriente;
-    public int codigoSucursal;
-    public String tipo;
-    public String fechaTarjeta;
+    protected String codigoTarjeta;
+    protected String codigoTitular;
+    protected String codigoCuentaCorriente;
+    protected int codigoSucursal;
+    protected String tipo;
+    protected String fechaTarjeta;
 /**
  * Constructor para crear un objeto de la clase Tarjeta
  * @param codigoTarjeta 
