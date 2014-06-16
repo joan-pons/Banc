@@ -19,11 +19,11 @@ public class ControlCC {
      * @return Un string con el contenido del IBAN.
      */
     public static String controlIBAN(){
-        String iban = GestionaMenu.llegirCadena("Introduce un IBAN: ");
+        String iban = GestionaMenu.llegirCadena("Introduce un IBAN (Dos digitos): ");
         boolean op = true;
         while(op){
             if (iban.length() != 2)
-                iban = GestionaMenu.llegirCadena("Introduce un IBAN: ");
+                iban = GestionaMenu.llegirCadena("Introduce un IBAN (Dos digitos): ");
             else
                 op = false;
         }
@@ -35,11 +35,11 @@ public class ControlCC {
      * @return Un string con el contenido de la oficina.
      */
     public static String controlOficina(){
-        String oficina = GestionaMenu.llegirCadena("Introduce una Oficina: ");
+        String oficina = GestionaMenu.llegirCadena("Introduce una Oficina (Cuatro digitos): ");
         boolean op = true;
         while(op){
             if (oficina.length() != 4)
-                oficina = GestionaMenu.llegirCadena("Introduce una Oficina: ");
+                oficina = GestionaMenu.llegirCadena("Introduce una Oficina (Cuatro digitos): ");
             else
                 op = false;
         }
@@ -51,11 +51,11 @@ public class ControlCC {
      * @return Un string con el contenido del dc.
      */
     public static String controlDc(){
-        String dc = GestionaMenu.llegirCadena("Introduce un Dc: ");
+        String dc = GestionaMenu.llegirCadena("Introduce un Dc (Dos digitos): ");
         boolean op = true;
         while(op){
             if (dc.length() != 2)
-                dc = GestionaMenu.llegirCadena("Introduce un Dc: ");
+                dc = GestionaMenu.llegirCadena("Introduce un Dc (Dos digitos): ");
             else
                 op = false;
         }
@@ -67,11 +67,11 @@ public class ControlCC {
      * @return Un string con el contenido del cc de la ccuenta corriente.
      */
     public static String controlCC(){
-        String cc = GestionaMenu.llegirCadena("Introduce un Numero de CC: ");
+        String cc = GestionaMenu.llegirCadena("Introduce un Numero de CC (Diez digitos): ");
         boolean op = true;
         while(op){
             if (cc.length() != 10)
-                cc = GestionaMenu.llegirCadena("Introduce un Numero de CC: ");
+                cc = GestionaMenu.llegirCadena("Introduce un Numero de CC (Diez digitos): ");
             else
                 op = false;
         }

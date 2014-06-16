@@ -96,7 +96,7 @@ public class Prestamo {
             ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_MP,"
                     + "CODIGO_PRESTAMO_MP,"
                     + "OPERACION_MP"
-                    + "to_char(FECHA_MP),"
+                    + "FECHA_MP,"
                     + "IMPORTE_MP,"
                     + "CONCEPTO_MP "
                     + "FROM MOVIMIENTO_PRESTAMO "
