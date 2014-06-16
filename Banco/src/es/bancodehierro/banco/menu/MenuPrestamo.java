@@ -4,6 +4,7 @@ import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Empleado;
+import java.sql.SQLException;
 
 /**
  * SUB MENU DEL APARTADO PRESTAMO. Se muestran las opciones de este sub-menu y
@@ -18,6 +19,7 @@ public class MenuPrestamo {
     /**
      * Opcion del menu
      *
+     * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol.
      * @param empleado Se pasa el objeto del empleado que hara las opciones.
      */
     public static void menuPres(Empleado empleado) {
@@ -38,6 +40,8 @@ public class MenuPrestamo {
                         System.err.println("El client no existeix.");
                     } catch (CuentaCorrienteException ex) {
                         System.err.println("La conta corrent no existeix.");
+                    } catch (SQLException ex) {
+                        System.err.println("Error de conexion.");
                     }
                     break;
                 case 2:
