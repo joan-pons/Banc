@@ -5,6 +5,7 @@
  */
 package es.bancodehierro.banco.central;
 
+import es.bancodehierro.banco.cc.ControlCC;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.enumeraciones.EnumCargo;
@@ -44,8 +45,8 @@ public class Banco {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-   public boolean agregarCuentaCorriente(Sucursal sucursal) throws SQLException{
-       CuentaCorriente cc= new CuentaCorriente(GestionaMenu.llegirCadena("Introduce un IBAN: "), GestionaMenu.llegirCadena("Introduce una Oficina: "), GestionaMenu.llegirCadena("Introduce un DC: "), GestionaMenu.llegirCadena("Introduce un Numero de Cuenta: "), 0);
+   public boolean agregarCuentaCorriente(Sucursal sucursal) throws SQLException, ClienteException{
+       CuentaCorriente cc= new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
         String function="{? = call INSERCIO_CCB(?,?,?)}";
@@ -61,6 +62,7 @@ public class Banco {
             
             //ResultSet rs = cS.executeQuery();
             cS.executeQuery();
+            cc.agregarTitular(sucursal);
            cS.close();
            st.close();
             
@@ -82,14 +84,20 @@ public class Banco {
 
    /**
     * Elimina la cuenta corriente que se le pasa por parámetro.
-    * @param cc La cuenta corriente que se desea eliminar.
     * @param sucursal La surcursal a la que pertenece la cuenta corriente.
     * @return Un boolean con el resultado de la sentencia.
     * @throws SQLException En el caso que haya fallado alguna sentencia a la
     * base de datos.
     */
-    public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws SQLException {
-       
+    public boolean eliminarCuentaCorriente(Sucursal sucursal) throws SQLException, ClienteException {
+       String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente titular = null;
+        if (Banco.comprobarCliente(dni)) {
+            titular = new Cliente(null, null, null, dni, null, null, null, null);
+        }
         /*Statement sel = (Statement) Conexion.conectar();
 
         ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
@@ -104,12 +112,31 @@ public class Banco {
         } else {
             throw new CuentaCorrienteException();
         }*/
-        
-        String function="{? = call ESBORRAR_CCB(?)}";
+         CuentaCorriente cc= new CuentaCorriente(ControlCC.controlIBAN(), ControlCC.controlOficina(), ControlCC.controlDc(), ControlCC.controlCC(), 0);
+       
+         String function="{? = call esborrar_client_CCB(?,?,?,?)}";
         //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
        
         //if (comp.next()) {
             CallableStatement cS = Conexion.conectar().prepareCall(function);
+            cS.registerOutParameter(1, java.sql.Types.INTEGER);
+            cS.setString(2, cc.muestraCC());
+            cS.setString(3, dni);
+            cS.setInt(4, sucursal.getCodi());
+            cS.setInt(5, GestionaMenu.llegirSencer("Posicion titular: "));
+            
+            
+            
+            //ResultSet rs = cS.executeQuery();
+            cS.executeQuery();
+           
+         
+         
+         function="{? = call ESBORRAR_CCB(?)}";
+        //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
+       
+        //if (comp.next()) {
+            cS = Conexion.conectar().prepareCall(function);
             cS.registerOutParameter(1, java.sql.Types.INTEGER);
             cS.setString(2, cc.muestraCC());
             
@@ -757,6 +784,15 @@ public class Banco {
 
     }
 
+    /**
+     * Metodo para insertar una tarjeta en la base de datos.
+     * @param codigoCliente DNI del cliente.
+     * @param cuentaCorriente Codigo de cuenta corriente.
+     * @param sucursal Codigo de sucursal conjunto a la cuenta corriente.
+     * @param limite Limite (€) de la tarjeta.
+     * @param tipo Si es débito o crédito.
+     * @return 
+     */
     public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite, String tipo) {
         if (tipo.toUpperCase() == "DEBITO") {
             Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
@@ -766,6 +802,11 @@ public class Banco {
         return null;
     }
 
+    /**
+     * Método para eliminar una tarjeta de la base de datos.
+     * @param codigoTarjeta Código de la tarjeta.
+     * @return 
+     */
     public Boolean eliminarTarjeta(String codigoTarjeta) {
         try {
             Statement st = Conexion.conectar().createStatement();

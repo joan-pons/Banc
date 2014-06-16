@@ -5,7 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 
-
+/**
+ * Clase para crear una Tarjeta (superclase).
+ * @author antonio
+ */
 public class Tarjeta {
 
     protected String codigoTarjeta;

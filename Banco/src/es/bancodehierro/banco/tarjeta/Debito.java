@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 /**
  * 
- *@author bernadi,marc,cristian,alejandro
+ *@author Grupo Tarjetas.
  * Clase Debito, subclase de Tarjeta
  */
 public class Debito extends Tarjeta {
