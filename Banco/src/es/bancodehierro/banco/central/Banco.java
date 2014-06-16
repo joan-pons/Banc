@@ -784,6 +784,15 @@ public class Banco {
 
     }
 
+    /**
+     * Metodo para insertar una tarjeta en la base de datos.
+     * @param codigoCliente DNI del cliente.
+     * @param cuentaCorriente Codigo de cuenta corriente.
+     * @param sucursal Codigo de sucursal conjunto a la cuenta corriente.
+     * @param limite Limite (€) de la tarjeta.
+     * @param tipo Si es débito o crédito.
+     * @return 
+     */
     public Boolean altaTarjeta(String codigoCliente, String cuentaCorriente, int sucursal, Double limite, String tipo) {
         if (tipo.toUpperCase() == "DEBITO") {
             Debito d = new Debito(codigoCliente, cuentaCorriente, sucursal);
@@ -793,6 +802,11 @@ public class Banco {
         return null;
     }
 
+    /**
+     * Método para eliminar una tarjeta de la base de datos.
+     * @param codigoTarjeta Código de la tarjeta.
+     * @return 
+     */
     public Boolean eliminarTarjeta(String codigoTarjeta) {
         try {
             Statement st = Conexion.conectar().createStatement();
