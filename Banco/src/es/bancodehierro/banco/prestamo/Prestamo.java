@@ -3,6 +3,7 @@ package es.bancodehierro.banco.prestamo;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.conexion.Conexion;
+import static es.bancodehierro.banco.enumeraciones.EnumMovimiento.PRESTAMO;
 import es.bancodehierro.banco.excepciones.PrestamoException;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
@@ -79,7 +80,10 @@ public class Prestamo {
         return listaMovimientos;
     }
 
-    //Ver Movimientos Préstamo
+    /**
+     * Ver Movimientos Préstamo
+     * @Jaume Mayol
+     */
     public void verMovimientosPrestamo(){
        try {
             ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_MP,"
@@ -126,6 +130,28 @@ public class Prestamo {
             return true;
         }
         return false;
+    }
+    
+    /**
+ * Buscador de préstamos El método parte del listado Movimiento y selecciona
+ * sólo los de tipo Préstamo.
+ *
+ * @author Jaume Mayol
+ * @param listaMovimientos
+ * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
+ * @see es.bancodehierro.banco.cc.Movimiento
+ */
+    public ArrayList<Movimiento> buscadorPrestamos(ArrayList<Movimiento> listaMovimientos) {
+    ArrayList<Movimiento> prestamos = new ArrayList<>();
+    for (int i = 0; i < listaMovimientos.size(); ++i) {
+        Movimiento aux = listaMovimientos.get(i);
+        //Get para conseguir el tipo y lo igualamos a PRESTAMO
+        //PRESTAMO, tipo de dato enumerario importado de la clase Enumeración.
+        if (aux.getTipo() == PRESTAMO) {
+            prestamos.add(aux);
+        }
+    }
+    return prestamos;
     }
 
     /**
