@@ -781,4 +781,52 @@ public class CuentaCorriente {
         }
 
     }
+    
+    public String ControlIBAN(){
+        String iban = null;
+        boolean op = true;
+        while(op){
+            if (iban.length() != 4)
+                iban = GestionaMenu.llegirCadena("Introduce un IBAN: ");
+            else
+                op = false;
+        }
+        return iban;
+    }
+    
+    public String ControlOficina(){
+        String oficina = null;
+        boolean op = true;
+        while(op){
+            if (oficina.length() != 4)
+                oficina = GestionaMenu.llegirCadena("Introduce una Oficina: ");
+            else
+                op = false;
+        }
+        return oficina;
+    }
+    
+    public String ControlDc(){
+        String dc = null;
+        boolean op = true;
+        while(op){
+            if (dc.length() != 2)
+                dc = GestionaMenu.llegirCadena("Introduce un Dc: ");
+            else
+                op = false;
+        }
+        return dc;
+    }
+    
+    public String ControlCC(){
+        String cc = null;
+        boolean op = true;
+        while(op){
+            if (cc.length() != 10)
+                cc = GestionaMenu.llegirCadena("Introduce un Numero de CC: ");
+            else
+                op = false;
+        }
+        return cc;
+    }
 }
