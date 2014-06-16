@@ -3,14 +3,11 @@ package es.bancodehierro.banco.prestamo;
 import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.cc.Movimiento;
 import es.bancodehierro.banco.conexion.Conexion;
-import static es.bancodehierro.banco.enumeraciones.EnumMovimiento.PRESTAMO;
 import es.bancodehierro.banco.excepciones.PrestamoException;
 import es.bancodehierro.banco.persona.Empleado;
 import es.bancodehierro.banco.sucursal.Sucursal;
-import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
