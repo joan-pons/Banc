@@ -1,10 +1,14 @@
 package es.bancodehierro.banco.menu;
 
 import es.bancodehierro.banco.central.Banco;
+import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
 import es.bancodehierro.banco.persona.Empleado;
+import es.bancodehierro.banco.prestamo.Prestamo;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * SUB MENU DEL APARTADO PRESTAMO. Se muestran las opciones de este sub-menu y
@@ -22,7 +26,7 @@ public class MenuPrestamo {
      * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol.
      * @param empleado Se pasa el objeto del empleado que hará las opciones.
      */
-    public static void menuPres(Empleado empleado) {
+    public static void menuPres(Empleado empleado, Prestamo presta) {
 
         String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
         int opcionSeleccionada;
@@ -45,13 +49,76 @@ public class MenuPrestamo {
                     }
                     break;
                 case 2:
-                    banco.eliminarPrestamo(null);
+                    banco.eliminarPrestamo(presta);
+                    break;
+                case 3:
+                    verMovimientosPrestamo();
+                    break;
+                case 4:
+
                     break;
                 default:
+
                     break;
             }
 
         } while (!(opcionSeleccionada == 3));
+    }
+
+    /**
+     * Metodo que sirve para recoger los datos que luego utilizaremos en el
+     * metodo para ver los movimientos de un préstamo.
+     *
+     */
+    public static void verMovimientosPrestamo() {
+        int codigoPrestamo;
+        boolean existe;
+        do {
+            codigoPrestamo = GestionaMenu.llegirSencer("Introduce el código del préstamo: ");
+            existe = comprobarPrestamo(codigoPrestamo);
+        } while (existe);
+        try {
+            Statement st = Conexion.conectar().createStatement();
+            boolean resultat = comprobarPrestamo(codigoPrestamo);
+            if (resultat == true) {
+                Prestamo prest = new Prestamo(codigoPrestamo, null, 0, null, null);
+                prest.verMovimientosPrestamo();
+            } else if (resultat == false) {
+
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+    }
+
+    /**
+     * Muestra por pantalla la informacion sobre un préstamo y si está.
+     *
+     * @param codigoPrestamo Codigo del préstamo
+     * @return Devuelve un objeto de tipo préstamo.
+     *
+     */
+    public static boolean comprobarPrestamo(int codigoPrestamo) {
+        boolean flag = true;
+        try {
+            Statement st = Conexion.conectar().createStatement();
+            String selectPrestamo = "SELECT COUNT(*) FROM PRESTAMO WHERE CODIGO_PRESTAMO = '" + codigoPrestamo + "'";
+            ResultSet rs = st.executeQuery(selectPrestamo);
+            rs.next();
+            int existeix = rs.getInt(1);
+            if (existeix == 1) {
+                System.out.println("Préstamo encontrado!");
+                flag = false;
+            } else {
+                System.out.println("Préstamo no encontrado!");
+                flag = true;
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException ex) {
+            System.out.println("Error: " + ex.getMessage() + ". \n ErrorCode:" + ex.getErrorCode() + ", SQLState:" + ex.getSQLState());
+        }
+        return flag;
     }
 
 }
