@@ -32,7 +32,7 @@ public class MenuCuentaCorriente {
     public static void menuCC() throws SQLException, CuentaCorrienteException, ClienteException {
         //CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
-        Sucursal sucursal = new Sucursal(null, null, 35, 0000, null, null);
+        Sucursal sucursal = new Sucursal(null, null, GestionaMenu.llegirSencer("Introduce un codigo de Sucursal (Cuatro digitos): "), 0000, null, null);
         Banco banco = new Banco();
         boolean repMenuPrincipal = true;
         for (; repMenuPrincipal;) {
