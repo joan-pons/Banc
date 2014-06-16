@@ -45,14 +45,11 @@ public class MenuPrestamo {
                 case 2:
                     banco.eliminarPrestamo(null);
                     break;
-                case 3:
-
-                    break;
                 default:
                     break;
             }
 
-        } while (!(opcionSeleccionada == 4));
+        } while (!(opcionSeleccionada == 3));
     }
 
 }

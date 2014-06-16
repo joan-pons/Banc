@@ -31,12 +31,12 @@ import java.util.logging.Logger;
  */
 public class Banco {
 
-    public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+   public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
         String function="{? = call INSERCIO_CCB(?,?,?)}";
         //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
-
+       
         //if (comp.next()) {
             CallableStatement cS = Conexion.conectar().prepareCall(function);
             cS.registerOutParameter(1, java.sql.Types.INTEGER);
@@ -47,8 +47,8 @@ public class Banco {
             
             //ResultSet rs = cS.executeQuery();
             cS.executeQuery();
-           
-           
+           cS.close();
+           st.close();
             
             // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
             
@@ -70,8 +70,8 @@ public class Banco {
     }
 
     public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
-
-        Statement sel = (Statement) Conexion.conectar();
+       
+        /*Statement sel = (Statement) Conexion.conectar();
 
         ResultSet comp = sel.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "','" + sucursal.getCodi() + "';");
 
@@ -84,11 +84,26 @@ public class Banco {
 
         } else {
             throw new CuentaCorrienteException();
-        }
+        }*/
+        
+        String function="{? = call ESBORRAR_CCB(?)}";
+        //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
+       
+        //if (comp.next()) {
+            CallableStatement cS = Conexion.conectar().prepareCall(function);
+            cS.registerOutParameter(1, java.sql.Types.INTEGER);
+            cS.setString(2, cc.muestraCC());
+            
+            
+            
+            //ResultSet rs = cS.executeQuery();
+            cS.executeQuery();
+            cS.close();
+             return true;
     }
 
     public ArrayList<CuentaCorriente> mostrarCuentaCorriente() throws SQLException {
-        String resultado = null;
+        /*String resultado = null;
         try (Statement st = Conexion.conectar().createStatement()) {
             String consultaTitular = "SELECT * FROM CUENTA_CORRIENTE";
             ResultSet rs = st.executeQuery(consultaTitular);
@@ -101,15 +116,78 @@ public class Banco {
             }
         }
 
-        return null;
+        return null;*/
+        
+         ArrayList<CuentaCorriente> aCC= new ArrayList<>();
+        CuentaCorriente cuentaCorriente = null;
+        //String resultado = null;
+        
+        try (Statement st = Conexion.conectar().createStatement()) {
+           
+            String consultaSaldo = "SELECT * FROM CUENTA_CORRIENTE";
+            ResultSet rs = st.executeQuery(consultaSaldo);
+            for(; rs.next();){
+                 cuentaCorriente = new CuentaCorriente("","","",rs.getString("NUMERO_CC"), rs.getDouble("IMPORTE_CC"));
+                   // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    aCC.add(cuentaCorriente);
+            }
+            //rs.next();
+           /* if (rs.getInt(1) == 0) {
+                throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
+            } else{
+               return rs.getDouble(1);
+            } */
+            //filas = st.executeUpdate(insertTitular);
+        }
+        return aCC;
     }
 
-    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Sucursal sucursal) {
-        return null;
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Sucursal sucursal) throws SQLException {
+        ArrayList<CuentaCorriente> aCC= new ArrayList<>();
+        CuentaCorriente cuentaCorriente = null;
+        //String resultado = null;
+        
+        try (Statement st = Conexion.conectar().createStatement()) {
+           
+            String consultaSaldo = "SELECT * FROM CUENTA_CORRIENTE WHERE CODIGO_SCC='"+sucursal.getCodi()+"'";
+            ResultSet rs = st.executeQuery(consultaSaldo);
+            for(; rs.next();){
+                 cuentaCorriente = new CuentaCorriente("","","",rs.getString("NUMERO_CC"), rs.getDouble("IMPORTE_CC"));
+                   // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    aCC.add(cuentaCorriente);
+            }
+            //rs.next();
+           /* if (rs.getInt(1) == 0) {
+                throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
+            } else{
+               return rs.getDouble(1);
+            } */
+            //filas = st.executeUpdate(insertTitular);
+        }
+        return aCC;
     }
 
-    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Cliente cliente) {
-        return null;
+    public ArrayList<CuentaCorriente> mostrarCuentaCorriente(Cliente cliente) throws SQLException {
+          ArrayList<CuentaCorriente> aCC= new ArrayList<>();
+        CuentaCorriente cuentaCorriente = null;
+         try (Statement st = Conexion.conectar().createStatement()) {
+           
+            String consultaSaldo = "SELECT * FROM CUENTA_CORRIENTE CC INNER JOIN CLIENTE_CUENTA_CORRIENTE CCC ON CC.NUMERO_CC=CCC.NUMERO_CC WHERE CCC.DNI_CLIENTE_CC='"+cliente.getDni()+"'";
+            ResultSet rs = st.executeQuery(consultaSaldo);
+            for(; rs.next();){
+                 cuentaCorriente = new CuentaCorriente("","","",rs.getString("NUMERO_CC"), rs.getDouble("IMPORTE_CC"));
+                   // resultado = resultado + "\n" + cuentaCorriente.toString();
+                    aCC.add(cuentaCorriente);
+            }
+            //rs.next();
+           /* if (rs.getInt(1) == 0) {
+                throw new CuentaCorrienteException("ERROR: NO HAY CUENTA CORRIENTE");
+            } else{
+               return rs.getDouble(1);
+            } */
+            //filas = st.executeUpdate(insertTitular);
+        }
+        return aCC;
     }
 
     //Part del grup de Guillem Arrom, Rotger, Pedro i François
@@ -171,12 +249,16 @@ public class Banco {
 
     //Fi de la part del grup de Guillem Arrom, Rotger, Pedro i François
     /**
-     * MÉTODO INSERTAR PRESTAMO - PENDIENTE DE PASAR A BANCO.
+     * MÉTODO INSERTAR PRESTAMO. Se pide el DNI del cliente para ver si existe y
+     * se consulta las cuentas que tiene ese cliente para despues seleccionar
+     * sobre qual hacer los cambios. Tambien se van pidiento otros parametros
+     * para crear el objeto Prestamo.
      *
      * @author Rafel Sastre, Miquel Vallespir i Pau Riera.
-     * @param presta
+     * @param empleado Se tiene que passar un objeto Empleado para registrar los
+     * cambios.
      */
-    public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException {
+    public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException, SQLException {
         Connection conexion = Conexion.conectar();
         ArrayList<CuentaCorriente> listCC = null;
         Banco b = new Banco();// al meter en banco desaparece
