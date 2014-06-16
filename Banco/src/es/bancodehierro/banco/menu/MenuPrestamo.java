@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 /**
  * SUB MENU DEL APARTADO PRESTAMO. Se muestran las opciones de este sub-menu y
- * te pide que introduxcas la opcion. Segun la opcion elegida ejecuta el metodo
+ * te pide que introduzcas la opcion. Según la opción elegida ejecuta el método
  * de banco encargado de pedir los datos.
  *
  * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol, Tomeu Moranta
@@ -20,7 +20,7 @@ public class MenuPrestamo {
      * Opcion del menu
      *
      * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol.
-     * @param empleado Se pasa el objeto del empleado que hara las opciones.
+     * @param empleado Se pasa el objeto del empleado que hará las opciones.
      */
     public static void menuPres(Empleado empleado) {
 

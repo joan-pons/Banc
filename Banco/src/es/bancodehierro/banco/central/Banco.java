@@ -304,7 +304,7 @@ public class Banco {
     }
 
     /**
-     * PENDIENTE DE PASAR A BANCO. Menú. Método de eliminar Préstamo Elimina el
+     * Menú. Método de eliminar Préstamo Elimina el
      * préstamo. Coge el código del préstamo.
      *
      * @author Jaume Mayol
