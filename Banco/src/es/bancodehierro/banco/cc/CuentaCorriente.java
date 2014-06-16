@@ -246,7 +246,20 @@ public class CuentaCorriente {
         cS.setInt(2, rs.getInt("CODIGO_CLIENTE"));
         cS.setString(3, titular.getDni());
         cS.setInt(4, sucursal.getCodi());
-        cS.setInt(5, GestionaMenu.llegirSencer("Posicion: "));
+
+
+        consulta = "SELECT COUNT(DNI_CLIENTE_CC) FROM CLIENTE_CUENTA_CORRIENTE WHERE NUMERO_CC =  '" + muestraCC() + "'";
+        rs = st.executeQuery(consulta);
+        rs.next();
+        if(rs.getInt(1)==0 ){
+            cS.setInt(5, 1);
+        }else  if(rs.getInt(1)==1 ){
+            cS.setInt(5, 2);
+        }else{
+            throw new ClienteException("Ya hay dos titulares");
+        }
+            
+        
         cS.registerOutParameter(6, java.sql.Types.INTEGER);
 
         //ResultSet rs = cS.executeQuery();
@@ -427,7 +440,7 @@ public class CuentaCorriente {
         rs = st.executeQuery(consultaCountTitular);
         rs.next();
         if (rs.getInt(1) == 0) {
-            throw new CuentaCorrienteException("ERROR");
+            throw new CuentaCorrienteException("ERROR: No hay titulares");
         } else if (rs.getInt(1) == 1) {
             insertTitular = "UPDATE CLIENTE_CUENTA_CORRIENTE SET DNI_CLIENTE_CC='" + nuevo.getDni() + "' WHERE POSICIO=1 AND NUMERO_CC='" + muestraCC() + "' AND CODIGO_SUCURSAL=" + sucursal.getCodi();
 
