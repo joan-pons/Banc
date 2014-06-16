@@ -1,27 +1,27 @@
 package es.bancodehierro.banco.menu;
 
-import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.central.Banco;
-import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.excepciones.ClienteException;
 import es.bancodehierro.banco.excepciones.CuentaCorrienteException;
-import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.persona.Empleado;
-import es.bancodehierro.banco.prestamo.Prestamo;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
+ * SUB MENU DEL APARTADO PRESTAMO. Se muestran las opciones de este sub-menu y
+ * te pide que introduzcas la opcion. Según la opción elegida ejecuta el método
+ * de banco encargado de pedir los datos.
  *
  * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol, Tomeu Moranta
+ *
  */
 public class MenuPrestamo {
 
+    /**
+     * Opcion del menu
+     *
+     * @author Miquel Vallespir, Rafel Sastre, Pau Riera, Jaume Mayol.
+     * @param empleado Se pasa el objeto del empleado que hará las opciones.
+     */
     public static void menuPres(Empleado empleado) {
 
         String[] opcions = {"Insertar Prestamo", "Eliminar Prestamo", "Atras"};
@@ -40,6 +40,8 @@ public class MenuPrestamo {
                         System.err.println("El client no existeix.");
                     } catch (CuentaCorrienteException ex) {
                         System.err.println("La conta corrent no existeix.");
+                    } catch (SQLException ex) {
+                        System.err.println("Error de conexion.");
                     }
                     break;
                 case 2:

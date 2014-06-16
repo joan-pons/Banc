@@ -366,8 +366,7 @@ public class MenuCuentaCorriente {
 
 public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente cliente,Sucursal sucursal,Banco banco) throws SQLException, CuentaCorrienteException{
         for (; repMenuBanco;) {
-                        String[] opcionesTit = {"Agregar Cuenta Corriente",
-                            "Modificar Cuenta Corriente",
+                        String[] opcionesTit = {"Agregar Cuenta Corriente",                           
                             "Eliminar Cuenta Corriente",
                             "Mostrar Cuenta Corriente",
                             "Volver atrás"};
@@ -380,15 +379,11 @@ public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente client
                                 break;
                             }
                             case 1: {
-                                banco.modificarCuentaCorriente();
-                                break;
-                            }
-                            case 2: {
                                 //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
                                 banco.eliminarCuentaCorriente(cC, sucursal);
                                 break;
                             }
-                            case 3: {
+                            case 2: {
                                 
                                  boolean repMenuMovimientoIncidencia = true;
                                 for (; repMenuMovimientoIncidencia;) {
