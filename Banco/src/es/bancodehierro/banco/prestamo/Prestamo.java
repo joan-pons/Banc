@@ -83,7 +83,7 @@ public class Prestamo {
     /**
      * Ver Movimientos Préstamo
      * Busca todos los movimientos de un préstamo.
-     * @Jaume Mayol
+     * @author Jaume Mayol
      */
     public void verMovimientosPrestamo(){
        try {
@@ -121,9 +121,9 @@ public class Prestamo {
 
     /**
      * Añade un movimiento a la lista de movimientos propia del préstamo.
-     * @param mov
+     * @param mov Parámetre movimiento
      * @return boolean
-     * @throws PrestamoException 
+     * @throws PrestamoException Lanza excepción
      */
     public boolean añadirMovimiento(Movimiento mov) throws PrestamoException {
         if (mov != null) {
@@ -138,7 +138,7 @@ public class Prestamo {
  * sólo los de tipo Préstamo.
  *
  * @author Jaume Mayol
- * @param listaMovimientos
+ * @param listaMovimientos listaMovimientos
  * @return el objeto ArrayList de Movimiento con el tipo sólo de préstamo.
  * @see es.bancodehierro.banco.cc.Movimiento
  */
