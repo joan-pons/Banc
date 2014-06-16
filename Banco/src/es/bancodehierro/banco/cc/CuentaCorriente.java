@@ -12,6 +12,8 @@ import es.bancodehierro.banco.menu.GestionaMenu;
 import es.bancodehierro.banco.menu.MenuCuentaCorriente;
 import es.bancodehierro.banco.persona.Cliente;
 import es.bancodehierro.banco.sucursal.Sucursal;
+import es.bancodehierro.banco.central.Banco;
+import es.bancodehierro.banco.excepciones.ClienteException;
 import java.sql.CallableStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -211,8 +213,15 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int agregarTitular(Cliente titular, Sucursal sucursal) throws SQLException {
-
+    public int agregarTitular(Sucursal sucursal) throws SQLException, ClienteException{
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente titular = null;
+        if (Banco.comprobarCliente(dni)){
+            titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
         int filas = '\0';
         /* try (Statement st = Conexion.conectar().createStatement()) {
          String consultaTitular = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE='" + titular.getDni() + "'";
@@ -254,7 +263,7 @@ public class CuentaCorriente {
         CallableStatement cS = Conexion.conectar().prepareCall(procedure);
         // cS.registerOutParameter(1, oracle.jdbc.OracleTypes.CURSOR);
         cS.setString(1, muestraCC());
-        cS.setInt(2, titular.getIdCliente());
+        cS.setInt(2, rs.getInt("CODIGO_CLIENTE"));
         cS.setString(3, titular.getDni());
         cS.setInt(4, sucursal.getCodi());
         cS.setInt(5, GestionaMenu.llegirSencer("Posicion: "));
@@ -279,7 +288,15 @@ public class CuentaCorriente {
      * @throws SQLException En el caso que haya fallado alguna sentencia a la
      * base de datos.
      */
-    public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws SQLException {
+    public int eliminarTitular(Cliente cliente, Sucursal sucursal) throws SQLException, ClienteException {
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+        Statement st = Conexion.conectar().createStatement();
+        String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni +"'";
+        ResultSet rs = st.executeQuery(consulta);
+        Cliente titular = null;
+        if (Banco.comprobarCliente(dni)){
+            titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+        }
         int filas = '\0';
         /*try (Statement st = Conexion.conectar().createStatement()) {
          String consultaTitular = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE='" + cliente.getDni() + "'";
