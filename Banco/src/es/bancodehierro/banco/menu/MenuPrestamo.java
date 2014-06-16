@@ -1,5 +1,6 @@
 package es.bancodehierro.banco.menu;
 
+import es.bancodehierro.banco.cc.CuentaCorriente;
 import es.bancodehierro.banco.central.Banco;
 import es.bancodehierro.banco.conexion.Conexion;
 import es.bancodehierro.banco.excepciones.ClienteException;
@@ -9,6 +10,7 @@ import es.bancodehierro.banco.prestamo.Prestamo;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * SUB MENU DEL APARTADO PRESTAMO. Se muestran las opciones de este sub-menu y
@@ -65,6 +67,37 @@ public class MenuPrestamo {
         } while (!(opcionSeleccionada == 3));
     }
 
+    public Prestamo getPrest(CuentaCorriente cc) throws SQLException{
+         ArrayList<String> resultSet = null;
+        try {
+            ResultSet rs = Conexion.conectar().createStatement().executeQuery("SELECT CODIGO_PRESTAMO,"
+                    + "IMPORTE_PRESTAMO,"
+                    + "DURACION_MES_PRESTAMO"
+                    + "DNI_TRABAJADOR,"
+                    + "FECHA_FIRMA_PRESTAMO,"
+                    + "CODIGO_SUC_TARJETA,"
+                    + "NUMERO_CC_PRESTAMO"
+                    + "FROM PRESTAMO "
+                    + "WHERE NUMERO_CC_PRESTAMO='" + cc.muestraCC() + "'");
+            while (rs.next()) {
+                resultSet.add(
+                        "Código préstamo: " + rs.getString(1)
+                        + ", Importe: " + rs.getInt(2)
+                        + ", Duración: " + rs.getString(3)
+                        + ", DNI: " + rs.getString(4)
+                        + ", Fecha Firma: " + rs.getDouble(5)
+                        + ", Codigo sucursal: " + rs.getString(6)
+                        + ", Número CC: " + rs.getString(7));
+            } 
+           
+    } catch (SQLException ex){
+            System.err.println(ex.getMessage());
+    }
+        
+        
+        return null;
+    }
+    
     /**
      * Metodo que sirve para recoger los datos que luego utilizaremos en el
      * metodo para ver los movimientos de un préstamo.
