@@ -202,7 +202,7 @@ public class MenuCuentaCorriente {
                             }
                             case 1: {
                                 Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
-                                cC.cambiarTitular(cliente, nuevo, sucursal);
+                                cC.cambiarTitular(sucursal);
                                 break;
                             }
                             case 2: {
