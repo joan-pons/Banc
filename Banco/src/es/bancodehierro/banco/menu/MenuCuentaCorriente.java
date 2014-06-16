@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class MenuCuentaCorriente {
 
-    public static void menuCC(){
+    public static void menuCC() {
         //CuentaCorriente cC = new CuentaCorriente(GestionaMenu.llegirCadena("Introduce IBAN: "), GestionaMenu.llegirCadena("Introduce Oficina: "), GestionaMenu.llegirCadena("Introduce DC: "), GestionaMenu.llegirCadena("Introduce Cuenta: "), '\0');
         MenuCuentaCorriente menuCC = new MenuCuentaCorriente();
         Sucursal sucursal = new Sucursal(null, null, GestionaMenu.llegirSencer("Introduce un codigo de Sucursal (Cuatro digitos): "), 0000, null, null);
@@ -69,15 +69,15 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 4: {
-                try {
-                    Principal.menuPrincipal();
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (CuentaCorrienteException ex) {
-                    System.err.println(ex.getMessage());
-                } catch (ClienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        Principal.menuPrincipal();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println(ex.getMessage());
+                    } catch (ClienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
 
@@ -169,23 +169,23 @@ public class MenuCuentaCorriente {
             int menuImp = mostrarMenu(opcionesImp);
             switch (menuImp) {
                 case 0: {
-                try {
-                    //cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
-                    cC.modificarSaldo(sucursal);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    try {
+                        //cC.setImporte(GestionaMenu.llegirDouble("Introduce importe:positivo para sumar, negativo para restar"));
+                        System.out.println("Cambios realizados: " + cC.modificarSaldo(sucursal));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 }
                 case 1: {
-                try {
-                    //System.out.println(cC.getImporte());
-                    System.out.println(cC.mostrarSaldo(sucursal) + "€");
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (CuentaCorrienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        //System.out.println(cC.getImporte());
+                        System.out.println(cC.mostrarSaldo(sucursal) + "€");
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
                 case 2: {
@@ -224,7 +224,7 @@ public class MenuCuentaCorriente {
                     //Cliente cliente2 = new Cliente(0, null, null, null, null, null, null, null, null);
                     //Cliente clienteOperacion= cliente;
                     try {
-                        cC.agregarTitular(sucursal);
+                        System.out.println("Filas insertadas: "+cC.agregarTitular(sucursal));
                     } catch (SQLException ex) {
                         Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (ClienteException ex) {
@@ -233,36 +233,36 @@ public class MenuCuentaCorriente {
                     break;
                 }
                 case 1: {
-                try {
-                    // Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
-                    cC.cambiarTitular(sucursal);
-                } catch (CuentaCorrienteException ex) {
-                    System.err.println(ex.getMessage());
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        // Cliente nuevo=new Cliente(null, null, null, "12345789O", null, null, null, null);
+                        System.out.println("Filas actualizadas: "+cC.cambiarTitular(sucursal));
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println(ex.getMessage());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
                 case 2: {
-                try {
-                    cC.eliminarTitular(sucursal);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        System.out.println("Filas eliminadas: "+cC.eliminarTitular(sucursal));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
                 case 3: {
-                try {
-                    cC.intercambiarTitular(sucursal);
-                } catch (CuentaCorrienteException ex) {
-                    System.err.println(ex.getMessage());
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    try {
+                       System.out.println("Filas actualizadas: "+cC.intercambiarTitular(sucursal));
+                    } catch (CuentaCorrienteException ex) {
+                        System.err.println(ex.getMessage());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     break;
                 }
                 case 4: {
@@ -298,15 +298,15 @@ public class MenuCuentaCorriente {
             int menuMovC = mostrarMenu(opcionesMovC);
             switch (menuMovC) {
                 case 0: {
-                try {
-                    for (Movimiento mov : cC.mostrarMovimiento()) {
+                    try {
+                        for (Movimiento mov : cC.mostrarMovimiento()) {
 
-                        System.out.println(mov);
+                            System.out.println(mov);
 
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                }
                     break;
                 }
                 case 1: {
@@ -342,25 +342,25 @@ public class MenuCuentaCorriente {
             int menuTit = mostrarMenu(opcionesTit);
             switch (menuTit) {
                 case 0: {
-                try {
-                    // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                    banco.agregarCuentaCorriente(sucursal);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                        System.out.println("CC insertada: "+banco.agregarCuentaCorriente(sucursal));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
                 case 1: {
-                try {
-                    //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                    banco.eliminarCuentaCorriente(sucursal);
-                } catch (SQLException ex) {
-                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClienteException ex) {
-                    System.err.println(ex.getMessage());
-                }
+                    try {
+                        //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
+                        System.out.println("CC eliminada: "+banco.eliminarCuentaCorriente(sucursal));
+                    } catch (SQLException ex) {
+                        Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClienteException ex) {
+                        System.err.println(ex.getMessage());
+                    }
                     break;
                 }
                 case 2: {
@@ -375,49 +375,49 @@ public class MenuCuentaCorriente {
                         int menuMovC = mostrarMenu(opcionesMovC);
                         switch (menuMovC) {
                             case 0: {
-                            try {
-                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente()) {
-                                    System.out.println(pCC);
+                                try {
+                                    for (CuentaCorriente pCC : banco.mostrarCuentaCorriente()) {
+                                        System.out.println(pCC);
+                                    }
+
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                                 break;
-                            } catch (SQLException ex) {
-                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-
                             }
                             case 1: {
-                            try {
-                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(sucursal)) {
-                                    System.out.println(pCC);
+                                try {
+                                    for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(sucursal)) {
+                                        System.out.println(pCC);
+                                    }
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            } catch (SQLException ex) {
-                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
                                 break;
                             }
                             case 2: {
-                            try {
-                                String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
-                                Statement st = Conexion.conectar().createStatement();
-                                String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
-                                ResultSet rs = st.executeQuery(consulta);
-                                rs.next();
-                                Cliente titular = null;
                                 try {
-                                    if (Banco.comprobarCliente(dni)) {
-                                        titular = new Cliente(null, null, null, dni, null, null, null, null);
+                                    String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+                                    Statement st = Conexion.conectar().createStatement();
+                                    String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
+                                    ResultSet rs = st.executeQuery(consulta);
+                                    rs.next();
+                                    Cliente titular = null;
+                                    try {
+                                        if (Banco.comprobarCliente(dni)) {
+                                            titular = new Cliente(null, null, null, dni, null, null, null, null);
+                                        }
+                                    } catch (ClienteException ex) {
+                                        System.err.println(ex.getMessage());
                                     }
-                                } catch (ClienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
 
-                                for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(titular)) {
-                                    System.out.println(pCC);
+                                    for (CuentaCorriente pCC : banco.mostrarCuentaCorriente(titular)) {
+                                        System.out.println(pCC);
+                                    }
+                                    break;
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                                break;
-                            } catch (SQLException ex) {
-                                Logger.getLogger(MenuCuentaCorriente.class.getName()).log(Level.SEVERE, null, ex);
-                            }
                             }
                             case 3: {
                                 //Retrocede al menu anterior
