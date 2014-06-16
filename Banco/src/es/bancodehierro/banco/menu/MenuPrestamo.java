@@ -49,13 +49,10 @@ public class MenuPrestamo {
                     }
                     break;
                 case 2:
-                    banco.eliminarPrestamo(presta);
+                    banco.eliminarPrestamo(null);
                     break;
                 case 3:
                     verMovimientosPrestamo();
-                    break;
-                case 4:
-
                     break;
                 default:
 
