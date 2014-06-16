@@ -34,35 +34,29 @@ public class Banco {
     public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
-        String function="{? = call INSERCIO_CCB(?,?,?)}";
+        String function = "{? = call INSERCIO_CCB(?,?,?)}";
         //ResultSet comp = st.executeQuery("SELECT * FROM CUENTA_CORRIENTE WHERE NUMERO_CC = '" + cc.muestraCC() + "' AND CODIGO_SCC =" + sucursal.getCodi());
 
         //if (comp.next()) {
-            CallableStatement cS = Conexion.conectar().prepareCall(function);
-            cS.registerOutParameter(1, java.sql.Types.INTEGER);
-            cS.setString(2, cc.muestraCC());
-            cS.setInt(3, sucursal.getCodi());
-            cS.setInt(4, 0);
-            
-            
-            //ResultSet rs = cS.executeQuery();
-            cS.executeQuery();
-           
-           
-            
-            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
-            
-            
-//ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
+        CallableStatement cS = Conexion.conectar().prepareCall(function);
+        cS.registerOutParameter(1, java.sql.Types.INTEGER);
+        cS.setString(2, cc.muestraCC());
+        cS.setInt(3, sucursal.getCodi());
+        cS.setInt(4, 0);
+
+        //ResultSet rs = cS.executeQuery();
+        cS.executeQuery();
 
             // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
 //ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
-            //ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
-            return true;
+            // + cc.muestraCC() + "','" + sucursal.getCodi() + "'," + 0 + ",SYSTIMESTAMP)}
+//ResultSet rs = st.executeQuery(resutado+":=ESBORRAR_CCB('"+cc.muestraCC()+"')");
+        //ResultSet rs = st.executeQuery("INSERT INTO CUENTA_CORRIENTE VALUES('" + cc.muestraCC() + "','" + sucursal.getCodi() + "',0," + "SYSTIMESTAMP);");
+        return true;
 
         /*} else {
-            throw new CuentaCorrienteException();
-        }*/
+         throw new CuentaCorrienteException();
+         }*/
     }
 
     public boolean modificarCuentaCorriente() {
@@ -171,10 +165,14 @@ public class Banco {
 
     //Fi de la part del grup de Guillem Arrom, Rotger, Pedro i François
     /**
-     * MÉTODO INSERTAR PRESTAMO - PENDIENTE DE PASAR A BANCO.
+     * MÉTODO INSERTAR PRESTAMO. Se pide el DNI del cliente para ver si existe y
+     * se consulta las cuentas que tiene ese cliente para despues seleccionar
+     * sobre qual hacer los cambios. Tambien se van pidiento otros parametros
+     * para crear el objeto Prestamo.
      *
      * @author Rafel Sastre, Miquel Vallespir i Pau Riera.
-     * @param presta
+     * @param empleado Se tiene que passar un objeto Empleado para registrar los
+     * cambios.
      */
     public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException {
         Connection conexion = Conexion.conectar();
