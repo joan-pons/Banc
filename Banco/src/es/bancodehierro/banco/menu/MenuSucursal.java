@@ -29,7 +29,7 @@ public abstract class MenuSucursal {
     private static final int MENU_SUCURSAL_ELIMINAR = 70003;
     private static final int MENU_SUCURSAL_LISTARTOT = 70004;
     private static final int MENU_SUCURSAL_VOLVER = 70005;
-
+          
     /**
      * Hace los pasos necesarios y pide la informacion necesaria para dar de
      * alta una sucursal y pasar la informacion a un metodo de banco que la
@@ -232,7 +232,7 @@ public abstract class MenuSucursal {
      * Muestra todas las sucursales de la bdd
      * @throws SQLException cuando hay un error inesperado de bdd
      */
-    private static void mostrarTodas() throws SQLException, SucursalException {
+    private static void mostrarTodas() throws SQLException {
         Connection conexion = Conexion.conectar();
         Statement st = conexion.createStatement();
         ResultSet rs = st.executeQuery("SELECT MAX(CODIGO_SUCURSAL) FROM SUCURSAL");
@@ -244,19 +244,24 @@ public abstract class MenuSucursal {
         if (maxSuc != 0) {
             for (int index = 1; index <= maxSuc; index++) {
                 boolean existente = true;
-                existente = Banco.comprobarSucursal(index);
-
+                try {
+                    existente = Banco.comprobarSucursal(index);
+                } catch (SucursalException ex) {
+                    existente = false;
+                }
                 if (existente) {
-
-                    sucursal = Banco.devuelveSucursal(index);
-                    System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
-                    mostrarSucursal(sucursal);
-                    System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
-
+                    try {
+                        sucursal = Banco.devuelveSucursal(index);
+                        System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
+                        mostrarSucursal(sucursal);
+                        System.out.println("|||||||||||||||||||||||||||||||||||||||||||||");
+                    } catch (SucursalException ex) {
+                        System.out.println("Se ha borrado una sucursal mientras se estaba intentando listar.");
+                    }
                 }
             }
         } else {
-            throw new SucursalException("No hay ninguna sucursal");
+            System.out.println("No hay ninguna sucursal!4");
         }
 
     }
