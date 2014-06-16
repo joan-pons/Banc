@@ -19,10 +19,10 @@ public class ControlCC {
      * @return Un string con el contenido del IBAN.
      */
     public static String controlIBAN(){
-        String iban = null;
+        String iban = GestionaMenu.llegirCadena("Introduce un IBAN: ");
         boolean op = true;
         while(op){
-            if (iban.length() != 4)
+            if (iban.length() != 2)
                 iban = GestionaMenu.llegirCadena("Introduce un IBAN: ");
             else
                 op = false;
@@ -35,7 +35,7 @@ public class ControlCC {
      * @return Un string con el contenido de la oficina.
      */
     public static String controlOficina(){
-        String oficina = null;
+        String oficina = GestionaMenu.llegirCadena("Introduce una Oficina: ");
         boolean op = true;
         while(op){
             if (oficina.length() != 4)
@@ -51,7 +51,7 @@ public class ControlCC {
      * @return Un string con el contenido del dc.
      */
     public static String controlDc(){
-        String dc = null;
+        String dc = GestionaMenu.llegirCadena("Introduce un Dc: ");
         boolean op = true;
         while(op){
             if (dc.length() != 2)
@@ -67,7 +67,7 @@ public class ControlCC {
      * @return Un string con el contenido del cc de la ccuenta corriente.
      */
     public static String controlCC(){
-        String cc = null;
+        String cc = GestionaMenu.llegirCadena("Introduce un Numero de CC: ");
         boolean op = true;
         while(op){
             if (cc.length() != 10)
