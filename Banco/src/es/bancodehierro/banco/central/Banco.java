@@ -719,17 +719,16 @@ public class Banco {
     public void insertarPrestamo(Empleado empleado) throws ClienteException, CuentaCorrienteException, SQLException {
         Connection conexion = Conexion.conectar();
         ArrayList<CuentaCorriente> listCC = null;
-        Banco b = new Banco();// al meter en banco desaparece
 
         String dniCliente = GestionaMenu.llegirCadena("Introduce DNI cliente.");
 
-        Cliente cliente = b.devuelveCliente(dniCliente);
+        Cliente cliente = devuelveCliente(dniCliente);
 
         if (cliente == null) {
             throw new ClienteException("El cliente con +" + dniCliente + " no ha sido encontrado.");
             //return false;
         } else {
-            listCC = b.mostrarCuentaCorriente(cliente);
+            listCC = mostrarCuentaCorriente(cliente);
         }
 
         if (listCC == null) {
