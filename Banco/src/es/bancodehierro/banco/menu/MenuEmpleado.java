@@ -187,7 +187,7 @@ public class MenuEmpleado {
      * Nos permite crear empleados, listar empleados, modificar empleados, eliminar empleados y volver al menú principal
      * Recoge las excepciones lanzadas por los metodes que llama desde cada case.
      */
-    public static void menuEmpleado(Connection conexion) {
+    public static void menuEmpleado() {
         try {
             String[] menu = {"Crear empleado", "listar empleado/s", "Modificar empleado", "Eliminar empleado"};
             switch (GestionaMenu.gestionarMenu("Menu empleado", menu, "Inserta tu opción: ", MENU_EMPLEADO_PREFIX)) {

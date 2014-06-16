@@ -700,6 +700,8 @@ public class Banco {
         ResultSet rs = st.executeQuery("select count(CODIGO_SUCURSAL) from SUCURSAL where CODIGO_SUCURSAL =" + codigoSucursal);
         rs.next();
         int a = rs.getInt(1);
+        st.close();
+        rs.close();
         if (a == 1) {
             return true;
         } else {

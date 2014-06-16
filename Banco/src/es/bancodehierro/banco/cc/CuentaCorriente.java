@@ -347,7 +347,8 @@ public class CuentaCorriente {
 
         //ResultSet rs = cS.executeQuery();
         cS.executeQuery();
-        System.out.println(cS.getInt(1));
+        //System.out.println(cS.getInt(1));
+        //System.out.println("Filas borradas: " + filas);
         cS.close();
 
         return filas;
