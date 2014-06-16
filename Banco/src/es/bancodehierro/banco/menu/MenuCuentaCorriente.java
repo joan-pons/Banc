@@ -194,7 +194,7 @@ public class MenuCuentaCorriente {
                                 Cliente clienteOperacion= cliente;
                                 try {
                                     cC.agregarTitular(cliente,sucursal);
-                                } catch (CuentaCorrienteException | SQLException ex) {
+                                } catch (SQLException ex) {
                                     System.err.println(ex.getMessage());
                                 }
                                 break;
@@ -205,12 +205,7 @@ public class MenuCuentaCorriente {
                                 break;
                             }
                             case 2: {
-                                //Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                try {
-                                    cC.eliminarTitular(cliente,sucursal);
-                                } catch (CuentaCorrienteException ex) {
-                                    System.err.println(ex.getMessage());
-                                }
+                                cC.eliminarTitular(cliente,sucursal);
                                 break;
                             }
                             case 3: {
@@ -259,15 +254,11 @@ public class MenuCuentaCorriente {
                                     int menuMovC = mostrarMenu(opcionesMovC);
                                     switch (menuMovC) {
                                         case 0: {
-                                        try {
                                             for (Movimiento mov : cC.mostrarMovimiento(false)) {
 
                                                 System.out.println(mov);
 
                                             }
-                                        } catch (CuentaCorrienteException ex) {
-                                            System.err.println(ex.getMessage());
-                                        }
                                             break;
                                         }
                                         case 1: {
@@ -310,14 +301,11 @@ public class MenuCuentaCorriente {
                                     int menuMovI = mostrarMenu(opcionesMovI);
                                     switch (menuMovI) {
                                         case 0: {
-                                        try {
                                             for (Movimiento mov : cC.mostrarMovimiento(true)) {
 
                                                 System.out.println(mov);
 
                                             }
-                                        } catch (CuentaCorrienteException ex) {
-                                        System.err.println(ex.getMessage());}
                                             break;
                                         }
                                         case 1: {
@@ -375,7 +363,7 @@ public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente client
                         switch (menuTit) {
                             case 0: {
                                // Cliente cliente = new Cliente(0, null, null, null, null, null, null);
-                                banco.agregarCuentaCorriente(cC, sucursal);
+                                banco.agregarCuentaCorriente(sucursal);
                                 break;
                             }
                             case 1: {
@@ -429,37 +417,18 @@ public void metodoBanco(boolean repMenuBanco, CuentaCorriente cC, Cliente client
                                         menuTit = 4;
                                     }
                                 }
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
                                
                                 //banco.mostrarCuentaCorriente(sucursal);
                                 break;
                             }
-                            case 4: {
+                            case 3: {
                                 //Retrocede al menu anterior
                                 repMenuBanco = false;
                                 break;
                             }
 
                         }
-                        if (menuTit != 4) {
+                        if (menuTit != 3) {
 
                             repMenuBanco = algunaCosaMas();;
 
