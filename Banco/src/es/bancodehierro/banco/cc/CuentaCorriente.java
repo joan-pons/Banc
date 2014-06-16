@@ -193,13 +193,14 @@ public class CuentaCorriente {
      * base de datos.
      */
     public int agregarTitular(Sucursal sucursal) throws SQLException, ClienteException {
-        String dni = GestionaMenu.llegirCadena("Introduce el DNI: ");
+        String dni = GestionaMenu.llegirCadena("Introduce el DNI del titular: ");
         Statement st = Conexion.conectar().createStatement();
         String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
         ResultSet rs = st.executeQuery(consulta);
+        rs.next();
         Cliente titular = null;
         if (Banco.comprobarCliente(dni)) {
-            titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+            titular = new Cliente(null, null, null, dni, null, null, null, null);
         }
         int filas = '\0';
         /* try (Statement st = Conexion.conectar().createStatement()) {
@@ -274,7 +275,7 @@ public class CuentaCorriente {
         ResultSet rs = st.executeQuery(consulta);
         Cliente titular = null;
         if (Banco.comprobarCliente(dni)) {
-            titular = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+            titular = new Cliente(null, null, null, dni, null, null, null, null);
         }
         int filas = '\0';
         /*try (Statement st = Conexion.conectar().createStatement()) {
@@ -394,16 +395,18 @@ public class CuentaCorriente {
         Statement st = Conexion.conectar().createStatement();
         String consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
         ResultSet rs = st.executeQuery(consulta);
+        rs.next();
         Cliente viejo = null;
         if (Banco.comprobarCliente(dni)) {
-            viejo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+            viejo = new Cliente(null, null, null,dni, null, null, null, null);
         }
         dni = GestionaMenu.llegirCadena("Introduce el DNI del cliente nuevo: ");
         consulta = "SELECT * FROM CLIENTE WHERE DNI_CLIENTE = '" + dni + "'";
         rs = st.executeQuery(consulta);
+        rs.next();
         Cliente nuevo = null;
         if (Banco.comprobarCliente(dni)) {
-            nuevo = new Cliente(null, null, null, rs.getString("DNI_CLIENTE"), null, null, null, null);
+            nuevo = new Cliente(null, null, null, dni, null, null, null, null);
         }
         /*if (!titulares.containsKey("Segundo")) {
          agregarTitular(nuevo, sucursal);
