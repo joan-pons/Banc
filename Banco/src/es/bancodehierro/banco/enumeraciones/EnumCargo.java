@@ -8,7 +8,8 @@ package es.bancodehierro.banco.enumeraciones;
 
 /**
  *
- * @author guillem
+ * @author Guillem Arrom, Guillem Rotger, Francois Lladó y Pedro Lladó
+ * Creamos la enumeracion cargo para indicar el cargo de un empleado
  */
 public enum EnumCargo {
     EMPLEADOSUCURSAL, DIRECTORBANCO, DIRECTORSUCURSAL
