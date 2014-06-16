@@ -82,6 +82,7 @@ public class Prestamo {
 
     /**
      * Ver Movimientos Préstamo
+     * Busca todos los movimientos de un préstamo.
      * @Jaume Mayol
      */
     public void verMovimientosPrestamo(){
