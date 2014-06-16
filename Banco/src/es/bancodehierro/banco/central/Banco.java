@@ -65,9 +65,6 @@ public class Banco {
         }*/
     }
 
-    public boolean modificarCuentaCorriente() {
-        return true;
-    }
 
     public boolean eliminarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
        
