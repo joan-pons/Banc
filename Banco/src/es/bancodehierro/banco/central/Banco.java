@@ -31,7 +31,8 @@ import java.util.logging.Logger;
  */
 public class Banco {
 
-   public boolean agregarCuentaCorriente(CuentaCorriente cc, Sucursal sucursal) throws CuentaCorrienteException, SQLException {
+   public boolean agregarCuentaCorriente(Sucursal sucursal) throws CuentaCorrienteException, SQLException{
+       CuentaCorriente cc= new CuentaCorriente(GestionaMenu.llegirCadena("Introduce un IBAN: "), GestionaMenu.llegirCadena("Introduce una Oficina: "), GestionaMenu.llegirCadena("Introduce un DC: "), GestionaMenu.llegirCadena("Introduce un Numero de Cuenta: "), 0);
         Statement st = Conexion.conectar().createStatement();
         boolean resultado = false;
         String function="{? = call INSERCIO_CCB(?,?,?)}";
